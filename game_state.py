@@ -10,6 +10,7 @@ from items import Item
 import skills
 from srs_random import Dice
 from name_generator import NameGenerator
+from util import last
 
 # TODO: Log more. Certainly including victory
 
@@ -174,7 +175,7 @@ class GameState(object):
 
   def current_state(self):
     """Return the current state."""
-    return self.state[-1]
+    return last(self.state)
 
   def faction_update(self, base_floor):
     for floor in range(max(1, base_floor - 4),
@@ -350,7 +351,7 @@ class GameState(object):
   def apply_choice_use_item(self, logs, choice_text):
     if choice_text.startswith("Use Item #"):
       self.pass_time(0, logs)
-      choice = int(choice_text[-1])
+      choice = int(last(choice_text))
       assert choice > 0
       choice -= 1
       item = self.character.items.pop(choice)

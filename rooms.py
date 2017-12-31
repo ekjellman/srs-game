@@ -2,6 +2,7 @@ import game_state
 from equipment import Equipment, RARITY
 from effect import WellRested, Blessed, Lucky
 import items
+from util import last
 
 class Room(object):
   NO_CHANGE = 0
@@ -418,7 +419,7 @@ class EquipmentShop(Room):
     if self.buying:
       return self.apply_choice_buy_equipment(choice_text, logs, character)
     elif choice_text.startswith("{} #".format(self.shop_type)):
-      choice = int(choice_text[-1])
+      choice = int(last(choice_text))
       self.shop_choice = choice - 1
       self.buying = True
       logs.append("You consider {}...".format(choice_text))
@@ -608,7 +609,7 @@ class Inn(Room):
         logs.append("You don't even have enough gold left to buy food.")
         return (0, Room.NO_CHANGE)
     elif choice_text.startswith("Trade"):
-      choice = int(choice_text[-1]) - 1
+      choice = int(last(choice_text)) - 1
       return self.handle_trade(choice, logs, character)
     elif choice_text == "Leave Inn":
       return (0, Room.LEAVE_ROOM)
@@ -781,7 +782,7 @@ class Alchemist(Room):
 
   def apply_choice(self, choice_text, logs, character):
     if choice_text.startswith("Choice #"):
-      choice = int(choice_text[-1]) - 1
+      choice = int(last(choice_text)) - 1
       item = self.inventory[choice]
       if character.can_afford(self.get_cost(item)):
         result = character.add_item(item)

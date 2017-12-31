@@ -3,6 +3,7 @@ import effect
 from equipment import RARITY
 from character import TRAITS
 from character import STAT_ORDER
+from util import last
 
 # TODO: Add substitute (automatic rez when you die)
 # TODO: Add names to items (based on stats / slot)
@@ -96,7 +97,7 @@ class EffectPotion(Item):
     level = self.EFFECT_POTIONS[name]["level"]
     pot_name = "{} Pot".format(name)
     # TODO: Pull buff names from effect classes
-    self.buff_name = name.split(' ')[-1] # Example: "Minor Surge" class gives "Surge" buff
+    self.buff_name = last(name.split(' ')) # Example: "Minor Surge" class gives "Surge" buff
     self.info = {"name": pot_name, "value": value, "item_level": level}
 
   def apply(self, character, monster, logs):
