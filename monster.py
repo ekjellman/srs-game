@@ -157,7 +157,7 @@ class Monster(object):
 
   @classmethod
   def roll_stat(cls, level, die, modifier):
-    return sum(random.randint(1, die) + modifier for _ in xrange(level))
+    return sum(random.randint(1, die) + modifier for _ in range(level))
 
   def get_action(self, character):
     # Monster AI

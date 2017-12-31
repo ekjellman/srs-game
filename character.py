@@ -192,7 +192,7 @@ class Character(object):
     if sum(self.materials) == 0:
       pieces.append("None\n")
     else:
-      for i in xrange(len(self.materials)):
+      for i in range(len(self.materials)):
         if self.materials[i] > 0:
           pieces.append("%s: %d  " % (RARITY[i], self.materials[i]))
       pieces.append("\n")
@@ -304,7 +304,7 @@ class Character(object):
     logs.append("Gained +1 %s" % stat)
 
   def gain_materials(self, materials):
-    for i in xrange(len(materials)):
+    for i in range(len(materials)):
       self.materials[i] += materials[i]
 
   def get_trait_choices(self):

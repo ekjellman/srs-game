@@ -78,7 +78,7 @@ class Equipment(object):
     # Stats
     max_gains = (self.rarity + 1) * (level - self.item_level)
     stat_gains = [0, 0, 0, 0]
-    for _ in xrange(max_gains):
+    for _ in range(max_gains):
       stat_gains[random.randint(0, 3)] += 1
     for i in range(4):
       stat_gains[i] = random.randint(stat_gains[i] / 2, stat_gains[i])
@@ -88,7 +88,7 @@ class Equipment(object):
     # Defenses
     max_gains = 2 * (level - self.item_level)
     def_gains = [0, 0]
-    for _ in xrange(max_gains):
+    for _ in range(max_gains):
       def_gains[random.randint(0, 1)] += 1
     for i in range(2):
       def_gains[i] = random.randint(def_gains[i] / 2, def_gains[i])
@@ -132,7 +132,7 @@ class Equipment(object):
   def get_recycled_materials(self):
     materials = [0] * len(RARITY)
     count = 0
-    for _ in xrange(self.item_level):
+    for _ in range(self.item_level):
       if random.random() > .7 ** count:
         continue
       rarity = int(self.rarity + random.gauss(0, 1))
@@ -147,7 +147,7 @@ class Equipment(object):
   @classmethod
   def materials_string(cls, materials):
     pieces = []
-    for i in xrange(len(materials)):
+    for i in range(len(materials)):
       if materials[i] > 0:
         pieces.append("%d %s materials" % (materials[i], RARITY[i]))
     if pieces:

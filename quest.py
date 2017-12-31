@@ -27,7 +27,7 @@ class Quest(object):
     self.treasure_reward = 1
     self.gp_reward = 5 * self.level
     self.xp_reward = 5 * self.level
-    for _ in xrange(self.treasures):
+    for _ in range(self.treasures):
       self.xp_reward += random.randint(2 * self.level, 5 * self.level)
       if random.random() < .3:
         self.treasure_reward += 1
