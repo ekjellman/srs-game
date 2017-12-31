@@ -40,7 +40,7 @@ class Room(object):
 
 class TrainingRoom(Room):
   def __init__(self, level):
-    super(TrainingRoom, self).__init__(level)
+    super().__init__(level)
     self.level = level
     self.train_count = 0
     self.forgetting = False
@@ -130,7 +130,7 @@ class TrainingRoom(Room):
 
 class Enchanter(Room):
   def __init__(self, level):
-    super(Enchanter, self).__init__(level)
+    super().__init__(level)
     self.level = level
     self.enchanting_armor = False
 
@@ -241,7 +241,7 @@ class Enchanter(Room):
 
 class Forge(Room):
   def __init__(self, level):
-    super(Forge, self).__init__(level)
+    super().__init__(level)
     self.level = level
     self.forging_armor = False
 
@@ -435,7 +435,7 @@ class EquipmentShop(Room):
 
 class ArmorShop(EquipmentShop):
   def __init__(self, level):
-    super(ArmorShop, self).__init__(level, "Armor")
+    super().__init__(level, "Armor")
     self.refresh()
 
   def refresh(self):
@@ -448,7 +448,7 @@ class ArmorShop(EquipmentShop):
 
 class WeaponShop(EquipmentShop):
   def __init__(self, level):
-    super(WeaponShop, self).__init__(level, "Weapon")
+    super().__init__(level, "Weapon")
     self.refresh()
 
   def refresh(self):
@@ -460,7 +460,7 @@ class WeaponShop(EquipmentShop):
 
 class Jeweler(EquipmentShop):
   def __init__(self, level):
-    super(Jeweler, self).__init__(level, "Accessory")
+    super().__init__(level, "Accessory")
     self.refresh()
 
   def refresh(self):
@@ -472,7 +472,7 @@ class Jeweler(EquipmentShop):
 
 class RareGoodsShop(EquipmentShop):
   def __init__(self, level):
-    super(RareGoodsShop, self).__init__(level, "Equipment")
+    super().__init__(level, "Equipment")
     self.refresh()
 
   def refresh(self):
@@ -498,7 +498,7 @@ class Inn(Room):
                   items.SacrificialJizo]
 
   def __init__(self, level):
-    super(Inn, self).__init__(level)
+    super().__init__(level)
     self.inventory = self.generate_inventory()
     self.trading = False
 
@@ -733,7 +733,7 @@ class Temple(Room):
 
 class Alchemist(Room):
   def __init__(self, level):
-    super(Alchemist, self).__init__(level)
+    super().__init__(level)
     self.level = level
     self.faction_rate = 1.0
     self.inventory = self.generate_inventory()
@@ -808,7 +808,7 @@ class Alchemist(Room):
 
 class Crafthall(Room):
   def __init__(self, level):
-    super(Crafthall, self).__init__(level)
+    super().__init__(level)
     self.level = level
     self.faction_rate = 1.0  # Ignored
     self.crafting = False

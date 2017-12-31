@@ -31,7 +31,7 @@ class HealthPotion(Item):
                 "Super": {"value": 15000, "level": 30, "effect": 5400},
                }
   def __init__(self, rank):
-    super(HealthPotion, self).__init__()
+    super().__init__()
     self.rank = rank
     name = "{} HP Pot".format(rank)
     value = self.HP_POTIONS[rank]["value"]
@@ -48,7 +48,7 @@ class MagicPotion(Item):
                 "Major": {"value": 7500, "level": 30, "effect": 600},
                }
   def __init__(self, rank):
-    super(MagicPotion, self).__init__()
+    super().__init__()
     self.rank = rank
     name = "{} SP Pot".format(rank)
     value = self.SP_POTIONS[rank]["value"]
@@ -61,7 +61,7 @@ class MagicPotion(Item):
 
 class InnFood(Item):
   def __init__(self):
-    super(InnFood, self).__init__()
+    super().__init__()
     self.info = {"name": "Inn-made Bento",
                  "value": 0,
                  "item_level": 1}
@@ -90,7 +90,7 @@ class EffectPotion(Item):
                     "Major BulkUp": {"value": 7500, "level": 30, "effect": effect.BulkUp(15, 2.0)},
   }
   def __init__(self, name):
-    super(EffectPotion, self).__init__()
+    super().__init__()
     self.effect = self.EFFECT_POTIONS[name]["effect"]
     value = self.EFFECT_POTIONS[name]["value"]
     level = self.EFFECT_POTIONS[name]["level"]
