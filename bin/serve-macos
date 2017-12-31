@@ -1,0 +1,2 @@
+#!/bin/sh
+fswatch -o *.py | xargs -n1 bin/build-html

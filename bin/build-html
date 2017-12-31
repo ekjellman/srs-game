@@ -1,0 +1,2 @@
+#!/bin/sh
+transcrypt -b -m -e 6 -n -t srs.py

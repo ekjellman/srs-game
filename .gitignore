@@ -40,3 +40,7 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Transcript generated files #
+##############################
+__javascript__
