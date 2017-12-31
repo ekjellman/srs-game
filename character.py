@@ -52,7 +52,7 @@ class Character(object):
     self.current_sp = self.max_sp
     self.level = 1
     self.exp = 0
-    self.materials = [0] * len(RARITY)
+    self.materials = [0] * len(RARITY) # __:opov
     self.buffs = []
     self.debuffs = []
     self.runes = 1

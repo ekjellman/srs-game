@@ -140,7 +140,7 @@ class Equipment(object):
     return self.attributes.get("Type", 0)
 
   def get_recycled_materials(self):
-    materials = [0] * len(RARITY)
+    materials = [0] * len(RARITY) # __:opov
     count = 0
     for _ in range(self.item_level):
       if self.game.rng.random() > .85 ** count:
@@ -167,8 +167,10 @@ class Equipment(object):
 
   def get_value(self):
     value = self.item_level * 25
+    # __pragma__ ('opov')
     for attribute in STATS + DEFENSES:
       value += self.attributes.get(attribute, 0) ** 2
+    # __pragma__ ('noopov')
     value *= max(1, self.rarity - 1)
     if self.slot == 0:  # Weapon
       average_damage = (self.attributes.get("Low", 0) + self.attributes.get("High", 0)) / 2
@@ -212,9 +214,11 @@ class Equipment(object):
     pieces.append(SLOTS[self.slot])
     pieces.append(": ")
     pieces.append(RARITY_COLORS[self.rarity])
+    # __pragma__ ('opov')
     pieces.append("({}{} {}) ".format(self.item_level,
                                   "*" * self.enchant_count,
                                   RARITY[self.rarity][0]))
+    # __pragma__ ('noopov')
     if SLOTS[self.slot] == "Weapon":
       pieces.append("({} {}-{}) ".format(self.attributes.get("Type", 0),
                                      self.attributes.get("Low", 0),

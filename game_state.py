@@ -32,7 +32,7 @@ CHOICES = {"CHAR_CREATE": ["Strength", "Stamina", "Speed", "Intellect"],
            "STRONGHOLD": ["Enter Room", "Rest", "Item", "Leave Stronghold"],
            "DUNGEON": ["Explore", "Rest", "Item", "Leave Dungeon"],
            "LOOT_EQUIPMENT": ["", "Keep Current", "Keep New", ""],
-           "VICTORY": [""] * 4,
+           "VICTORY": ["", "", "", ""],
            "SHOP_WARNING": ["", "Enter Room", "", ""],
            "ACCEPT_QUEST": ["", "Accept Quest", "Decline Quest", ""]}
 
@@ -87,9 +87,9 @@ class GameState(object):
     self.time_spent = 0
     self.energy = 200
     self.towns = self.generate_towns()
-    self.tower_lock = [True] * (TOWER_LEVELS + 1)
+    self.tower_lock = [True] * (TOWER_LEVELS + 1) # __:opov
     self.tower_lock[1] = False
-    self.tower_faction = [1.0] * (TOWER_LEVELS + 1)
+    self.tower_faction = [1.0] * (TOWER_LEVELS + 1) # __:opov
     self.tower_update_ready = False
     self.tower_quests = self.generate_quests()
     # Number of encounters completed in current tower ascension
@@ -230,7 +230,7 @@ class GameState(object):
       return self.skill_choices
       # Next: Handle the trait choice, then implement the traits
     elif current_state == "USE_SKILL":
-      choices = [""] * (3 - len(self.character.skills))
+      choices = [""] * (3 - len(self.character.skills)) # __:opov
       for skill in self.character.skills:
         if (skill.sp_cost() > self.character.current_sp or
             (skill.once_per_battle() and skill.get_name() in self.skills_used)):

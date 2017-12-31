@@ -28,7 +28,7 @@ class Room(object):
     return "Unnamed Room"
 
   def get_buttons(self, character):
-    return ["Not Implemented"] * 4
+    return ["N/I", "N/I", "N/I", "N/I"]
 
   def get_text(self, character):
     return "Not Implemented"

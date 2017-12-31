@@ -1,7 +1,7 @@
 # coding=utf-8
 from equipment import STATS, DEFENSES
 
-STACK_MULTIPLY = ["XP Gain"] + STATS + DEFENSES
+STACK_MULTIPLY = ["XP Gain"] + STATS + DEFENSES # __:opov
 STACK_MAX = ["Blinded", "Stunned", "Immortal", "Auto Life", "Lucky"]
 STACK_ADD = ["HP Restore", "Substitute"]
 
@@ -42,6 +42,7 @@ class Effect(object):
 
   @classmethod
   def get_combined_impact(cls, impact, buffs, debuffs):
+    # __pragma__ ('opov')
     if impact in STACK_MULTIPLY:
       combined_impact = 1.0
       for effect in buffs + debuffs:
@@ -62,6 +63,7 @@ class Effect(object):
           combined_impact += impacts[impact]
     else:
       assert False
+    # __pragma__ ('noopov')
     return combined_impact
 
   def __str__(self):
@@ -124,8 +126,10 @@ class Blessed(Buff):
   # +10% stats and defenses
   def get_impacts(self):
     impacts = {}
+    # __pragma__ ('opov')
     for stat in STATS + DEFENSES:
       impacts[stat] = 1.10
+    # __pragma__ ('noopov')
     return impacts
 
   def get_name(self):
@@ -290,8 +294,10 @@ class Wither(Debuff):
   def get_impacts(self):
     impact = 0.99 ** self.quantity
     impacts = {}
+    # __pragma__ ('opov')
     for stat in STATS + DEFENSES:
       impacts[stat] = impact
+    # __pragma__ ('noopov')
     return impacts
 
 class Renew(Buff):
@@ -366,8 +372,10 @@ class Aura(Buff):
   def get_impacts(self):
     impact = 1.00 + (.01 * self.quantity)
     impacts = {}
+    # __pragma__ ('opov')
     for stat in STATS + DEFENSES:
       impacts[stat] = impact
+    # __pragma__ ('noopov')
     return impacts
 
 class Substitute(Buff):
