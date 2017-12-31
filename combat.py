@@ -80,7 +80,7 @@ class Combat(object):
       method = getattr(Combat, method_name)
       return method(info, actor, target, logs)
     except AttributeError as exc:
-      print exc
+      print(exc)
       logs.append("Combat option %s not implemented" % action)
       return cls.TARGET_ALIVE
 

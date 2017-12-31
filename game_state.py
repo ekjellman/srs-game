@@ -766,7 +766,7 @@ class GameState(object):
       method(self, logs, choice_text)
     #except AttributeError as exc:
     except IOError as exc:
-      print exc  # pylint: disable=print-statement
+      print(exc)  # pylint: disable=print-statement
       logs.append("apply_choice not implemented yet, state: %s" % current_state)
     return logs
 
