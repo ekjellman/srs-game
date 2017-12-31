@@ -220,7 +220,7 @@ class GameState(object):
     elif current_state == "USE_ITEM":
       choices = []
       for i in range(len(self.character.items)):
-        choices.append("Use Item #%d" % (i + 1))
+        choices.append("Use Item #{}".format(i + 1))
       while len(choices) < 3:
         choices.insert(0, "")
       choices.append("Never Mind")
@@ -248,7 +248,7 @@ class GameState(object):
       item = self.treasure_queue.pop()
       if isinstance(item, int):
         amount_gained = self.character.gain_gold(item)
-        logs.append("You got %d gold." % amount_gained)
+        logs.append("You got {} gold.".format(amount_gained))
       elif isinstance(item, Equipment):
         logs.append("You got the following equipment")
         logs.append(str(item))
@@ -308,7 +308,7 @@ class GameState(object):
       self.character.runes = 5
     else:
       self.character.make_initial_equipment(choice_text)
-    logs.append("Generated %s equipment." % choice_text)
+    logs.append("Generated {} equipment.".format(choice_text))
     self.change_state("TOWN")
 
   def start_combat(self, logs, boss_chance, level=None):
@@ -369,7 +369,7 @@ class GameState(object):
       self.pass_time(5, logs)
       logs.append("You rest")
       hp_gained = self.character.rest()
-      logs.append("You regain %d HP" % hp_gained)
+      logs.append("You regain {} HP".format(hp_gained))
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
@@ -379,7 +379,7 @@ class GameState(object):
     elif choice_text == "Complete Quest":
       logs.append("You complete the quest.")
       amount_gained = self.character.gain_gold(self.quest.gp_reward)
-      logs.append("You gain %d gold." % amount_gained)
+      logs.append("You gain {} gold.".format(amount_gained))
       levelups = self.character.gain_exp(self.quest.xp_reward, self.floor, logs,
                                          level_adjust=False)
       self.treasure_queue = self.quest.get_treasure()
@@ -408,7 +408,7 @@ class GameState(object):
       self.pass_time(5, logs)
       logs.append("You rest")
       hp_gained = self.character.rest()
-      logs.append("You regain %d HP" % hp_gained)
+      logs.append("You regain {} HP".format(hp_gained))
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
@@ -457,7 +457,7 @@ class GameState(object):
         assert self.ascension_encounters == -1
         self.floor += 1
         self.frontier = max(self.frontier, self.floor)
-        logs.append("Congratulations, you have reached floor %d" % self.floor)
+        logs.append("Congratulations, you have reached floor {}".format(self.floor))
         if self.floor < TOWER_LEVELS:
           self.leave_state()
           self.change_state("OUTSIDE")
@@ -470,7 +470,7 @@ class GameState(object):
       self.pass_time(5, logs)
       logs.append("You rest")
       hp_gained = self.character.rest()
-      logs.append("You regain %d HP" % hp_gained)
+      logs.append("You regain {} HP".format(hp_gained))
       if random.random() < .2:
         self.start_combat(logs, .1)
     elif choice_text == "Item":
@@ -511,7 +511,7 @@ class GameState(object):
       self.pass_time(5, logs)
       logs.append("You rest")
       hp_gained = self.character.rest()
-      logs.append("You regain %d HP" % hp_gained)
+      logs.append("You regain {} HP".format(hp_gained))
       if random.random() < .2 or self.infinity_dungeon:
         self.start_combat(logs, .1)
     elif choice_text == "Item":
@@ -551,7 +551,7 @@ class GameState(object):
     factor = DEATH_TIME_FACTOR[state]
     time_lost = random.randint(1, int(3 * self.floor * factor))
     self.pass_time(time_lost, logs)
-    logs.append("You lost %d time units" % time_lost)
+    logs.append("You lost {} time units".format(time_lost))
 
   def dungeon_victory_update(self, base_floor):
     if self.infinity_dungeon:
@@ -568,7 +568,7 @@ class GameState(object):
       self.apply_death(logs)
     elif result == Combat.MONSTER_DEAD:
       self.skills_used = set()
-      logs.append("You have defeated %s" % self.monster.name)
+      logs.append("You have defeated {}".format(self.monster.name))
       levelups = self.character.gain_exp(self.monster.calculate_exp(),
                                          self.monster.level, logs)
       self.treasure_queue = self.monster.get_treasure(self.infinity_dungeon)
@@ -664,7 +664,7 @@ class GameState(object):
           break
       if shop:
         self.pass_time(1, logs)
-        logs.append("Went to the %s" % shop.get_name())
+        logs.append("Went to the {}".format(shop.get_name()))
         self.add_state("SHOP")
         shop.enter_shop(self.tower_faction[self.floor])
 
@@ -706,7 +706,7 @@ class GameState(object):
       self.pass_time(10, logs)
       self.floor -= 1  # Bug if there's only one floor, I guess.
       self.change_state("OUTSIDE")
-      logs.append("Descended to floor %d" % self.floor)
+      logs.append("Descended to floor {}".format(self.floor))
 
 
   def apply_choice_outside(self, logs, choice_text):
@@ -718,7 +718,7 @@ class GameState(object):
         logs.append("Entered tower")
       else:
         self.floor += 1
-        logs.append("Ascended to floor %d" % self.floor)
+        logs.append("Ascended to floor {}".format(self.floor))
         if self.floor == TOWER_LEVELS:
           self.change_state("SUMMIT")
     elif choice_text == "Quest":
@@ -737,7 +737,7 @@ class GameState(object):
       self.pass_time(10, logs)
       if self.floor > 1:
         self.floor -= 1
-        logs.append("Descended to floor %d" % self.floor)
+        logs.append("Descended to floor {}".format(self.floor))
       else:
         logs.append("Cannot descend while on floor 1.")
 
@@ -747,10 +747,10 @@ class GameState(object):
     elif choice_text == "Keep New":
       recycle = self.character.equip(self.equipment_choice)
       self.equipment_choice = None
-    logs.append("Recycled %s" % recycle)
+    logs.append("Recycled {}".format(recycle))
     materials = recycle.get_recycled_materials()
     self.character.gain_materials(materials)
-    logs.append("Received %s" % Equipment.materials_string(materials))
+    logs.append("Received {}".format(Equipment.materials_string(materials)))
     # Add materials to character, add materials inventory to character string
     self.leave_state()
     self.handle_treasure(logs)
@@ -767,7 +767,7 @@ class GameState(object):
     #except AttributeError as exc:
     except IOError as exc:
       print(exc)  # pylint: disable=print-statement
-      logs.append("apply_choice not implemented yet, state: %s" % current_state)
+      logs.append("apply_choice not implemented yet, state: {}".format(current_state))
     return logs
 
   def loot_choice_text(self):
@@ -778,7 +778,7 @@ class GameState(object):
   def use_item_text(self):
     pieces = []
     for i, item in enumerate(self.character.items):
-      pieces.append("Use Item #%d: %s" % (i + 1, item.get_name()))
+      pieces.append("Use Item #{}: {}".format(i + 1, item.get_name()))
     return "\n".join(pieces)
 
   def trait_text(self):
@@ -787,7 +787,7 @@ class GameState(object):
     choices = self.get_choices()
     for choice in choices:
       if choice in TRAITS:
-        pieces.append("%s: %s" % (choice, TRAITS[choice]))
+        pieces.append("{}: {}".format(choice, TRAITS[choice]))
     return "\n".join(pieces)
 
   def skill_text(self):
@@ -805,7 +805,7 @@ class GameState(object):
         already_used = "(Already Used)"
       else:
         already_used = ""
-      pieces.append("%s: %d sp %s%s\n%s" % (skill.get_name(), skill.sp_cost(),
+      pieces.append("{}: {} sp {}{}\n{}".format(skill.get_name(), skill.sp_cost(),
                                             insufficient_sp, already_used,
                                             skill.get_description()))
     return "\n".join(pieces)
@@ -814,7 +814,7 @@ class GameState(object):
     buffs = ", ".join(str(buff) for buff in self.character.buffs)
     buffs = buffs or "None"
     libra_string = self.monster.libra_string(self.character.traits.get("Libra", 0))
-    return "Your HP: %s\nBuffs: %s\n\n%s" % (self.character.colored_hp(),
+    return "Your HP: {}\nBuffs: {}\n\n{}".format(self.character.colored_hp(),
                                              buffs, libra_string)
 
   def panel_text(self):
@@ -824,13 +824,13 @@ class GameState(object):
     if current_state == "CHAR_CREATE":
       return "Please choose the starting specialization for your character"
     elif current_state == "TOWN":
-      return "Town on tower level %d" % self.floor
+      return "Town on tower level {}".format(self.floor)
     elif current_state == "OUTSIDE":
-      return "Outside town on tower level %d" % self.floor
+      return "Outside town on tower level {}".format(self.floor)
     elif current_state == "SUMMIT":
       return "At the summit of the tower"
     elif current_state == "TOWER":
-      return "Inside the tower ascending to level %d" % (self.floor + 1)
+      return "Inside the tower ascending to level {}".format(self.floor + 1)
     elif current_state == "COMBAT":
       return self.combat_text()
     elif current_state == "LOOT_EQUIPMENT":
@@ -842,9 +842,9 @@ class GameState(object):
     elif current_state == "USE_ITEM":
       return self.use_item_text()
     elif current_state == "RUNE_WORLD":
-      return "Rune world level %d" % (self.rune_level + 1)
+      return "Rune world level {}".format(self.rune_level + 1)
     elif current_state == "DUNGEON":
-      return "Level %d Dungeon" % self.floor
+      return "Level {} Dungeon".format(self.floor)
     elif current_state == "LEVEL_UP":
       return self.trait_text()
     elif current_state == "LEVEL_UP_SKILL":
@@ -852,8 +852,8 @@ class GameState(object):
     elif current_state == "USE_SKILL":
       return self.skill_select_text()
     elif current_state == "STRONGHOLD":
-      return "Stronghold of the Ten: Room %d" % (self.stronghold_room + 1)
+      return "Stronghold of the Ten: Room {}".format(self.stronghold_room + 1)
     elif current_state == "VICTORY":
-      return "You win! Victory Time: %d" % self.time_spent
+      return "You win! Victory Time: {}".format(self.time_spent)
     else:
-      return "Error, no text for state %s" % current_state
+      return "Error, no text for state {}".format(current_state)

@@ -43,17 +43,17 @@ class Monster(object):
     self.max_hp = self.stats["Stamina"] * 5
     self.current_hp = self.max_hp
     if boss:
-      self.name = "%s (Level %d Elite)" % (NAME_GENERATOR.generate_name(),
+      self.name = "{} (Level {} Elite)".format(NAME_GENERATOR.generate_name(),
                                            self.level)
     else:
-      self.name = "%s (Level %d)" % (NAME_GENERATOR.generate_name(), self.level)
+      self.name = "{} (Level {})".format(NAME_GENERATOR.generate_name(), self.level)
     self.traits = {}
     self.buffs = []
     self.debuffs = []
 
   def hp_string(self):
     percent = int(100 * self.current_hp / self.max_hp)
-    return "%d%%" % percent
+    return "{}%".format(percent)
 
   def pass_time(self, amount):
     remaining_debuffs = []
@@ -68,11 +68,11 @@ class Monster(object):
 
   def libra_string(self, libra_level):
     pieces = []
-    pieces.append("Name: %s\n" % self.name)
+    pieces.append("Name: {}\n".format(self.name))
     if libra_level == 0:
-      pieces.append("HP: %s\n" % self.hp_string())
+      pieces.append("HP: {}\n".format(self.hp_string()))
     else:
-      pieces.append("HP: %d / %d\n" % (self.current_hp, self.max_hp))
+      pieces.append("HP: {} / {}\n".format(self.current_hp, self.max_hp))
     pieces.append("Debuffs: ")
     pieces.append(", ".join(str(debuff) for debuff in self.debuffs))
     if self.debuffs:
@@ -81,15 +81,15 @@ class Monster(object):
       pieces.append("None\n")
     if libra_level > 0:
       for stat in STAT_ORDER:
-        pieces.append("%s: %d (%d)  " % (stat, self.get_effective_stat(stat),
+        pieces.append("{}: {} ({})  ".format(stat, self.get_effective_stat(stat),
                                          self.stats[stat]))
         pieces.append("\n")
     return "".join(pieces)
 
   def __str__(self):
     pieces = []
-    pieces.append("Name: %s\n" % self.name)
-    pieces.append("HP: %s\n" % self.hp_string())
+    pieces.append("Name: {}\n".format(self.name))
+    pieces.append("HP: {}\n".format(self.hp_string()))
     pieces.append("Debuffs: ")
     pieces.append(", ".join(str(debuff) for debuff in self.debuffs))
     if self.debuffs:
@@ -98,12 +98,12 @@ class Monster(object):
       pieces.append("None\n")
     pieces.append("***DEBUG***\n")
     for stat in self.stats.keys():
-      pieces.append("%s: %d (%d)  " % (stat, self.get_effective_stat(stat),
+      pieces.append("{}: {} ({})  ".format(stat, self.get_effective_stat(stat),
                                        self.stats[stat]))
       pieces.append("\n")
-    pieces.append("stats: %r\n" % self.stats)
-    pieces.append("HP: %d / %d\n" % (self.current_hp, self.max_hp))
-    pieces.append("XP value: %d\n" % self.calculate_exp())
+    pieces.append("stats: {0!r}\n".format(self.stats))
+    pieces.append("HP: {} / {}\n".format(self.current_hp, self.max_hp))
+    pieces.append("XP value: {}\n".format(self.calculate_exp()))
     return "".join(pieces)
 
   def calculate_exp(self):

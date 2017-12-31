@@ -46,7 +46,7 @@ class Quest(object):
     pieces.append("Remaining monsters:")
     for monster in self.monsters:
       pieces.append(monster.name)
-    pieces.append("Reward: %d GP, %d XP, %d treasures" % (self.gp_reward,
+    pieces.append("Reward: {} GP, {} XP, {} treasures".format(self.gp_reward,
                                                           self.xp_reward,
                                                           self.treasure_reward))
     return "\n".join(pieces)

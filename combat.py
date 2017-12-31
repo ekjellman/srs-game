@@ -34,7 +34,7 @@ class Combat(object):
     while next_turn == cls.MONSTER_TURN:
       if Effect.get_combined_impact("Stunned", monster.buffs,
                                     monster.debuffs) > 0:
-        logs.append("%s is stunned" % monster.name)
+        logs.append("{} is stunned".format(monster.name))
         return cls.CHARACTER_TURN
       action, info = monster.get_action(character)
       result = cls.perform_action(action, info, monster, character, logs)
@@ -81,7 +81,7 @@ class Combat(object):
       return method(info, actor, target, logs)
     except AttributeError as exc:
       print(exc)
-      logs.append("Combat option %s not implemented" % action)
+      logs.append("Combat option {} not implemented".format(action))
       return cls.TARGET_ALIVE
 
   @classmethod
@@ -104,7 +104,7 @@ class Combat(object):
 
   @classmethod
   def action_skill(cls, info, actor, target, logs):
-    logs.append("%s uses %s" % (actor.name, info.get_name()))
+    logs.append("{} uses {}".format(actor.name, info.get_name()))
     return info.apply_skill(actor, target, logs)
 
   @classmethod
@@ -112,7 +112,7 @@ class Combat(object):
                     multiplier=None, base_damage=None):
     """Attacks, applies damage, returns True if target dies."""
     assert (multiplier is None) or (base_damage is None)
-    logs.append("%s attacks %s" % (actor.name, target.name))
+    logs.append("{} attacks {}".format(actor.name, target.name))
     damage = base_damage or actor.get_damage()
     damage_type = attack_type or actor.get_damage_type()
     damage = cls.apply_traits(damage, damage_type, actor, target)
@@ -138,7 +138,7 @@ class Combat(object):
         logs.append("Misses due to Blindness")
         return cls.TARGET_ALIVE
     color_string = "`255,0,0`" if isinstance(actor, Monster) else ""
-    logs.append("%sHits for %d %s damage`0,0,0`" % (color_string, damage,
+    logs.append("{}Hits for {} {} damage`0,0,0`".format(color_string, damage,
                                                     damage_type))
     return cls.apply_damage(target, damage)
 

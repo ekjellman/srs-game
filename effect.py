@@ -65,9 +65,9 @@ class Effect(object):
 
   def __str__(self):
     if self.quantity:
-      return "%s (%d): %d" % (self.get_name(), self.quantity, self.duration)
+      return "{} ({}): {}".format(self.get_name(), self.quantity, self.duration)
     else:
-      return "%s: %d" % (self.get_name(), self.duration)
+      return "{}: {}".format(self.get_name(), self.duration)
 
 class Buff(Effect):
   @classmethod

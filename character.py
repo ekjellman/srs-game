@@ -70,7 +70,7 @@ class Character(object):
       color = ORANGE_HP
     else:
       color = RED_HP
-    return "%s%d / %d%s" % (color, self.current_hp, self.max_hp, BLACK)
+    return "{}{} / {}{}".format(color, self.current_hp, self.max_hp, BLACK)
 
   @classmethod
   def debug_character(cls, level, choice_text):
@@ -162,12 +162,12 @@ class Character(object):
   def __str__(self):
     pieces = []
     pieces.append("Character:\n")
-    pieces.append("HP: %d / %d\n" % (self.current_hp, self.max_hp))
-    pieces.append("SP: %d / %d\n" % (self.current_sp, self.max_sp))
-    pieces.append("Level: %d " % self.level)
-    pieces.append("(%d / %d)\n" % (self.exp, self.next_level_exp()))
+    pieces.append("HP: {} / {}\n".format(self.current_hp, self.max_hp))
+    pieces.append("SP: {} / {}\n".format(self.current_sp, self.max_sp))
+    pieces.append("Level: {} ".format(self.level))
+    pieces.append("({} / {})\n".format(self.exp, self.next_level_exp()))
     for stat in STAT_ORDER:
-      pieces.append("%s: %d (%d)  " % (stat, self.get_effective_stat(stat),
+      pieces.append("{}: {} ({})  ".format(stat, self.get_effective_stat(stat),
                                        self.stats[stat]))
     pieces.append("\n")
     pieces.append("Equipment:\n")
@@ -179,14 +179,14 @@ class Character(object):
     else:
       for trait in self.traits.keys():
         if self.traits.get(trait, 0) > 0:
-          pieces.append("%s: %d  " % (trait, self.traits.get(trait, 0)))
+          pieces.append("{}: {}  ".format(trait, self.traits.get(trait, 0)))
     pieces.append("\n")
     pieces.append("Skills: ")
     if not self.skills:
       pieces.append("None")
     else:
       for skill in self.skills:
-        pieces.append("%s: %d  " % (skill.get_name(), skill.level))
+        pieces.append("{}: {}  ".format(skill.get_name(), skill.level))
     pieces.append("\n")
     pieces.append("Materials: ")
     if sum(self.materials) == 0:
@@ -194,7 +194,7 @@ class Character(object):
     else:
       for i in range(len(self.materials)):
         if self.materials[i] > 0:
-          pieces.append("%s: %d  " % (RARITY[i], self.materials[i]))
+          pieces.append("{}: {}  ".format(RARITY[i], self.materials[i]))
       pieces.append("\n")
     pieces.append("Buffs: ")
     pieces.append(", ".join(str(buff) for buff in self.buffs))
@@ -208,7 +208,7 @@ class Character(object):
       pieces.append("\n")
     else:
       pieces.append("None\n")
-    pieces.append("Corrupted runes: %d" % self.runes)
+    pieces.append("Corrupted runes: {}".format(self.runes))
     return "".join(pieces)
 
   def restore_hp(self, amount=None):
@@ -239,7 +239,7 @@ class Character(object):
     if penalty:
       logs.append("You were found by a passerby, and brought back to town.")
       lost_gold = self.gold / 2
-      logs.append("You lost %d gold" % lost_gold)
+      logs.append("You lost {} gold".format(lost_gold))
       self.gold -= lost_gold
       self.buffs = []
 
@@ -286,13 +286,13 @@ class Character(object):
       increase = random.randint(1, 3)
       if increase > 0:
         self.stats[stat] += increase
-        logs.append("You have gained %d %s" % (increase, stat))
+        logs.append("You have gained {} {}".format(increase, stat))
     hp_gain = random.randint(10, 20)
     sp_gain = random.randint(5, 10)
     self.base_hp += hp_gain
     self.base_sp += sp_gain
-    logs.append("You have gained %d HP" % hp_gain)
-    logs.append("You have gained %d SP" % sp_gain)
+    logs.append("You have gained {} HP".format(hp_gain))
+    logs.append("You have gained {} SP".format(sp_gain))
     self.recalculate_maxes()
 
   def train_xp(self, level, logs):
@@ -301,7 +301,7 @@ class Character(object):
   def train_stats(self, logs):
     stat = random.choice(self.stats.keys())
     self.stats[stat] += 1
-    logs.append("Gained +1 %s" % stat)
+    logs.append("Gained +1 {}".format(stat))
 
   def gain_materials(self, materials):
     for i in range(len(materials)):
@@ -404,12 +404,12 @@ class Character(object):
     total_xp_gain = int(exp_gained * xp_buff)
     self.exp += total_xp_gain
     added_xp = total_xp_gain - exp_gained
-    logs.append("You have gained %d XP (%+d buffs)" % (exp_gained, added_xp))
+    logs.append("You have gained {} XP ({:+d} buffs)".format(exp_gained, added_xp))
     levels_gained = 0
     while self.exp >= self.next_level_exp():
       self.exp -= self.next_level_exp()
       self.level += 1
-      logs.append("You have reached level %d!" % self.level)
+      logs.append("You have reached level {}!".format(self.level))
       self.level_up(logs)
       levels_gained += 1
     return levels_gained
