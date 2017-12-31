@@ -210,7 +210,7 @@ class Equipment(object):
                                      self.attributes.get("High", 0)))
     defense_pieces = []
     stat_pieces = []
-    for attr in self.attributes:
+    for attr in self.attributes.keys():
       if attr in STATS:
         if self.attributes.get(attr, 0) > 0:
           stat_pieces.append("%+d %s " % (self.attributes.get(attr, 0), attr))

@@ -28,14 +28,14 @@ class Monster(object):
     self.level = level
     self.boss = boss
     # If you modify these, make sure to modify the XP calc
-    for stat in STAT_DICE:
+    for stat in STAT_DICE.keys():
       die, modifier = STAT_DICE[stat]
       self.stats[stat] = self.roll_stat(self.level, die, modifier)
     if boss:
-      for stat in self.stats:
+      for stat in self.stats.keys():
         self.stats[stat] = self.stats[stat] * 1.3
       self.stats["Stamina"] *= 4   # Effectively x5.2
-    for stat in self.stats:
+    for stat in self.stats.keys():
       # 75-125% change
       self.stats[stat] *= (random.random() * 0.5) + 0.75
       self.stats[stat] = int(self.stats[stat])
@@ -97,7 +97,7 @@ class Monster(object):
     else:
       pieces.append("None\n")
     pieces.append("***DEBUG***\n")
-    for stat in self.stats:
+    for stat in self.stats.keys():
       pieces.append("%s: %d (%d)  " % (stat, self.get_effective_stat(stat),
                                        self.stats[stat]))
       pieces.append("\n")
@@ -108,7 +108,7 @@ class Monster(object):
 
   def calculate_exp(self):
     effective_level = 0
-    for stat in STAT_DICE:
+    for stat in STAT_DICE.keys():
       die, modifier = STAT_DICE[stat]
       average = ((1 + die) / 2.0) + modifier
       effective_level += (self.stats[stat] / average)
