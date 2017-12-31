@@ -1,5 +1,4 @@
 import random
-import collections
 from skills import SKILLS, SKILL_NAMES
 from equipment import Equipment, RARITY
 from effect import Effect, Buff, Debuff
@@ -57,7 +56,7 @@ class Character(object):
     self.buffs = []
     self.debuffs = []
     self.runes = 0
-    self.traits = collections.defaultdict(int)
+    self.traits = {}
     random.seed()
     self.reroll_counter = random.randint(0, 1000000)
 
@@ -135,9 +134,9 @@ class Character(object):
       if buff.active():
         remaining_buffs.append(buff)
     self.buffs = remaining_buffs
-    restored_hp = self.traits["Regeneration"] * 3 * time_passed
+    restored_hp = self.traits.get("Regeneration", 0) * 3 * time_passed
     # Not used yet
-    restored_sp = self.traits["Clarity of Mind"] * time_passed
+    restored_sp = self.traits.get("Clarity of Mind", 0) * time_passed
     self.restore_hp(restored_hp)
     self.restore_sp(restored_sp)
     self.recalculate_maxes()
@@ -151,7 +150,7 @@ class Character(object):
     self.recalculate_maxes()
 
   def gain_gold(self, amount):
-    amount_gained = amount * (1.00 + (0.05 * self.traits["Merchant Warrior"]))
+    amount_gained = amount * (1.00 + (0.05 * self.traits.get("Merchant Warrior", 0)))
     amount_gained = int(amount_gained)
     self.gold += amount_gained
     return amount_gained
@@ -179,8 +178,8 @@ class Character(object):
       pieces.append("None")
     else:
       for trait in self.traits:
-        if self.traits[trait] > 0:
-          pieces.append("%s: %d  " % (trait, self.traits[trait]))
+        if self.traits.get(trait, 0) > 0:
+          pieces.append("%s: %d  " % (trait, self.traits.get(trait, 0)))
     pieces.append("\n")
     pieces.append("Skills: ")
     if not self.skills:
@@ -310,16 +309,16 @@ class Character(object):
 
   def get_trait_choices(self):
     choices = [""]
-    reroll_trait_level = self.traits["Self-Improvement"]
+    reroll_trait_level = self.traits.get("Self-Improvement", 0)
     reroll_chance = float(reroll_trait_level) / (reroll_trait_level + 1)
     if random.random() < reroll_chance:
       choices.append("Get New Traits")
     while len(choices) < 4:
       best_roll, best_trait = 0.0, None
       for trait in TRAITS:
-        rerolls = max(1, int((self.traits[trait] + 1) ** .5))
+        rerolls = max(1, int((self.traits.get(trait, 0) + 1) ** .5))
         roll = min(random.random() for _ in range(rerolls))
-        if trait == "Libra" and self.traits[trait] > 0:  # Only one libra level
+        if trait == "Libra" and self.traits.get(trait, 0) > 0:  # Only one libra level
           roll = 0.0
         if roll > best_roll:
           best_roll, best_trait = roll, trait
@@ -332,7 +331,7 @@ class Character(object):
       self.reroll_counter += 1
       return False
     assert trait in TRAITS
-    self.traits[trait] += 1
+    self.traits[trait] = self.traits.get(trait, 0) + 1
     return True
 
   def get_skill_choices(self):
@@ -346,7 +345,7 @@ class Character(object):
     if len(self.skills) == 3:
       choices.extend(skill.get_name() for skill in self.skills)
     else:
-      reroll_skill_level = self.traits["Scholar"]
+      reroll_skill_level = self.traits.get("Scholar", 0)
       reroll_chance = float(reroll_skill_level) / (reroll_skill_level + 1)
       if random.random() < reroll_chance:
         choices.append("Get New Skills")
@@ -397,7 +396,7 @@ class Character(object):
       return True
 
   def gain_exp(self, exp, encounter_level, logs, level_adjust=True):
-    exp_gained = exp * (1.0 + (0.03 * self.traits["Quick Learner"]))
+    exp_gained = exp * (1.0 + (0.03 * self.traits.get("Quick Learner", 0)))
     level_difference = encounter_level - self.level
     if level_adjust:
       exp_gained = int(exp_gained * (1.03 ** level_difference))

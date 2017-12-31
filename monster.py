@@ -1,4 +1,3 @@
-import collections
 import random
 from equipment import Equipment
 from effect import Debuff, Effect
@@ -48,7 +47,7 @@ class Monster(object):
                                            self.level)
     else:
       self.name = "%s (Level %d)" % (NAME_GENERATOR.generate_name(), self.level)
-    self.traits = collections.defaultdict(int)
+    self.traits = {}
     self.buffs = []
     self.debuffs = []
 

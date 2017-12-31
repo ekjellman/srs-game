@@ -55,7 +55,7 @@ class Combat(object):
             if buff.get_name() == "Auto Life":
               buff.duration = 0
         else:
-          death_chance = 0.95 ** character.traits["Perseverance"]
+          death_chance = 0.95 ** character.traits.get("Perseverance", 0)
           if random.random() < death_chance:
             return cls.CHARACTER_DEAD
           else:
@@ -69,7 +69,7 @@ class Combat(object):
         if random.random() < combobreaker_chance:
           next_turn = cls.CHARACTER_TURN
           logs.append("Combobreaker! prevented the next enemy turn")
-      combobreaker_chance += character.traits["Combobreaker!"] / 100.0
+      combobreaker_chance += character.traits.get("Combobreaker!", 0) / 100.0
     return cls.CHARACTER_TURN
 
   @classmethod
@@ -92,11 +92,11 @@ class Combat(object):
   @classmethod
   def apply_traits(cls, damage, damage_type, actor, target):
     if damage_type == "Physical":
-      attack_factor = 1.00 + (.05 * actor.traits["Beefy!"])
-      defense_factor = 0.95 ** target.traits["Stocky!"]
+      attack_factor = 1.00 + (.05 * actor.traits.get("Beefy!", 0))
+      defense_factor = 0.95 ** target.traits.get("Stocky!", 0)
     elif damage_type == "Magic":
-      attack_factor = 1.00 + (.05 * actor.traits["Wizardry"])
-      defense_factor = 0.95 ** target.traits["Mental Toughness"]
+      attack_factor = 1.00 + (.05 * actor.traits.get("Wizardry", 0))
+      defense_factor = 0.95 ** target.traits.get("Mental Toughness", 0)
     else:
       assert False
     damage = max(1, damage * attack_factor * defense_factor)

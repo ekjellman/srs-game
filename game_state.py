@@ -813,7 +813,7 @@ class GameState(object):
   def combat_text(self):
     buffs = ", ".join(str(buff) for buff in self.character.buffs)
     buffs = buffs or "None"
-    libra_string = self.monster.libra_string(self.character.traits["Libra"])
+    libra_string = self.monster.libra_string(self.character.traits.get("Libra", 0))
     return "Your HP: %s\nBuffs: %s\n\n%s" % (self.character.colored_hp(),
                                              buffs, libra_string)
 
