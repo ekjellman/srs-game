@@ -129,7 +129,7 @@ class Monster(object):
     chances = CHANCE_TIERS[treasure_tier]
     for rarity in range(1, len(chances)):
       while random.random() < chances[rarity]:
-        treasure.append(Equipment.get_new_armor(self.level, rarity=rarity))
+        treasure.append(Equipment.get_new_armor(self.level, None, None, rarity))
     rune_chance = RUNE_CHANCES[treasure_tier]
     while random.random() < rune_chance:
       treasure.append("Rune")

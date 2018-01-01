@@ -323,7 +323,7 @@ class GameState(object):
   def apply_choice_rune_world(self, logs, choice_text):
     if choice_text == "Explore":
       self.rune_level += 1
-      self.start_combat(logs, .1, level=self.rune_level)
+      self.start_combat(logs, .1, self.rune_level)
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
@@ -404,7 +404,7 @@ class GameState(object):
   def apply_choice_stronghold(self, logs, choice_text):
     if choice_text == "Enter Room":
       level = TOWER_LEVELS - 20 + (self.stronghold_room * 5)
-      self.start_combat(logs, 1.0, level=level)
+      self.start_combat(logs, 1.0, level)
     elif choice_text == "Rest":
       self.pass_time(5, logs)
       logs.append("You rest")
