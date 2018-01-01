@@ -5,3 +5,7 @@ transcrypt -b -m -e 6 -n -t srs.py
 
 # Fix '...'.join
 sed -i '' -e 's/strings.join (/Array.prototype.join.call (strings, /' __javascript__/srs.js
+
+# Fix mul for '...'*0 and [...]*0
+perl -0777 -i -pe "s/String.prototype.__mul__ = function \(scalar\) \{\n        var result = this;\n        for \(var i = 1/String.prototype.__mul__ = function \(scalar\) \{\n        var result = '';\n        for \(var i = 0/igs" __javascript__/srs.js
+perl -0777 -i -pe "s/Array.prototype.__mul__ = function \(scalar\) \{\n        var result = this;\n        for \(var i = 1/Array.prototype.__mul__ = function \(scalar\) \{\n        var result = [];\n        for \(var i = 0/igs" __javascript__/srs.js
