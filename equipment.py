@@ -41,7 +41,9 @@ class Equipment(object):
   def comparison_text(cls, old, new):
     assert old.slot == new.slot
     pieces = []
-    attributes = set().union(old.attributes, new.attributes)
+    # NB: We avoid union, for which Transcrypt seems to only support 1 argument.
+    attributes = set(old.attributes.keys())
+    attributes.update(new.attributes.keys())
     for attr in attributes:
       if attr not in STATS and attr not in DEFENSES:
         continue
