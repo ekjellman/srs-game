@@ -744,10 +744,20 @@ class Alchemist(Room):
     inventory = []
     for _ in range(3):
       # Health, magic, and buff potions each have their own constructors
+      # __pragma__ ('opov')
       health_pots = [items.HealthPotion(self.game, x) for x in ("Minor", "Standard", "Major", "Super")]
       magic_pots = [items.MagicPotion(self.game, x) for x in ("Minor", "Standard", "Major")] # Super Magic Potion doesn't exist
       pots = health_pots + magic_pots + [items.EffectPotion(self.game, x) for x in items.EffectPotion.EFFECT_POTIONS]
-      inventory.append(max((self.item_rate(p), p) for p in pots)[1])
+      # __pragma__ ('noopov')
+      #inventory.append(max((self.item_rate(p), p) for p in pots)[1])
+      best_pot = None
+      best_score = 0
+      for p in pots:
+        score = self.item_rate(p)
+        if score > best_score:
+          best_pot = p
+          best_score = score
+      inventory.append(best_pot)
     return inventory
 
   def refresh(self):
