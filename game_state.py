@@ -831,7 +831,7 @@ class GameState(object):
       method = getattr(GameState, method_name)
       method(self, logs, choice_text)
     #except AttributeError as exc:
-    except IOError as exc:
+    except Error as exc:
       print(exc)  # pylint: disable=print-statement
       logs.append("apply_choice not implemented yet, state: {}".format(current_state))
     self.last_turn_logs = logs[:]
