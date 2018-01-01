@@ -219,9 +219,9 @@ class Cannibalize(Skill):
   def sp_cost(self):
     return 0
   def apply_skill(self, actor, opponent, logs):
-    hp_to_convert = actor.max_hp * self.percent_converted() / 100
+    hp_to_convert = actor.max_hp * self.percent_converted() // 100
     hp_to_convert = min(hp_to_convert, actor.current_hp - 1)
-    sp_gained = hp_to_convert / 2
+    sp_gained = hp_to_convert // 2
     actor.current_hp -= hp_to_convert
     sp_gained = actor.restore_sp(sp_gained)
     logs.append("Converted {} HP into {} SP".format(hp_to_convert, sp_gained))
@@ -263,7 +263,7 @@ class Meditate(Skill):
     return (actor.current_sp / float(actor.max_sp) * (.99 ** self.level))
   def apply_skill(self, actor, opponent, logs):
     if random.random() > self.chance_to_fail(actor):
-      sp_gained = actor.restore_sp(actor.max_sp * self.percent_gained() / 100)
+      sp_gained = actor.restore_sp(actor.max_sp * self.percent_gained() // 100)
       logs.append("{} SP gained".format(sp_gained))
     else:
       logs.append("Meditation failed")
@@ -427,7 +427,7 @@ class HolyBlade(Skill):
                                   self.get_attack_multiple())
     actor.add_buff(effect.Aura(self.get_aura_length(),
                                self.get_aura_stacks()))
-    heal = actor.max_hp * self.get_heal_percent() / 100
+    heal = actor.max_hp * self.get_heal_percent() // 100
     heal = actor.restore_hp(heal)
     logs.append("You restore {} HP".format(heal))
     return result

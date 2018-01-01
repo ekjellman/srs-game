@@ -61,7 +61,7 @@ class Character(object):
     self.reroll_counter = random.randint(0, 1000000)
 
   def colored_hp(self):
-    hp_percent = self.current_hp * 100 / self.max_hp
+    hp_percent = self.current_hp * 100 // self.max_hp
     if hp_percent > 75:
       color = GREEN_HP
     elif hp_percent > 50:
@@ -237,7 +237,7 @@ class Character(object):
     self.debuffs = []
     if penalty:
       logs.append("You were found by a passerby, and brought back to town.")
-      lost_gold = self.gold / 2
+      lost_gold = self.gold // 2
       logs.append("You lost {} gold".format(lost_gold))
       self.gold -= lost_gold
       self.buffs = []

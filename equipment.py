@@ -66,8 +66,8 @@ class Equipment(object):
   def enchant(self):
     self.enchant_count += 1
     enchanted_stat = random.choice(STATS)
-    amount = random.randint(max(1, self.item_level / 4),
-                            max(1, self.item_level / 2))
+    amount = random.randint(max(1, self.item_level // 4),
+                            max(1, self.item_level // 2))
     amount = int(amount * (1.0 + 0.25 * self.rarity))
     self.attributes[enchanted_stat] = self.attributes.get(enchanted_stat, 0) + amount
     return "{:+d} {}".format(amount, enchanted_stat)
@@ -83,7 +83,7 @@ class Equipment(object):
     for _ in range(max_gains):
       stat_gains[random.randint(0, 3)] += 1
     for i in range(4):
-      stat_gains[i] = random.randint(stat_gains[i] / 2, stat_gains[i])
+      stat_gains[i] = random.randint(stat_gains[i] // 2, stat_gains[i])
       self.attributes[STATS[i]] = self.attributes.get(STATS[i], 0) + stat_gains[i]
       if stat_gains[i] > 0:
         result_pieces.append("{:+d} {}".format(stat_gains[i], STATS[i]))
@@ -93,7 +93,7 @@ class Equipment(object):
     for _ in range(max_gains):
       def_gains[random.randint(0, 1)] += 1
     for i in range(2):
-      def_gains[i] = random.randint(def_gains[i] / 2, def_gains[i])
+      def_gains[i] = random.randint(def_gains[i] // 2, def_gains[i])
       self.attributes[DEFENSES[i]] = self.attributes.get(DEFENSES[i], 0) + def_gains[i]
       if def_gains[i] > 0:
         result_pieces.append("{:+d} {}".format(def_gains[i], DEFENSES[i]))
@@ -121,7 +121,7 @@ class Equipment(object):
 
   @classmethod
   def make_stat_value(cls, item_level, rarity):
-    min_stat = max(1, item_level / 2)
+    min_stat = max(1, item_level // 2)
     max_stat = min_stat + item_level + rarity
     return random.randint(min_stat, max_stat)
 

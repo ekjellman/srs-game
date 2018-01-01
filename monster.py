@@ -52,7 +52,7 @@ class Monster(object):
     self.debuffs = []
 
   def hp_string(self):
-    percent = int(100 * self.current_hp / self.max_hp)
+    percent = int(100 * self.current_hp // self.max_hp)
     return "{}%".format(percent)
 
   def pass_time(self, amount):

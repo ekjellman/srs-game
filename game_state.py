@@ -167,10 +167,10 @@ class GameState(object):
     return UPDATE_TIME - (self.time_spent % UPDATE_TIME)
 
   def pass_time(self, amount, logs):
-    old_period = self.time_spent / UPDATE_TIME
+    old_period = self.time_spent // UPDATE_TIME
     if self.rune_level == -1:
       self.time_spent += amount
-    new_period = self.time_spent / UPDATE_TIME
+    new_period = self.time_spent // UPDATE_TIME
     if old_period != new_period:
       self.tower_update_ready = True
       logs.append("Tower ready for update.")

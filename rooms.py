@@ -122,7 +122,7 @@ class Enchanter(Room):
 
   @classmethod
   def enchant_cost_materials(cls, item):
-    return item.item_level * (item.enchant_count + 1) / 2
+    return item.item_level * (item.enchant_count + 1) // 2
 
   def armor_text(self, character):
     pieces = []

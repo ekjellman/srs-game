@@ -107,7 +107,7 @@ class LogPanel(wx.Panel):
     if length > self.max_length:
       # The text field lags on add if there is too much text. Keep it to a
       # reasonable size
-      position = self.text_field.GetLastPosition() - (self.max_length / 2)
+      position = self.text_field.GetLastPosition() - (self.max_length // 2)
       new_line_position = self.text_field.GetValue().find("\n", position)
       if new_line_position == -1:
         new_line_position = position
