@@ -74,6 +74,7 @@ class Game:
     for log in logs:
       line = time.strftime("%m/%d/%y %H:%M:%S: ", time.localtime()) + str(log)
       self.log_panel.innerHTML += line + "<br>"
+      self.log_panel.scrollTop = self.log_panel.scrollHeight
     self.update_ui()
 
   def keydown(self, event):
