@@ -10,6 +10,7 @@ from items import Item
 import skills
 from srs_random import Dice
 from name_generator import NameGenerator
+from platform import nl
 from util import last
 
 # TODO: Log more. Certainly including victory
@@ -860,7 +861,7 @@ class GameState(object):
     pieces = []
     for i, item in enumerate(self.character.items):
       pieces.append("Use Item #{}: {}".format(i + 1, item.get_name()))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def trait_text(self):
     pieces = []
@@ -869,7 +870,7 @@ class GameState(object):
     for choice in choices:
       if choice in TRAITS:
         pieces.append("{}: {}".format(choice, TRAITS[choice]))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def skill_text(self):
     pieces = []
@@ -890,7 +891,7 @@ class GameState(object):
       else:
         pieces.append("  (New Skill)")
         pieces.append(" {} ({} sp)".format(new_skill.get_description(), new_skill.sp_cost()))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def skill_select_text(self):
     pieces = []
@@ -901,17 +902,19 @@ class GameState(object):
         already_used = "(Already Used)"
       else:
         already_used = ""
-      pieces.append("{}: {} sp {}{}\n{}".format(skill.get_name(), skill.sp_cost(),
-                                            insufficient_sp, already_used,
-                                            skill.get_description()))
-    return "\n".join(pieces)
+      pieces.append(("{}: {} sp {}{}" + nl() + "{}").format(skill.get_name(),
+                                                            skill.sp_cost(),
+                                                            insufficient_sp,
+                                                            already_used,
+                                                            skill.get_description()))
+    return nl().join(pieces)
 
   def combat_text(self):
     buffs = ", ".join(str(buff) for buff in self.character.buffs)
     buffs = buffs or "None"
     libra_string = self.monster.libra_string(self.character.traits.get("Libra", 0))
-    return "Your HP: {}\nBuffs: {}\n\n{}".format(self.character.colored_hp(),
-                                             buffs, libra_string)
+    return nl("Your HP: {}") + nl(nl("Buffs: {}")) + "{}".format(self.character.colored_hp(),
+                                                                 buffs, libra_string)
 
   def panel_text(self):
     """Return text to display to the player about the current game state."""
@@ -926,7 +929,7 @@ class GameState(object):
     elif current_state == "SUMMIT":
       return "You stand at the summit of the tower."
     elif current_state == "TOWER":
-      text = "You are inside the tower, ascending to level {}.\n".format(self.floor + 1)
+      text = nl("You are inside the tower, ascending to level {}.").format(self.floor + 1)
       text += "(Encounters completed: {})".format(self.ascension_encounters)
       return text
     elif current_state == "COMBAT":

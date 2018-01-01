@@ -9,3 +9,6 @@ except NameError:
 else:
   is_browser = True
   NL = '<br>'
+
+def nl(s = ""):
+    return s + NL

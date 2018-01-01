@@ -1,6 +1,7 @@
 from equipment import Equipment, RARITY
 from effect import WellRested, Blessed, Lucky
 import items
+from platform import nl
 from util import last
 
 class Room(object):
@@ -75,7 +76,7 @@ class TrainingRoom(Room):
                     (self.xp_training_cost(), self.level * 25))
       pieces.append("Gain Stats: {} gold (+1 random stat)".format
                     (self.stat_training_cost(character)))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def apply_choice(self, choice_text, logs, character):
     if choice_text == "Gain XP":
@@ -159,7 +160,7 @@ class Enchanter(Room):
       material_cost = self.enchant_cost_materials(item)
       pieces.append("Enchant {}: {} gold and {} {} materials".format
                     (name, cost, material_cost, RARITY[item.rarity]))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def normal_text(self, character):
     pieces = []
@@ -174,7 +175,7 @@ class Enchanter(Room):
                   (self.enchant_cost_gold(acc),
                    self.enchant_cost_materials(acc),
                    RARITY[acc.rarity]))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def get_text(self, character):
     if self.enchanting_armor:
@@ -289,7 +290,7 @@ class Forge(Room):
     else:
       pieces.append("Your weapon cannot currently be reforged.")
     pieces.append("Reforge Armor: [submenu]")
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def forge_armor_text(self, character):
     pieces = []
@@ -302,7 +303,7 @@ class Forge(Room):
                       (name, cost, material_cost, RARITY[item.rarity]))
       else:
         pieces.append("{} cannot currently be reforged.".format(name))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def get_text(self, character):
     if self.forging_armor:
@@ -390,7 +391,7 @@ class EquipmentShop(Room):
           pieces.append(str(item))
       if not pieces:
         pieces.append("You cleaned 'em out!")
-      return "\n".join(pieces)
+      return nl().join(pieces)
 
   def apply_choice_buy_equipment(self, choice_text, logs, character):
     if choice_text == "Keep Current":
@@ -551,7 +552,7 @@ class Inn(Room):
       pieces.append("Buy Food: {} gold".format(self.get_food_cost()))
     if not pieces:
       pieces.append("You cleaned 'em out!")
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def handle_trade(self, choice, logs, character):
     if not self.inventory[choice]:
@@ -639,7 +640,7 @@ class TeleportChamber(Room):
     for i in range(3):
       pieces.append("{}Teleport ({} {} materials): teleport {} levels."
                     .format(levels[i], self.level + i, mats[i], i+1))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def apply_choice(self, choice_text, logs, character):
     # TODO: Cleanup
@@ -686,7 +687,7 @@ class Temple(Room):
     pieces.append("Offering: ({}g) Make an offering to the gods.".format(self.get_offering_cost()))
     pieces.append("Blessing: ({}g) gain the Blessed buff".format(self.get_blessing_cost()))
     pieces.append("Purify Rune: Enter the rune world to cleanse a rune")
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def get_offering_cost(self):
     return int(100 * self.level * self.faction_rate)
@@ -790,7 +791,7 @@ class Alchemist(Room):
                                                     self.get_cost(item)))
       else:
         pieces.append("")
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def apply_choice(self, choice_text, logs, character):
     if choice_text.startswith("Choice #"):
@@ -847,7 +848,7 @@ class Crafthall(Room):
                    .format(self.level * 20, self.level, self.level))
       pieces.append("Craft Epic: {} gold, {} common mats, {} epic mats"
                    .format(self.level * 30, self.level, self.level))
-      return "\n".join(pieces)
+      return nl().join(pieces)
 
   def get_craft_rarity(self, starting_rarity):
     rarity = starting_rarity

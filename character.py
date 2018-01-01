@@ -1,6 +1,7 @@
 from skills import SKILLS, SKILL_NAMES
 from equipment import Equipment, RARITY
 from effect import Effect, Buff, Debuff
+from platform import nl
 
 STAT_ORDER = ["Strength", "Intellect", "Speed", "Stamina", "Defense",
               "Magic Defense"]
@@ -170,18 +171,18 @@ class Character(object):
 
   def __str__(self):
     pieces = []
-    pieces.append("Character:\n")
-    pieces.append("HP: {} / {}\n".format(self.current_hp, self.max_hp))
-    pieces.append("SP: {} / {}\n".format(self.current_sp, self.max_sp))
+    pieces.append(nl("Character:"))
+    pieces.append(nl("HP: {} / {}").format(self.current_hp, self.max_hp))
+    pieces.append(nl("SP: {} / {}").format(self.current_sp, self.max_sp))
     pieces.append("Level: {} ".format(self.level))
-    pieces.append("({} / {})\n".format(self.exp, self.next_level_exp()))
+    pieces.append(nl("({} / {})").format(self.exp, self.next_level_exp()))
     for stat in STAT_ORDER:
       pieces.append("{}: {} ({})  ".format(stat, self.get_effective_stat(stat),
                                        self.stats[stat]))
-    pieces.append("\n")
-    pieces.append("Equipment:\n")
+    pieces.append(nl())
+    pieces.append(nl("Equipment:"))
     for piece in self.equipment:
-      pieces.append(str(piece) + "\n")
+      pieces.append(nl(str(piece)))
     pieces.append("Traits: ")
     if sum(self.traits.values()) == 0:
       pieces.append("None")
@@ -189,34 +190,34 @@ class Character(object):
       for trait in self.traits.keys():
         if self.traits.get(trait, 0) > 0:
           pieces.append("{}: {}  ".format(trait, self.traits.get(trait, 0)))
-    pieces.append("\n")
+    pieces.append(nl())
     pieces.append("Skills: ")
     if not self.skills:
       pieces.append("None")
     else:
       for skill in self.skills:
         pieces.append("{}: {}  ".format(skill.get_name(), skill.level))
-    pieces.append("\n")
+    pieces.append(nl())
     pieces.append("Materials: ")
     if sum(self.materials) == 0:
-      pieces.append("None\n")
+      pieces.append(nl("None"))
     else:
       for i in range(len(self.materials)):
         if self.materials[i] > 0:
           pieces.append("{}: {}  ".format(RARITY[i], self.materials[i]))
-      pieces.append("\n")
+      pieces.append(nl())
     pieces.append("Buffs: ")
     pieces.append(", ".join(str(buff) for buff in self.buffs))
     if self.buffs:
-      pieces.append("\n")
+      pieces.append(nl())
     else:
-      pieces.append("None\n")
+      pieces.append(nl("None"))
     pieces.append("Items: ")
     if self.items:
       pieces.append(", ".join(item.get_name() for item in self.items))
-      pieces.append("\n")
+      pieces.append(nl())
     else:
-      pieces.append("None\n")
+      pieces.append(nl("None"))
     pieces.append("Corrupted runes: {}".format(self.runes))
     return "".join(pieces)
 

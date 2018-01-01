@@ -1,3 +1,5 @@
+from platform import nl
+
 # TODO: Make stats always be in a specific order [OrderedDict or array]
 # TODO: Should probably move these to a different place
 STATS = ["Strength", "Stamina", "Speed", "Intellect"]
@@ -37,11 +39,11 @@ class Equipment(object):
   @staticmethod
   def equipment_comparison_text(current, new):
     pieces = []
-    pieces.append("Current Equipment:\n")
+    pieces.append(nl("Current Equipment:"))
     pieces.append(str(current))
-    pieces.append("\nNew Equipment:\n")
+    pieces.append(nl() + nl("New Equipment:"))
     pieces.append(str(new))
-    pieces.append("\nComparison:\n")
+    pieces.append(nl() + nl("Comparison:"))
     pieces.append(Equipment.comparison_text(current, new))
     return "".join(pieces)
 
@@ -69,7 +71,7 @@ class Equipment(object):
       pieces.append("{}{:+0.1f} average damage".format(color, difference))
       if old.attributes.get("Type", 0) != new.attributes.get("Type", 0):
         pieces.append("`0,0,0`Weapon type change")
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def enchant(self):
     self.enchant_count += 1

@@ -1,5 +1,6 @@
 from monster import Monster
 from equipment import Equipment
+from platform import nl
 
 TREASURE_CHANCES = [1.0, 1.0, 0.500, 0.080, 0.015]
 
@@ -49,7 +50,7 @@ class Quest(object):
     pieces.append("Reward: {} GP, {} XP, {} treasures".format(self.gp_reward,
                                                           self.xp_reward,
                                                           self.treasure_reward))
-    return "\n".join(pieces)
+    return nl().join(pieces)
 
   def get_treasure(self):
     treasure = []

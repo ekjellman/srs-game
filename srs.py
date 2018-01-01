@@ -1,5 +1,6 @@
 import time
 from game_state import GameState
+from platform import nl
 
 class Game:
   def __init__(self):
@@ -23,11 +24,11 @@ class Game:
     self.buttons[3].onclick = self.button_press_u
 
     #self.encounter_panel.innerHTML = "<span style='color: brown'>Hello world</span>"
-    #self.encounter_panel.innerHTML += "<br>Weapon &#x1F5E1"
-    #self.encounter_panel.innerHTML += "<br>Helm &#x26D1"
-    #self.encounter_panel.innerHTML += "<br>Chest &#x1f455"
-    #self.encounter_panel.innerHTML += "<br>Legs &#x1f456"
-    #self.encounter_panel.innerHTML += "<br>Accessory &#x1f48d"
+    #self.encounter_panel.innerHTML += nl() + "Weapon &#x1F5E1"
+    #self.encounter_panel.innerHTML += nl() + "Helm &#x26D1"
+    #self.encounter_panel.innerHTML += nl() + "Chest &#x1f455"
+    #self.encounter_panel.innerHTML += nl() + "Legs &#x1f456"
+    #self.encounter_panel.innerHTML += nl() + "Accessory &#x1f48d"
 
     self.game_state = GameState()
     self.update_ui()
@@ -73,7 +74,7 @@ class Game:
     logs = self.game_state.apply_choice(number)
     for log in logs:
       line = time.strftime("%m/%d/%y %H:%M:%S: ", time.localtime()) + str(log)
-      self.log_panel.innerHTML += line + "<br>"
+      self.log_panel.innerHTML += nl(line)
       self.log_panel.scrollTop = self.log_panel.scrollHeight
     self.update_ui()
 
