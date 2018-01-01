@@ -22,11 +22,10 @@ TRAITS = {"Beefy": "Increase physical damage inflicted",
           "Sneaky": "Chance to skip non-elite battles (in tower only)",
          }
 
-GREEN_HP = "`0,160,0`"
-YELLOW_HP = "`200,200,0`"
-ORANGE_HP = "`224,136,20`"
-RED_HP = "`255,0,0`"
-BLACK = "`0,0,0`"
+GREEN_HP = "rgb(0,160,0)"
+YELLOW_HP = "rgb(200,200,0)"
+ORANGE_HP = "rgb(224,136,20)"
+RED_HP = "rgb(255,0,0)"
 
 # TRAITS:
 # TODO: There are more on the sheet
@@ -69,7 +68,7 @@ class Character(object):
       color = ORANGE_HP
     else:
       color = RED_HP
-    return "{}{} / {}{}".format(color, int(self.current_hp), self.max_hp, BLACK)
+    return "<span style=\"color: {}\">{} / {}</span>".format(color, int(self.current_hp), self.max_hp)
 
   @classmethod
   def debug_character(cls, game, level, choice_text):

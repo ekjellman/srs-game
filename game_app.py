@@ -29,24 +29,32 @@ import subprocess
 #       given leave shop is down and leave town is up. Consider adjusting this
 
 def write_color_text(rtc, string):
-  # Takes a wx.richtext.RichTextCtrl and writes my wacky custom color-coded
-  # text out to it.
-  # Colors are specified via `r,g,b` in the text
-  # Note: Assumes there are no "`" in the text.
-  tokens = string.split("`")
+  # Parses CSS-styled colors and writes them to a wx.richtext.RichTextCtrl.
+  # Colors are specified in the text as '<span style=\"color: asdf\">...</span>'
+
+  # Normalize the formatting of <span> tags so splitting is easier.
+  norm_spans = string.replace('</span>', '<span style="color: rgb(0,0,0)">')
+
+  # Parse HTML with regex; nothing can possibly go wrong.
+  tokens = re.split('<span +style="color: *([^"]*)" *>', norm_spans)
+
+  # Ensure even number of tokens, for upcoming split+zip loop.
+  if len(tokens) % 2 == 1: tokens.append('')
+
+  # Prime our area.
   rtc.SetInsertionPoint(rtc.GetLastPosition())
   rtc.BeginTextColour((0, 0, 0))
   rtc.BeginParagraphSpacing(0, 0)
-  token = tokens.pop(0)
-  if token:
-    rtc.WriteText(token)
-  while tokens:
-    color_string = tokens.pop(0)
-    r, g, b = map(int, color_string.split(","))  # pylint: disable=invalid-name
-    rtc.BeginTextColour((r, g, b))
-    token = tokens.pop(0)
-    if token:
-      rtc.WriteText(token)
+
+  # Iterate over (string, color) pairs.
+  for string, color in zip(tokens[0:][::2], tokens[1:][::2]):
+    if string:
+      rtc.WriteText(string)
+    if color:
+      r, g, b = map(int, re.findall('\d+', color))  # pylint: disable=invalid-name
+      rtc.BeginTextColour((r, g, b))
+
+  # Navigate to bottom of area.
   rtc.ShowPosition(rtc.GetLastPosition())
 
 class ButtonPanel(wx.Panel):

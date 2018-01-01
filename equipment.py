@@ -6,8 +6,8 @@ STATS = ["Strength", "Stamina", "Speed", "Intellect"]
 DEFENSES = ["Defense", "Magic Defense"]
 SLOTS = ["Weapon", "Hat", "Shirt", "Pants", "Accessory"]
 RARITY = ["Common", "Uncommon", "Rare", "Epic", "Legendary"]
-RARITY_COLORS = ["`160,160,160`", "`0,160,0`", "`0,0,160`", "`160,0,160`",
-                 "`255,140,0`"]
+RARITY_COLORS = ["rgb(160,160,160)", "rgb(0,160,0)", "rgb(0,0,160)", "rgb(160,0,160)",
+                 "rgb(255,140,0)"]
 ABBREVIATIONS = {"Defense": "Def",
                  "Magic Defense": "MDef"}
 WEAPON_STATS = ["Low", "High", "Type"]
@@ -61,16 +61,16 @@ class Equipment(object):
       new_attribute = new.attributes.get(attr, 0) if attr in new.attributes else 0
       difference = new_attribute - old_attribute
       if difference != 0:
-        color_string = "`255,0,0`" if difference < 0 else "`0,160,0`"
-        pieces.append("{}{:+d} {}".format(color_string, difference, attr))
+        color_string = "rgb(255,0,0)" if difference < 0 else "rgb(0,160,0)"
+        pieces.append("<span style=\"color: {}\">{:+d} {}</span>".format(color_string, difference, attr))
     if old.slot == 0:
       old_average = (old.attributes.get("Low", 0) + old.attributes.get("High", 0)) / 2.0
       new_average = (new.attributes.get("Low", 0) + new.attributes.get("High", 0)) / 2.0
       difference = new_average - old_average
-      color = "`255,0,0`" if difference < 0 else "`0,160,0`"
-      pieces.append("{}{:+0.1f} average damage".format(color, difference))
+      color = "rgb(255,0,0)" if difference < 0 else "rgb(0,160,0)"
+      pieces.append("<span style=\"color: {}\">{:+0.1f} average damage</span>".format(color, difference))
       if old.attributes.get("Type", 0) != new.attributes.get("Type", 0):
-        pieces.append("`0,0,0`Weapon type change")
+        pieces.append("Weapon type change")
     return nl().join(pieces)
 
   def enchant(self):
@@ -215,7 +215,7 @@ class Equipment(object):
     pieces = []
     pieces.append(SLOTS[self.slot])
     pieces.append(": ")
-    pieces.append(RARITY_COLORS[self.rarity])
+    pieces.append("<span style=\"color: {}\">".format(RARITY_COLORS[self.rarity]))
     # __pragma__ ('opov')
     pieces.append("({}{} {}) ".format(self.item_level,
                                   "*" * self.enchant_count,
@@ -238,5 +238,5 @@ class Equipment(object):
         assert attr in WEAPON_STATS
     pieces.append("({}) ".format(" / ".join(defense_pieces)))
     pieces.append(" ".join(stat_pieces))
-    pieces.append("`0,0,0`")
+    pieces.append("</span>")
     return "".join(pieces)

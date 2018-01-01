@@ -144,8 +144,8 @@ class Combat(object):
       if actor.game.rng.random() < .5:
         logs.append("Misses due to Blindness.")
         return cls.TARGET_ALIVE
-    color_string = "`255,0,0`" if isinstance(actor, Monster) else ""
-    logs.append("{}Hits for {} {} damage.`0,0,0`".format(color_string, damage,
+    color_string = " style=\"color: rgb(255,0,0)\"" if isinstance(actor, Monster) else ""
+    logs.append("{}Hits for {} {} damage.".format(color_string, damage,
                                                     damage_type))
     return cls.apply_damage(target, damage)
 
