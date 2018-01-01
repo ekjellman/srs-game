@@ -57,3 +57,19 @@ class Dice(object):
   def choice(self, seq):
     i = self.randint(0, len(seq) - 1)
     return seq[i]
+
+  def min_random_n_times(self, n):
+    # NB: Unrolled version of:
+    #return roll = min(random.random() for _ in range(n))
+    roll = 1.0
+    for _ in range(n):
+      roll = min(roll, self.random())
+    return roll
+
+  def min_randint_n_times(self, lo, hi, n):
+    # NB: Unrolled version of:
+    #return min(random.randint(lo, hi) for _ in range(n))
+    roll = hi
+    for _ in range(n):
+      roll = min(roll, self.randint(lo, hi))
+    return roll

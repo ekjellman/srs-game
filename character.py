@@ -328,7 +328,7 @@ class Character(object):
       best_roll, best_trait = 0.0, None
       for trait in TRAITS.keys():
         rerolls = max(1, int((self.traits.get(trait, 0) + 1) ** .5))
-        roll = min(self.game.rng.random() for _ in range(rerolls))
+        roll = self.game.rng.min_random_n_times(rerolls)
         if trait == "Libra" and self.traits.get(trait, 0) > 0:  # Only one libra level
           roll = 0.0
         if roll > best_roll:
@@ -366,7 +366,7 @@ class Character(object):
             rerolls = 1
           else:
             rerolls = int(current_skill.level ** .5)
-          roll = min(self.game.rng.random() for _ in range(rerolls))
+          roll = self.game.rng.min_random_n_times(rerolls)
           if roll > best_roll:
             best_roll, best_skill = roll, skill_name
         if best_skill not in choices:
