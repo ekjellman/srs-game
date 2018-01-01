@@ -196,8 +196,9 @@ class GameState(object):
     if current_state in CHOICES:
       return CHOICES[current_state]
     if current_state == "TOWN":
-      choices = [shop.get_name() for shop in self.towns[self.floor]]
-      return ["Leave Town"] + choices
+      choices = ["Leave Town"]
+      choices.extend([shop.get_name() for shop in self.towns[self.floor]])
+      return choices
     elif current_state == "SHOP":
       return self.current_shop.get_buttons(self.character)
     elif current_state == "OUTSIDE":
