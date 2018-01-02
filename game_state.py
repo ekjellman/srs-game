@@ -586,6 +586,8 @@ class GameState(object):
       if levelups > 0:
         self.levelups = levelups
         self.skillups = levelups
+        self.trait_choices = self.character.get_trait_choices()
+        self.skill_choices = self.character.get_skill_choices()
         self.add_state("LEVEL_UP")
       self.handle_treasure(logs)
 
@@ -688,6 +690,8 @@ class GameState(object):
     elif result == self.current_shop.LEVEL_UP:
       self.levelups = 1
       self.skillups = 1
+      self.trait_choices = self.character.get_trait_choices()
+      self.skill_choices = self.character.get_skill_choices()
       self.add_state("LEVEL_UP")
     else:
       assert False
