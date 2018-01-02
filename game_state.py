@@ -248,7 +248,7 @@ class GameState(object):
         amount_gained = self.character.gain_gold(item)
         logs.append("You got %d gold." % amount_gained)
       elif isinstance(item, Equipment):
-        logs.append("You got the following equipment")
+        logs.append("You got the following equipment:")
         logs.append(str(item))
         self.add_state("LOOT_EQUIPMENT")
         self.equipment_choice = item
@@ -315,7 +315,7 @@ class GameState(object):
     boss = random.random() < boss_chance
     self.add_state("COMBAT")
     self.monster = Monster(level, boss)
-    logs.append("You have encountered a monster")
+    logs.append("You have encountered a monster.")
 
   def apply_choice_rune_world(self, logs, choice_text):
     if choice_text == "Explore":
@@ -327,7 +327,7 @@ class GameState(object):
     elif choice_text == "Leave Rune":
       self.pass_time(0, logs)
       self.leave_state()
-      logs.append("You leave the world of the rune")
+      logs.append("You leave the world of the rune.")
       self.handle_rune_completion(logs)
 
   def apply_choice_accept_quest(self, logs, choice_text):
@@ -362,12 +362,12 @@ class GameState(object):
       logs.append("You continue the quest...")
       self.add_state("COMBAT")
       self.monster = self.quest.get_monster()
-      logs.append("You have encountered a monster")
+      logs.append("You have encountered a monster.")
     elif choice_text == "Rest":
       self.pass_time(5, logs)
-      logs.append("You rest")
+      logs.append("You rest.")
       hp_gained = self.character.rest()
-      logs.append("You regain %d HP" % hp_gained)
+      logs.append("You regain %d HP." % hp_gained)
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
@@ -404,13 +404,13 @@ class GameState(object):
       self.pass_time(5, logs)
       logs.append("You rest")
       hp_gained = self.character.rest()
-      logs.append("You regain %d HP" % hp_gained)
+      logs.append("You regain %d HP." % hp_gained)
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
     elif choice_text == "Leave Stronghold":
       self.pass_time(10, logs)
-      logs.append("You leave the Stronghold of the Ten")
+      logs.append("You leave the Stronghold of the Ten.")
       self.leave_state()
 
   def handle_explore(self, logs, explore_type):
@@ -420,7 +420,7 @@ class GameState(object):
       logs.append("You find a treasure hoard!")
       self.find_treasure(logs, 8)
     elif random_number < sum(chances[0:2]):
-      logs.append("You find a shop")
+      logs.append("You find a shop.")
       self.character.restore_hp()
       self.character.restore_sp()
       shop = random.choice(TOWER_BUILDINGS)(self.floor)
@@ -432,7 +432,7 @@ class GameState(object):
         faction = self.tower_faction[self.floor]
       shop.enter_shop(faction)
     elif random_number < sum(chances[0:3]):
-      logs.append("You find a treasure chest")
+      logs.append("You find a treasure chest!")
       self.find_treasure(logs, 1)
     elif random_number < sum(chances):
       self.start_combat(logs, 1.0)  # Boss monster
@@ -453,7 +453,7 @@ class GameState(object):
         assert self.ascension_encounters == -1
         self.floor += 1
         self.frontier = max(self.frontier, self.floor)
-        logs.append("Congratulations, you have reached floor %d" % self.floor)
+        logs.append("Congratulations, you have reached floor %d!" % self.floor)
         if self.floor < TOWER_LEVELS:
           self.leave_state()
           self.change_state("OUTSIDE")
@@ -464,9 +464,9 @@ class GameState(object):
           assert False
     elif choice_text == "Rest":
       self.pass_time(5, logs)
-      logs.append("You rest")
+      logs.append("You rest.")
       hp_gained = self.character.rest()
-      logs.append("You regain %d HP" % hp_gained)
+      logs.append("You regain %d HP." % hp_gained)
       if random.random() < .2:
         self.start_combat(logs, .1)
     elif choice_text == "Item":
@@ -474,7 +474,7 @@ class GameState(object):
       self.add_state("USE_ITEM")
     elif choice_text == "Leave Tower":
       self.pass_time(10, logs)
-      logs.append("You leave the tower")
+      logs.append("You leave the tower.")
       self.change_state("OUTSIDE")
 
   def find_treasure(self, logs, item_count):
@@ -505,9 +505,9 @@ class GameState(object):
         self.handle_explore(logs, "Dungeon")
     elif choice_text == "Rest":
       self.pass_time(5, logs)
-      logs.append("You rest")
+      logs.append("You rest.")
       hp_gained = self.character.rest()
-      logs.append("You regain %d HP" % hp_gained)
+      logs.append("You regain %d HP." % hp_gained)
       if random.random() < .2 or self.infinity_dungeon:
         self.start_combat(logs, .1)
     elif choice_text == "Item":
@@ -515,7 +515,7 @@ class GameState(object):
       self.add_state("USE_ITEM")
     elif choice_text == "Leave Dungeon":
       self.pass_time(5, logs)
-      logs.append("You leave the dungeon")
+      logs.append("You leave the dungeon.")
       if self.infinity_dungeon:
         self.infinity_dungeon = False
         self.floor = TOWER_LEVELS
@@ -547,7 +547,7 @@ class GameState(object):
     factor = DEATH_TIME_FACTOR[state] 
     time_lost = random.randint(1, int(3 * self.floor * factor))
     self.pass_time(time_lost, logs)
-    logs.append("You lost %d time units" % time_lost)
+    logs.append("You lost %d time units." % time_lost)
 
   def dungeon_victory_update(self, base_floor):
     if self.infinity_dungeon:
@@ -564,7 +564,7 @@ class GameState(object):
       self.apply_death(logs)
     elif result == Combat.MONSTER_DEAD:
       self.skills_used = set()
-      logs.append("You have defeated %s" % self.monster.name)
+      logs.append("You have defeated %s!" % self.monster.name)
       levelups = self.character.gain_exp(self.monster.calculate_exp(),
                                          self.monster.level, logs)
       self.treasure_queue = self.monster.get_treasure(self.infinity_dungeon)
@@ -603,7 +603,7 @@ class GameState(object):
       if result == Combat.CHARACTER_DEAD:
         self.apply_death(logs)
       elif result == Combat.CHARACTER_ESCAPED:
-        logs.append("You escaped successfully")
+        logs.append("You escaped successfully!")
         self.monster = None
         self.leave_state()
 
@@ -647,7 +647,7 @@ class GameState(object):
         self.change_state("SUMMIT")
       else:
         self.change_state("OUTSIDE")
-      logs.append("Left town")
+      logs.append("You left town.")
     else:
       shop = None
       for shop in self.towns[self.floor]:
@@ -656,7 +656,7 @@ class GameState(object):
           break
       if shop:
         self.pass_time(1, logs)
-        logs.append("Went to the %s" % shop.get_name())
+        logs.append("You went to the %s." % shop.get_name())
         self.add_state("SHOP")
         shop.enter_shop(self.tower_faction[self.floor])
 
@@ -693,12 +693,12 @@ class GameState(object):
     elif choice_text == "Town":
       self.pass_time(5, logs)
       self.change_state("TOWN")
-      logs.append("Went to town")
+      logs.append("You went to town.")
     elif choice_text == "Descend Tower":
       self.pass_time(10, logs)
       self.floor -= 1  # Bug if there's only one floor, I guess.
       self.change_state("OUTSIDE")
-      logs.append("Descended to floor %d" % self.floor)
+      logs.append("Descended to floor %d." % self.floor)
 
 
   def apply_choice_outside(self, logs, choice_text):
@@ -707,10 +707,10 @@ class GameState(object):
       if self.frontier <= self.floor:
         self.add_state("TOWER")
         self.ascension_encounters = random.randint(5, 10)
-        logs.append("Entered tower")
+        logs.append("You entered the tower.")
       else:
         self.floor += 1
-        logs.append("Ascended to floor %d" % self.floor)
+        logs.append("Ascended to floor %d." % self.floor)
         if self.floor == TOWER_LEVELS:
           self.change_state("SUMMIT")
     elif choice_text == "Quest":
@@ -721,15 +721,15 @@ class GameState(object):
     elif choice_text == "Town":
       self.pass_time(5, logs)
       self.change_state("TOWN")
-      logs.append("Went to town")
+      logs.append("Went to town.")
       if self.tower_lock[self.floor]:
         self.tower_lock[self.floor] = False
-        logs.append("Ascend Tower unlocked")
+        logs.append("Ascend Tower unlocked.")
     elif choice_text == "Descend Tower":
       self.pass_time(10, logs)
       if self.floor > 1:
         self.floor -= 1
-        logs.append("Descended to floor %d" % self.floor)
+        logs.append("Descended to floor %d." % self.floor)
       else:
         logs.append("Cannot descend while on floor 1.")
 
@@ -742,7 +742,7 @@ class GameState(object):
     logs.append("Recycled %s" % recycle)
     materials = recycle.get_recycled_materials()
     self.character.gain_materials(materials)
-    logs.append("Received %s" % Equipment.materials_string(materials))
+    logs.append("Received %s." % Equipment.materials_string(materials))
     # Add materials to character, add materials inventory to character string
     self.leave_state()
     self.handle_treasure(logs)
