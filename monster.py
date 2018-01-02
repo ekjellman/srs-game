@@ -1,6 +1,6 @@
 from equipment import Equipment
 from effect import Debuff, Effect
-from platform import nl
+from platform import is_browser, nl
 
 STAT_ORDER = ["Strength", "Intellect", "Speed", "Stamina", "Defense",
               "Magic Defense"]
@@ -24,6 +24,14 @@ class Monster(object):
     self.stats = {}
     self.level = level
     self.boss = boss
+
+    # TEMP: Initialize monster with a random image, for testing.
+    fame_monster = "https://upload.wikimedia.org/wikipedia/commons/d/de/Ladygaga.jpg"
+    cute_monster = "https://upload.wikimedia.org/wikipedia/commons/2/28/PEO-monster.svg"
+    energy_monster = "https://upload.wikimedia.org/wikipedia/commons/6/69/Lata_de_Monster_Energy.jpg"
+    spaghetti_monster = "https://upload.wikimedia.org/wikipedia/commons/3/30/Flying_Spaghetti_Monster.svg"
+    monsters = [fame_monster, cute_monster, energy_monster, spaghetti_monster]
+    self.image = monsters[game.rng.randint(0, len(monsters) - 1)]
 
     # If you modify these, make sure to modify the XP calc
     for stat in STAT_DICE.keys():
@@ -66,6 +74,9 @@ class Monster(object):
 
   def libra_string(self, libra_level):
     pieces = []
+    # TODO: Mark elites somehow
+    if is_browser:
+      pieces.append(nl(nl("<img class=\"monster\" src=\"" + self.image + "\">")));
     pieces.append(nl("Name: {}").format(self.name))
     if libra_level == 0:
       pieces.append(nl("HP: {}").format(self.hp_string()))
