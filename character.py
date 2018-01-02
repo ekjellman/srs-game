@@ -395,7 +395,7 @@ class Character(object):
       return True
 
   def gain_exp(self, exp, encounter_level, logs, level_adjust=True):
-    exp_gained = exp * (1.0 + (0.03 * self.traits.get("Quick Learner", 0)))
+    exp_gained = int(exp * (1.0 + (0.03 * self.traits.get("Quick Learner", 0))))
     level_difference = encounter_level - self.level
     if level_adjust:
       exp_gained = int(exp_gained * (1.03 ** level_difference))
