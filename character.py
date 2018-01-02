@@ -8,8 +8,8 @@ import items
 STAT_ORDER = ["Strength", "Intellect", "Speed", "Stamina", "Defense",
               "Magic Defense"]
 
-TRAITS = {"Beefy!": "Increase physical damage",
-          "Wizardry": "Increase magical damage",
+TRAITS = {"Beefy!": "Increase physical damage inflicted",
+          "Wizardry": "Increase magical damage inflicted",
           "Perseverance": "Chance to survive fatal attacks in combat",
           "Scholar": "On level up, chance to choose new skills",
           "Self-Improvement": "On level up, chance to choose new passives",
@@ -17,8 +17,8 @@ TRAITS = {"Beefy!": "Increase physical damage",
           "Merchant Warrior": "Improved gold gain",
           "Clarity of Mind": "SP regeneration over time",
           "Regeneration": "HP regeneration over time",
-          "Stocky!": "Reduce physical damage",
-          "Mental Toughness": "Reduce magical damage",
+          "Stocky!": "Reduce physical damage taken",
+          "Mental Toughness": "Reduce magical damage taken",
           "Combobreaker!": "Chance to prevent multiple consecutive enemy turns",
           "Libra": "See monster stats",
          }
