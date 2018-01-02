@@ -46,10 +46,10 @@ class Game:
     labels = self.game_state.get_choices()
     for i in range(len(self.buttons)):
       if i >= len(labels):
-        self.buttons[i].innerHTML = ''
+        self.buttons[i].innerHTML = '&nbsp;'
         self.buttons[i].enabled = False
       else:
-        self.buttons[i].innerHTML = labels[i]
+        self.buttons[i].innerHTML = labels[i] if labels[i] != '' else '&nbsp;'
         self.buttons[i].enabled = labels[i] != ''
 
     # update status bar
