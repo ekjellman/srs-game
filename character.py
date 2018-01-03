@@ -20,6 +20,7 @@ TRAITS = {"Beefy!": "Increase physical damage inflicted",
           "Mental Toughness": "Reduce magical damage taken",
           "Combobreaker!": "Chance to prevent multiple consecutive enemy turns",
           "Libra": "See monster stats",
+          "Sneaky": "Chance to skip non-elite battles in (tower only)",
          }
 
 GREEN_HP = "`0,160,0`"

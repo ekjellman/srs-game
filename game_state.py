@@ -459,6 +459,11 @@ class GameState(object):
       self.add_state("SHOP")
       self.current_shop = chamber
     else:
+      if explore_type == "Tower":
+        sneak_chance = self.character.traits["Sneaky"] * 0.02
+        if random.random() < sneak_chance:
+          logs.append("You encountered a monster, but sneaked past.")
+          return
       self.start_combat(logs, 0.0)
 
   def apply_choice_tower(self, logs, choice_text):
