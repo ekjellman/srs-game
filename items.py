@@ -27,7 +27,7 @@ class MinorHealthPotion(Item):
                  "item_level": 1}
   def apply(self, character, monster, logs):
     hp_gained = character.restore_hp(200)
-    logs.append("You restored %d HP" % hp_gained)
+    logs.append("You restored {} HP".format(hp_gained))
 
 class HealthPotion(Item):
   def __init__(self):
@@ -37,7 +37,7 @@ class HealthPotion(Item):
                  "item_level": 10}
   def apply(self, character, monster, logs):
     hp_gained = character.restore_hp(600)
-    logs.append("You restored %d HP" % hp_gained)
+    logs.append("You restored {} HP".format(hp_gained))
 
 class MajorHealthPotion(Item):
   def __init__(self):
@@ -47,7 +47,7 @@ class MajorHealthPotion(Item):
                  "item_level": 30}
   def apply(self, character, monster, logs):
     hp_gained = character.restore_hp(1800)
-    logs.append("You restored %d HP" % hp_gained)
+    logs.append("You restored {} HP".format(hp_gained))
 
 class SuperHealthPotion(Item):
   def __init__(self):
@@ -57,7 +57,7 @@ class SuperHealthPotion(Item):
                  "item_level": 30}
   def apply(self, character, monster, logs):
     hp_gained = character.restore_hp(5400)
-    logs.append("You restored %d HP" % hp_gained)
+    logs.append("You restored {} HP".format(hp_gained))
 
 class MinorMagicPotion(Item):
   def __init__(self):
@@ -67,7 +67,7 @@ class MinorMagicPotion(Item):
                  "item_level": 1}
   def apply(self, character, monster, logs):
     sp_gained = character.restore_sp(50)
-    logs.append("You restored %d SP" % sp_gained)
+    logs.append("You restored {} SP".format(sp_gained))
 
 class MagicPotion(Item):
   def __init__(self):
@@ -77,7 +77,7 @@ class MagicPotion(Item):
                  "item_level": 10}
   def apply(self, character, monster, logs):
     sp_gained = character.restore_sp(200)
-    logs.append("You restored %d SP" % sp_gained)
+    logs.append("You restored {} SP".format(sp_gained))
 
 class MajorMagicPotion(Item):
   def __init__(self):
@@ -87,7 +87,7 @@ class MajorMagicPotion(Item):
                  "item_level": 30}
   def apply(self, character, monster, logs):
     sp_gained = character.restore_sp(600)
-    logs.append("You restored %d SP" % sp_gained)
+    logs.append("You restored {} SP".format(sp_gained))
 
 class InnFood(Item):
   def __init__(self):

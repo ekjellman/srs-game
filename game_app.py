@@ -6,6 +6,28 @@ import wx
 import wx.richtext
 
 # TODO: Look into using unicode graphics for some of this stuff
+# TODO: Consider making the log stuff be in the encounter panel
+#       Alternate: Put last turn of logs in there
+# TODO: Either show current time or time passed in the log
+# TODO: Add text describing skills to level up dialog
+# TODO: Disable rest if HP/SP full? But Infinity Dungeon...
+# TODO: Rename chest armor to torso/shirt/something
+#       Hat / Shirt / Pants
+# TODO: Change "insufficient payment" and "gold or materials" to give
+#       the actual reason. Possibly snarky if you have neither
+# TODO: If you have three skills, don't activate scholar (if it does)
+# TODO: AutoLife seems very strong early. Could remove buffs on trigger?
+# TODO: Implement a swear word filter on names
+# TODO: Have a confirm screen on levelling up skills
+# TODO: Make inn bento restore 1 hp as an fu
+# TODO: Buff perserverance
+# TODO: Get rid of status bar
+# TODO: Add "time to tower reset" text
+# TODO: In shops "Which item would you like to look at?"
+# TODO: Make sure in-game docs note that some attacks don't work on elites
+# TODO: Add a "encounters defeated" counter to Ascend Tower
+# TODO: Consider making everything work against elites instead
+# TODO: Consider allowing replacing skills
 
 def write_color_text(rtc, string):
   # Takes a wx.richtext.RichTextCtrl and writes my wacky custom color-coded
@@ -85,7 +107,7 @@ class LogPanel(wx.Panel):
     if length > self.max_length:
       # The text field lags on add if there is too much text. Keep it to a
       # reasonable size
-      position = self.text_field.GetLastPosition() - (self.max_length / 2)
+      position = self.text_field.GetLastPosition() - (self.max_length // 2)
       new_line_position = self.text_field.GetValue().find("\n", position)
       if new_line_position == -1:
         new_line_position = position

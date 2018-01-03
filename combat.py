@@ -34,7 +34,7 @@ class Combat(object):
     while next_turn == cls.MONSTER_TURN:
       if Effect.get_combined_impact("Stunned", monster.buffs,
                                     monster.debuffs) > 0:
-        logs.append("%s is stunned" % monster.name)
+        logs.append("{} is stunned".format(monster.name))
         return cls.CHARACTER_TURN
       action, info = monster.get_action(character)
       result = cls.perform_action(action, info, monster, character, logs)
@@ -55,7 +55,7 @@ class Combat(object):
             if buff.get_name() == "Auto Life":
               buff.duration = 0
         else:
-          death_chance = 0.95 ** character.traits["Perseverance"]
+          death_chance = 0.95 ** character.traits.get("Perseverance", 0)
           if random.random() < death_chance:
             return cls.CHARACTER_DEAD
           else:
@@ -69,7 +69,7 @@ class Combat(object):
         if random.random() < combobreaker_chance:
           next_turn = cls.CHARACTER_TURN
           logs.append("Combobreaker! prevented the next enemy turn")
-      combobreaker_chance += character.traits["Combobreaker!"] / 100.0
+      combobreaker_chance += character.traits.get("Combobreaker!", 0) / 100.0
     return cls.CHARACTER_TURN
 
   @classmethod
@@ -80,8 +80,8 @@ class Combat(object):
       method = getattr(Combat, method_name)
       return method(info, actor, target, logs)
     except AttributeError as exc:
-      print exc
-      logs.append("Combat option %s not implemented" % action)
+      print(exc)
+      logs.append("Combat option {} not implemented".format(action))
       return cls.TARGET_ALIVE
 
   @classmethod
@@ -92,11 +92,11 @@ class Combat(object):
   @classmethod
   def apply_traits(cls, damage, damage_type, actor, target):
     if damage_type == "Physical":
-      attack_factor = 1.00 + (.05 * actor.traits["Beefy!"])
-      defense_factor = 0.95 ** target.traits["Stocky!"]
+      attack_factor = 1.00 + (.05 * actor.traits.get("Beefy!", 0))
+      defense_factor = 0.95 ** target.traits.get("Stocky!", 0)
     elif damage_type == "Magic":
-      attack_factor = 1.00 + (.05 * actor.traits["Wizardry"])
-      defense_factor = 0.95 ** target.traits["Mental Toughness"]
+      attack_factor = 1.00 + (.05 * actor.traits.get("Wizardry", 0))
+      defense_factor = 0.95 ** target.traits.get("Mental Toughness", 0)
     else:
       assert False
     damage = max(1, damage * attack_factor * defense_factor)
@@ -104,7 +104,7 @@ class Combat(object):
 
   @classmethod
   def action_skill(cls, info, actor, target, logs):
-    logs.append("%s uses %s" % (actor.name, info.get_name()))
+    logs.append("{} uses {}".format(actor.name, info.get_name()))
     return info.apply_skill(actor, target, logs)
 
   @classmethod
@@ -112,7 +112,7 @@ class Combat(object):
                     multiplier=None, base_damage=None):
     """Attacks, applies damage, returns True if target dies."""
     assert (multiplier is None) or (base_damage is None)
-    logs.append("%s attacks %s" % (actor.name, target.name))
+    logs.append("{} attacks {}".format(actor.name, target.name))
     damage = base_damage or actor.get_damage()
     damage_type = attack_type or actor.get_damage_type()
     damage = cls.apply_traits(damage, damage_type, actor, target)
@@ -138,7 +138,7 @@ class Combat(object):
         logs.append("Misses due to Blindness")
         return cls.TARGET_ALIVE
     color_string = "`255,0,0`" if isinstance(actor, Monster) else ""
-    logs.append("%sHits for %d %s damage`0,0,0`" % (color_string, damage,
+    logs.append("{}Hits for {} {} damage`0,0,0`".format(color_string, damage,
                                                     damage_type))
     return cls.apply_damage(target, damage)
 

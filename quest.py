@@ -27,7 +27,7 @@ class Quest(object):
     self.treasure_reward = 1
     self.gp_reward = 5 * self.level
     self.xp_reward = 5 * self.level
-    for _ in xrange(self.treasures):
+    for _ in range(self.treasures):
       self.xp_reward += random.randint(2 * self.level, 5 * self.level)
       if random.random() < .3:
         self.treasure_reward += 1
@@ -46,7 +46,7 @@ class Quest(object):
     pieces.append("Remaining monsters:")
     for monster in self.monsters:
       pieces.append(monster.name)
-    pieces.append("Reward: %d GP, %d XP, %d treasures" % (self.gp_reward,
+    pieces.append("Reward: {} GP, {} XP, {} treasures".format(self.gp_reward,
                                                           self.xp_reward,
                                                           self.treasure_reward))
     return "\n".join(pieces)
@@ -56,6 +56,6 @@ class Quest(object):
     while len(treasure) < self.treasure_reward:
       for rarity in range(4, -1, -1):
         if random.random() < TREASURE_CHANCES[rarity]:
-          treasure.append(Equipment.get_new_armor(self.level, rarity=rarity))
+          treasure.append(Equipment.get_new_armor(self.level, None, None, rarity))
           break
     return treasure
