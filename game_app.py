@@ -28,6 +28,20 @@ import wx.richtext
 # TODO: Add a "encounters defeated" counter to Ascend Tower
 # TODO: Consider making everything work against elites instead
 # TODO: Consider allowing replacing skills
+# TODO: Add a trader to the inn that takes materials and gives materials or
+#       items (including pots and possibly corrupted runes, and maybe
+#       other items that cannot be obtained in other ways (elixirs)
+# TODO: Item names
+
+# Ideas to shorten the game
+# -- Reduce tower levels
+# -- Teleport stones (encounter in tower)
+#    (Balancing problems)
+# -- Reducing number of encounters
+# -- Improving drop quality, reduce quantity (less choices to make)
+#    (If so, increase materials)
+# -- Trait "Sneaky", .5% chance to skip (non-final) encounter
+# -- Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
 
 def write_color_text(rtc, string):
   # Takes a wx.richtext.RichTextCtrl and writes my wacky custom color-coded
