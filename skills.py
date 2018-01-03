@@ -40,10 +40,10 @@ class QuickAttack(Skill):
     if result == Combat.TARGET_DEAD:
       return result
     if random.random() < self.go_again_chance():
-      logs.append("Quick attack succeeded")
+      logs.append("Quick attack succeeded!")
       return Combat.ACTOR_TURN
     else:
-      logs.append("Quick attack failed")
+      logs.append("Quick attack failed.")
       return Combat.TARGET_ALIVE
 
 class Blind(Skill):
@@ -64,9 +64,9 @@ class Blind(Skill):
                                   self.get_attack_multiple())
     if random.random() < self.blind_chance():
       if opponent.boss:
-        logs.append("Blind resisted")
+        logs.append("Blind resisted.")
       else:
-        logs.append("%s is blinded" % opponent.name)
+        logs.append("%s is blinded." % opponent.name)
         opponent.add_debuff(effect.Blinded(10))
     return result
 
@@ -88,9 +88,9 @@ class Bash(Skill):
                                   self.get_attack_multiple())
     if random.random() < self.stun_chance():
       if opponent.boss:
-        logs.append("Stun resisted")
+        logs.append("Stun resisted.")
       else:
-        logs.append("%s is stunned" % opponent.name)
+        logs.append("%s is stunned." % opponent.name)
         opponent.add_debuff(effect.Stunned(3))
     return result
 
@@ -100,7 +100,7 @@ class Protection(Skill):
   def buff_duration(self):
     return 5 + (5 * self.level)
   def get_description(self):
-    return "Increase def/mdef by 100%% for %d time units" % self.buff_duration()
+    return "Increase def/mdef by 100%% for %d time units." % self.buff_duration()
   def sp_cost(self):
     return int(self.level * 6 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
@@ -122,7 +122,7 @@ class HeavySwing(Skill):
     return int(self.level * 6 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
     if random.random() < self.miss_chance():
-      logs.append("Heavy Swing missed")
+      logs.append("Heavy Swing missed.")
       return Combat.TARGET_ALIVE
     else:
       result = Combat.action_attack(None, actor, opponent, logs, "Physical",
@@ -141,7 +141,7 @@ class LastStand(Skill):
   def once_per_battle(self):
     return True
   def apply_skill(self, actor, opponent, logs):
-    logs.append("%s takes a Last Stand" % actor.name)
+    logs.append("%s takes a Last Stand." % actor.name)
     actor.add_buff(effect.LastStand(self.duration()))
 
 class Surge(Skill):
@@ -184,7 +184,7 @@ class Swiftness(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Speed up by %d%% for %d time" % ((self.buff_power() - 1) * 100,
+    return "Speed up by %d%% for %d time." % ((self.buff_power() - 1) * 100,
                                             self.buff_duration())
   def sp_cost(self):
     return int(self.level * 7 * (1.1 ** self.level))
@@ -200,7 +200,7 @@ class BulkUp(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Stamina up by %d%% for %d time" % ((self.buff_power() - 1) * 100,
+    return "Stamina up by %d%% for %d time." % ((self.buff_power() - 1) * 100,
                                             self.buff_duration())
   def sp_cost(self):
     return int(self.level * 7 * (1.1 ** self.level))
@@ -214,7 +214,7 @@ class Cannibalize(Skill):
   def percent_converted(self):
     return 3 + self.level
   def get_description(self):
-    desc = "Convert up to %d%% of max HP into half as many SP"
+    desc = "Convert up to %d%% of max HP into half as many SP."
     return desc % self.percent_converted()
   def sp_cost(self):
     return 0
@@ -282,7 +282,7 @@ class Heal(Skill):
     effective_int = actor.get_effective_stat("Intellect")
     hp_gained = int(self.base_hp_gain() * ((effective_int / 100.0) ** .5))
     actor.restore_hp(hp_gained)
-    logs.append("Restored %d HP" % hp_gained)
+    logs.append("Restored %d HP." % hp_gained)
     return Combat.TARGET_ALIVE
 
 class Drain(Skill):
@@ -429,7 +429,7 @@ class HolyBlade(Skill):
                                self.get_aura_stacks()))
     heal = actor.max_hp * self.get_heal_percent() / 100
     heal = actor.restore_hp(heal)
-    logs.append("You restore %d HP" % heal)
+    logs.append("You restore %d HP." % heal)
     return result
 
 SKILLS = [QuickAttack, Blind, Bash, Protection, HeavySwing, LastStand, Surge,

@@ -814,15 +814,15 @@ class GameState(object):
     # TODO: Add explanations for menu choices, as well.
     current_state = self.current_state()
     if current_state == "CHAR_CREATE":
-      return "Please choose the starting specialization for your character"
+      return "Please choose the starting specialization for your character."
     elif current_state == "TOWN":
-      return "Town on tower level %d" % self.floor
+      return "Town on tower level %d." % self.floor
     elif current_state == "OUTSIDE":
-      return "Outside town on tower level %d" % self.floor
+      return "Outside town on tower level %d." % self.floor
     elif current_state == "SUMMIT":
-      return "At the summit of the tower"
+      return "At the summit of the tower."
     elif current_state == "TOWER":
-      return "Inside the tower ascending to level %d" % (self.floor + 1)
+      return "Inside the tower ascending to level %d." % (self.floor + 1)
     elif current_state == "COMBAT":
       return self.combat_text()
     elif current_state == "LOOT_EQUIPMENT":
@@ -846,6 +846,6 @@ class GameState(object):
     elif current_state == "STRONGHOLD":
       return "Stronghold of the Ten: Room %d" % (self.stronghold_room + 1)
     elif current_state == "VICTORY":
-      return "You win! Victory Time: %d" % self.time_spent
+      return "You win! Victory Time: %d." % self.time_spent
     else:
       return "Error, no text for state %s" % current_state
