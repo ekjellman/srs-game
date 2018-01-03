@@ -312,8 +312,6 @@ class GameState(object):
   def apply_choice_char_create(self, logs, choice_text):
     if DEBUG_CHARACTER:
       self.character = Character.debug_character(DEBUG_CHARACTER, choice_text)
-      self.character.skills[1] = skills.HolyBlade(7)
-      self.character.skills[0] = skills.BulkUp(7)
       self.character.runes = 5
     else:
       self.character.make_initial_equipment(choice_text)
