@@ -34,10 +34,10 @@ CHOICES = {"CHAR_CREATE": ["Strength", "Stamina", "Speed", "Intellect"],
            "VICTORY": [""] * 4,
            "ACCEPT_QUEST": ["", "Accept Quest", "Decline Quest", ""]}
 
-#                           Hoard,Shop,Chest,Boss
-EXPLORE_CHANCES = {"Tower": [.01, .02, .15, .04],
-                   "Dungeon": [.02, .00, .20, .05],
-                   "Infinity Dungeon": [.03, .03, .25, .06]}
+#                           Hoard,Shop,Chest,Boss,Teleport
+EXPLORE_CHANCES = {"Tower": [.01, .02, .15, .04, .01],
+                   "Dungeon": [.02, .00, .20, .05, .02],
+                   "Infinity Dungeon": [.03, .03, .25, .06, .00]}
 
 DEATH_TIME_FACTOR = {"TOWER": 1.0, "QUEST": 0.5, "DUNGEON": 0.7,
                      "STRONGHOLD": 1.5, "RUNE_WORLD": 0.0}
@@ -47,12 +47,14 @@ UPDATE_TIME = 360
 DEBUG_FLOOR = None
 DEBUG_BUILDING = None
 DEBUG_GOLD = None
+DEBUG_MATERIALS = None
 DEBUG_CHARACTER = None
 DEBUG_TOWER_START = None
 
-#DEBUG_BUILDING = rooms.RareGoodsShop
-#DEBUG_FLOOR = 1
+#DEBUG_BUILDING = rooms.TeleportChamber
+#DEBUG_FLOOR = 39
 #DEBUG_GOLD = 100000
+#DEBUG_MATERIALS = [100, 100, 100, 100, 100]
 #DEBUG_CHARACTER = 70
 #DEBUG_TOWER_START = 39
 
@@ -103,6 +105,7 @@ class GameState(object):
     self.tower_quests = self.generate_quests()
     # Number of encounters remaining in current tower ascension
     self.ascension_encounters = 0
+    self.current_shop = None
     # Monster currently in combat with
     self.monster = None
     self.quest = None
@@ -110,7 +113,6 @@ class GameState(object):
     # at a time
     self.treasure_queue = []
     self.equipment_choice = None
-    self.current_shop = None
     self.rune_level = -1
     self.levelups = 0
     self.skillups = 0
@@ -279,6 +281,8 @@ class GameState(object):
     if self.current_state() == "TOWN":
       self.character.restore_hp()
       self.character.restore_sp()
+      if self.tower_lock[self.floor]:
+        self.tower_lock[self.floor] = False
     if self.current_state() == "OUTSIDE" or self.current_state == "TOWN":
       if self.tower_update_ready:
         self.tower_update()
@@ -291,6 +295,10 @@ class GameState(object):
 
   def add_state(self, state):
     self.state.append(state)
+    self.state_change_checks()
+
+  def set_state(self, state):
+    self.state = [state]
     self.state_change_checks()
 
   def leave_state(self):
@@ -309,6 +317,8 @@ class GameState(object):
       self.character.runes = 5
     else:
       self.character.make_initial_equipment(choice_text)
+    if DEBUG_MATERIALS:
+      self.character.materials = DEBUG_MATERIALS
     logs.append("Generated {} equipment.".format(choice_text))
     self.change_state("TOWN")
 
@@ -439,8 +449,15 @@ class GameState(object):
     elif random_number < sum(chances[0:3]):
       logs.append("You find a treasure chest!")
       self.find_treasure(logs, 1)
-    elif random_number < sum(chances):
+    elif random_number < sum(chances[0:4]):
       self.start_combat(logs, 1.0)  # Boss monster
+    elif random_number < sum(chances):
+      logs.append("You find a teleport chamber.")
+      self.character.restore_hp()
+      self.character.restore_sp()
+      chamber = rooms.TeleportChamber(self.floor)
+      self.add_state("SHOP")
+      self.current_shop = chamber
     else:
       self.start_combat(logs, 0.0)
 
@@ -693,8 +710,24 @@ class GameState(object):
       self.trait_choices = self.character.get_trait_choices()
       self.skill_choices = self.character.get_skill_choices()
       self.add_state("LEVEL_UP")
+    elif result == self.current_shop.MINOR_TELEPORT:
+      self.teleport(1)
+    elif result == self.current_shop.TELEPORT:
+      self.teleport(2)
+    elif result == self.current_shop.MAJOR_TELEPORT:
+      self.teleport(3)
     else:
       assert False
+
+  def teleport(self, floors):
+    self.floor += floors
+    self.floor = min(TOWER_LEVELS, self.floor)
+    self.frontier = max(self.frontier, self.floor)
+    for i in range(self.floor, max(1, self.floor - floors - 1), -1):
+      self.tower_lock[i] = False
+    self.set_state("TOWN")
+    self.ascension_encounters = 0
+    self.current_shop = None
 
   def apply_choice_summit(self, logs, choice_text):
     if choice_text == "Stronghold of the Ten":
@@ -735,9 +768,6 @@ class GameState(object):
       self.pass_time(5, logs)
       self.change_state("TOWN")
       logs.append("Went to town.")
-      if self.tower_lock[self.floor]:
-        self.tower_lock[self.floor] = False
-        logs.append("Ascend Tower unlocked.")
     elif choice_text == "Descend Tower":
       self.pass_time(10, logs)
       if self.floor > 1:

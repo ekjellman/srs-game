@@ -14,6 +14,9 @@ class Room(object):
   PURIFY_RUNE = 3
   ENTER_DUNGEON = 4
   LEVEL_UP = 5
+  MINOR_TELEPORT = 6
+  TELEPORT = 7
+  MAJOR_TELEPORT = 8
 
   def __init__(self, level):
     self.level = level
@@ -514,6 +517,55 @@ class Inn(Room):
 
   def enter_shop(self, faction_rate):
     self.faction_rate = faction_rate
+
+class TeleportChamber(Room):
+  @classmethod
+  def get_name(cls):
+    return "Teleport Chamber"
+
+  def refresh(self):
+    pass
+
+  def get_buttons(self, character):
+    return ["Minor Teleport", "Teleport", "Major Teleport", "Leave Chamber"]
+
+  def get_text(self, character):
+    pieces = []
+    levels = ["Minor ", "", "Major "]
+    mats = ["common", "uncommon", "rare"]
+    for i in range(3):
+      pieces.append("{}Teleport ({} {} materials): teleport {} levels"
+                    .format(levels[i], self.level + i, mats[i], i+1))
+    return "\n".join(pieces)
+
+  def apply_choice(self, choice_text, logs, character):
+    # TODO: Cleanup
+    if choice_text == "Minor Teleport":
+      if self.level <= character.materials[0]:
+        character.materials[0] -= self.level
+        logs.append("You teleport 1 level.")
+        return (1, Room.MINOR_TELEPORT)
+      else:
+        logs.append("You do not have sufficient materials.")
+        return (0, Room.NO_CHANGE)
+    if choice_text == "Teleport":
+      if self.level + 1 <= character.materials[1]:
+        character.materials[1] -= self.level + 1
+        logs.append("You teleport 2 levels.")
+        return (1, Room.TELEPORT)
+      else:
+        logs.append("You do not have sufficient materials.")
+        return (0, Room.NO_CHANGE)
+    if choice_text == "Major Teleport":
+      if self.level + 2 <= character.materials[2]:
+        character.materials[2] -= self.level + 2
+        logs.append("You teleport 3 levels.")
+        return (1, Room.MAJOR_TELEPORT)
+      else:
+        logs.append("You do not have sufficient materials.")
+        return (0, Room.NO_CHANGE)
+    elif choice_text == "Leave Chamber":
+      return (0, Room.LEAVE_ROOM)
 
 class Temple(Room):
   @classmethod
