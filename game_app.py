@@ -34,15 +34,7 @@ import wx.richtext
 # TODO: Item names
 # TODO: Separator between combat turns for ease of understanding
 
-# Ideas to shorten the game
-# -- Reduce tower levels
-# -- Teleport stones (encounter in tower)
-#    (Balancing problems)
-# -- Reducing number of encounters
-# -- Improving drop quality, reduce quantity (less choices to make)
-#    (If so, increase materials)
-# -- Trait "Sneaky", .5% chance to skip (non-final) encounter
-# -- Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
+# TODO: Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
 
 def write_color_text(rtc, string):
   # Takes a wx.richtext.RichTextCtrl and writes my wacky custom color-coded
