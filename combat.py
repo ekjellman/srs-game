@@ -86,7 +86,7 @@ class Combat(object):
 
   @classmethod
   def apply_damage(cls, target, damage):
-    target.current_hp -= damage
+    target.current_hp -= int(damage)
     return cls.TARGET_DEAD if target.current_hp <= 0 else cls.TARGET_ALIVE
 
   @classmethod

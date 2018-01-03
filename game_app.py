@@ -32,6 +32,7 @@ import wx.richtext
 #       items (including pots and possibly corrupted runes, and maybe
 #       other items that cannot be obtained in other ways (elixirs)
 # TODO: Item names
+# TODO: Separator between combat turns for ease of understanding
 
 # Ideas to shorten the game
 # -- Reduce tower levels
