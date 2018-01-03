@@ -56,7 +56,7 @@ class Character(object):
     self.materials = [0] * len(RARITY)
     self.buffs = []
     self.debuffs = []
-    self.runes = 0
+    self.runes = 1
     self.traits = {}
     random.seed()
     self.reroll_counter = random.randint(0, 1000000)
