@@ -752,7 +752,7 @@ class GameState(object):
       self.pass_time(10, logs)
       if self.frontier <= self.floor:
         self.add_state("TOWER")
-        self.ascension_encounters = random.randint(5, 10)
+        self.ascension_encounters = random.randint(5, 8)
         logs.append("You entered the tower.")
       else:
         self.floor += 1
