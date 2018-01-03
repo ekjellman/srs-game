@@ -101,8 +101,7 @@ class Debuff(Effect):
 class WellRested(Buff):
   # +25% xp, +15% stats
   def get_impacts(self):
-    impacts = {}
-    impacts["XP Gain"] = 1.25
+    impacts = {"XP Gain": 1.25}
     for stat in STATS:
       impacts[stat] = 1.15
     return impacts
@@ -113,10 +112,8 @@ class WellRested(Buff):
 class WellFed(Buff):
   # +10% xp, +5% stats
   def get_impacts(self):
-    impacts = {}
+    impacts = {stat: 1.05 for stat in STATS}
     impacts["XP Gain"] = 1.10
-    for stat in STATS:
-      impacts[stat] = 1.05
     return impacts
 
   def get_name(self):
@@ -125,11 +122,7 @@ class WellFed(Buff):
 class Blessed(Buff):
   # +10% stats and defenses
   def get_impacts(self):
-    impacts = {}
-    # __pragma__ ('opov')
-    for stat in STATS + DEFENSES:
-      impacts[stat] = 1.10
-    # __pragma__ ('noopov')
+    impacts = {stat: 1.10 for stat in STATS + DEFENSES} # __:opov
     return impacts
 
   def get_name(self):
@@ -144,37 +137,28 @@ class Lucky(Buff):
 class Protection(Buff):
   # 100% increase to def / mdef
   def get_impacts(self):
-    impacts = {}
-    for stat in DEFENSES:
-      impacts[stat] = 2.00
-    return impacts
+    return {stat: 2.00 for stat in DEFENSES}
 
   def get_name(self):
     return "Protection"
 
 class Blinded(Debuff):
   def get_impacts(self):
-    impacts = {}
-    impacts["Blinded"] = 1
-    return impacts
+    return {"Blinded": 1}
 
   def get_name(self):
     return "Blinded"
 
 class Stunned(Debuff):
   def get_impacts(self):
-    impacts = {}
-    impacts["Stunned"] = 1
-    return impacts
+    return {"Stunned": 1}
 
   def get_name(self):
     return "Stunned"
 
 class LastStand(Buff):
   def get_impacts(self):
-    impacts = {}
-    impacts["Immortal"] = 1
-    return impacts
+    return {"Immortal": 1}
 
   def get_name(self):
     return "Last Stand"
@@ -197,9 +181,7 @@ class Surge(Buff):
       return False
 
   def get_impacts(self):
-    impacts = {}
-    impacts["Strength"] = self.impact
-    return impacts
+    return {"Strength": self.impact}
 
   def get_name(self):
     return "Surge"
@@ -222,9 +204,7 @@ class Concentrate(Buff):
       return False
 
   def get_impacts(self):
-    impacts = {}
-    impacts["Intellect"] = self.impact
-    return impacts
+    return {"Intellect": self.impact}
 
   def get_name(self):
     return "Concentrate"
@@ -247,9 +227,7 @@ class Swiftness(Buff):
       return False
 
   def get_impacts(self):
-    impacts = {}
-    impacts["Speed"] = self.impact
-    return impacts
+    return {"Speed": self.impact}
 
   def get_name(self):
     return "Swiftness"
@@ -272,9 +250,7 @@ class BulkUp(Buff):
       return False
 
   def get_impacts(self):
-    impacts = {}
-    impacts["Stamina"] = self.impact
-    return impacts
+    return {"Stamina": self.impact}
 
   def get_name(self):
     return "Bulk Up"
@@ -293,11 +269,7 @@ class Wither(Debuff):
 
   def get_impacts(self):
     impact = 0.99 ** self.quantity
-    impacts = {}
-    # __pragma__ ('opov')
-    for stat in STATS + DEFENSES:
-      impacts[stat] = impact
-    # __pragma__ ('noopov')
+    impacts = {stat: impact for stat in STATS + DEFENSES} # __:opov
     return impacts
 
 class Renew(Buff):
@@ -313,9 +285,7 @@ class Renew(Buff):
     return "Renew"
 
   def get_impacts(self):
-    impacts = {}
-    impacts["HP Restore"] = self.quantity
-    return impacts
+    return {"HP Restore": self.quantity}
 
   def turn_by_turn(self):
     return True
@@ -343,9 +313,7 @@ class AutoLife(Buff):
     return "Auto Life"
 
   def get_impacts(self):
-    impacts = {}
-    impacts["Auto Life"] = self.quantity
-    return impacts
+    return {"Auto Life": self.quantity}
 
   def update(self, buff):
     """Returns True if buff is the same kind, False otherwise."""
@@ -371,11 +339,7 @@ class Aura(Buff):
 
   def get_impacts(self):
     impact = 1.00 + (.01 * self.quantity)
-    impacts = {}
-    # __pragma__ ('opov')
-    for stat in STATS + DEFENSES:
-      impacts[stat] = impact
-    # __pragma__ ('noopov')
+    impacts = {stat: impact for stat in STATS + DEFENSES} # __:opov
     return impacts
 
 class Substitute(Buff):
