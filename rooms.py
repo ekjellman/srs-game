@@ -83,7 +83,7 @@ class TrainingRoom(Room):
         else:
           return (5, Room.NO_CHANGE)
       else:
-        logs.append("Not enough money to train XP")
+        logs.append("Not enough money to train XP.")
         return (0, Room.NO_CHANGE)
     elif choice_text == "Gain Stats":
       cost = self.stat_training_cost(character)
@@ -93,7 +93,7 @@ class TrainingRoom(Room):
         character.gold -= cost
         return (5, Room.NO_CHANGE)
       else:
-        logs.append("Not enough money to train stats")
+        logs.append("Not enough money to train stats.")
         return (0, Room.NO_CHANGE)
     elif choice_text == "Leave Shop":
       return (0, Room.LEAVE_ROOM)
@@ -164,10 +164,10 @@ class Enchanter(Room):
       character.materials[item.rarity] -= mat_cost
       old_item_string = str(item)
       enchantment = item.enchant()
-      logs.append("Your %s was enchanted (%s)" % (old_item_string, enchantment))
+      logs.append("Your %s was enchanted (%s)." % (old_item_string, enchantment))
       return (3, Room.NO_CHANGE)
     else:
-      logs.append("You do not have sufficient payment")
+      logs.append("You do not have sufficient payment.")
       return (0, Room.NO_CHANGE)
 
   def apply_choice_enchanter(self, choice_text, logs, character):
@@ -260,7 +260,7 @@ class Forge(Room):
                      self.reforge_cost_materials(weapon),
                      RARITY[weapon.rarity]))
     else:
-      pieces.append("Weapon cannot currently be reforged")
+      pieces.append("Weapon cannot currently be reforged.")
     pieces.append("Reforge Armor: [submenu]")
     return "\n".join(pieces)
 
@@ -274,7 +274,7 @@ class Forge(Room):
         pieces.append("Reforge %s: %d gold and %d %s materials" %
                       (name, cost, material_cost, RARITY[item.rarity]))
       else:
-        pieces.append("%s cannot currently be reforged" % name)
+        pieces.append("%s cannot currently be reforged." % name)
     return "\n".join(pieces)
 
   def get_text(self, character):
@@ -292,10 +292,10 @@ class Forge(Room):
       character.materials[item.rarity] -= mat_cost
       old_item_string = str(item)
       improvement = item.reforge(self.level)
-      logs.append("Your %s was reforged (%s)" % (old_item_string, improvement))
+      logs.append("Your %s was reforged (%s)." % (old_item_string, improvement))
       return (3, Room.NO_CHANGE)
     else:
-      logs.append("You do not have sufficient payment")
+      logs.append("You do not have sufficient payment.")
       return (0, Room.NO_CHANGE)
 
   def apply_choice(self, choice_text, logs, character):
@@ -379,7 +379,7 @@ class EquipmentShop(Room):
         self.shop_choice = None
         self.buying = False
         logs.append("Purchased %s for %d gold." % (str(equipment), value))
-        logs.append("Recycled %s" % recycle)
+        logs.append("Recycled %s." % recycle)
         materials = recycle.get_recycled_materials()
         character.gain_materials(materials)
         logs.append("Received %s" % Equipment.materials_string(materials))
@@ -492,7 +492,7 @@ class Inn(Room):
         logs.append("You became well rested.")
         return (30, Room.NO_CHANGE)
       else:
-        logs.append("You do not have sufficient money")
+        logs.append("You do not have sufficient money.")
         return (0, Room.NO_CHANGE)
     # TODO: There's a lot of very similar "buying things" code to consolidate
     elif choice_text == "Buy Food":
@@ -501,7 +501,7 @@ class Inn(Room):
         result = character.add_item(item)
         if result:
           character.gold -= self.get_food_cost()
-          logs.append("You purchase the %s" % item.get_name())
+          logs.append("You purchase the %s." % item.get_name())
           return (1, Room.NO_CHANGE)
         else:
           logs.append("Your inventory is full!")
@@ -541,10 +541,10 @@ class Temple(Room):
       if cost <= character.gold:
         character.gold -= cost
         character.add_buff(Blessed(241))
-        logs.append("You were blessed")
+        logs.append("You were blessed.")
         return (1, Room.NO_CHANGE)
       else:
-        logs.append("You do not have sufficient money")
+        logs.append("You do not have sufficient money.")
         return (0, Room.NO_CHANGE)
     elif choice_text == "Purify Rune":
       if character.runes <= 0:
@@ -628,7 +628,7 @@ class Alchemist(Room):
         result = character.add_item(item)
         if result:
           character.gold -= self.get_cost(item)
-          logs.append("You purchase a %s" % item.get_name())
+          logs.append("You purchase a %s." % item.get_name())
           self.inventory[choice] = None
           return (1, Room.NO_CHANGE)
         else:
@@ -711,17 +711,17 @@ class Crafthall(Room):
       logs.append("Recycled %s" % recycle)
       materials = recycle.get_recycled_materials()
       character.gain_materials(materials)
-      logs.append("Received %s" % Equipment.materials_string(materials))
+      logs.append("Received %s." % Equipment.materials_string(materials))
       return (0, Room.NO_CHANGE)
     elif choice_text == "Keep New":
       equipment = self.crafted_piece
       recycle = character.equip(equipment)
       self.crafted_piece = None
       self.crafting = False
-      logs.append("Recycled %s" % recycle)
+      logs.append("Recycled %s." % recycle)
       materials = recycle.get_recycled_materials()
       character.gain_materials(materials)
-      logs.append("Received %s" % Equipment.materials_string(materials))
+      logs.append("Received %s." % Equipment.materials_string(materials))
       return (0, Room.NO_CHANGE)
     elif choice_text == "Craft Uncommon":
       return self.handle_craft(1, logs, character)
