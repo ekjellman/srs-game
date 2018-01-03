@@ -7,9 +7,9 @@ STAT_ORDER = ["Strength", "Intellect", "Speed", "Stamina", "Defense",
               "Magic Defense"]
 
 # TODO: Should Monster and Character subclass from something?
-CHANCE_TIERS = {1: [0.0, 0.2, 0.04, 0.008, 0.00016],
-                2: [0.0, 0.4, 0.16, 0.064, 0.0256],
-                3: [0.0, 0.5, 0.25, 0.125, 0.0625]}
+CHANCE_TIERS = {1: [0.0, 0.100, 0.050, 0.015, 0.001],
+                2: [0.0, 0.200, 0.180, 0.100, 0.040],
+                3: [0.0, 0.300, 0.270, 0.150, 0.080]}
 RUNE_CHANCES = {1: 0.002, 2: 0.01, 3: 0.02}
 
 NAME_GENERATOR = NameGenerator("monsters.txt")

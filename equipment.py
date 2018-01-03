@@ -135,7 +135,7 @@ class Equipment(object):
     materials = [0] * len(RARITY)
     count = 0
     for _ in range(self.item_level):
-      if random.random() > .7 ** count:
+      if random.random() > .8 ** count:
         continue
       rarity = int(self.rarity + random.gauss(0, 1))
       if rarity < 0:

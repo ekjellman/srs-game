@@ -502,7 +502,7 @@ class GameState(object):
   def find_treasure(self, logs, item_count):
     treasure = []
     for i in range(item_count):
-      if random.random() < .5:
+      if random.random() < .7:
         min_gold = self.floor * 10
         max_gold = self.floor * 20
         treasure.append(random.randint(min_gold, max_gold))

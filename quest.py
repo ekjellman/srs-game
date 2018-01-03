@@ -2,7 +2,7 @@ import random
 from monster import Monster
 from equipment import Equipment
 
-TREASURE_CHANCES = [1.0, 1.0, 0.36, 0.06, 0.01]
+TREASURE_CHANCES = [1.0, 1.0, 0.500, 0.080, 0.015]
 
 class Quest(object):
   def __init__(self, level):
@@ -29,7 +29,7 @@ class Quest(object):
     self.xp_reward = 5 * self.level
     for _ in range(self.treasures):
       self.xp_reward += random.randint(2 * self.level, 5 * self.level)
-      if random.random() < .3:
+      if random.random() < .2:
         self.treasure_reward += 1
       else:
         self.gp_reward += random.randint(2 * self.level, 5 * self.level)
