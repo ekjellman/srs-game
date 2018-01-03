@@ -42,7 +42,7 @@ EXPLORE_CHANCES = {"Tower": [.01, .02, .15, .04],
 DEATH_TIME_FACTOR = {"TOWER": 1.0, "QUEST": 0.5, "DUNGEON": 0.7,
                      "STRONGHOLD": 1.5, "RUNE_WORLD": 0.0}
 
-TOWER_LEVELS = 50
+TOWER_LEVELS = 40
 UPDATE_TIME = 360
 DEBUG_FLOOR = None
 DEBUG_BUILDING = None
@@ -54,7 +54,7 @@ DEBUG_TOWER_START = None
 #DEBUG_FLOOR = 1
 #DEBUG_GOLD = 100000
 #DEBUG_CHARACTER = 70
-#DEBUG_TOWER_START = 49
+#DEBUG_TOWER_START = 39
 
 # TODO: http://www.pyinstaller.org/ to get packages
 # TODO: It is probably not best to be passing logs around to everything?
@@ -403,7 +403,7 @@ class GameState(object):
 
   def apply_choice_stronghold(self, logs, choice_text):
     if choice_text == "Enter Room":
-      level = TOWER_LEVELS - 20 + (self.stronghold_room * 5)
+      level = TOWER_LEVELS - 10 + (self.stronghold_room * 5)
       self.start_combat(logs, 1.0, level)
     elif choice_text == "Rest":
       self.pass_time(5, logs)
