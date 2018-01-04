@@ -375,10 +375,7 @@ class GameState(object):
       self.monster = self.quest.get_monster()
       logs.append("You have encountered a monster.")
     elif choice_text == "Rest":
-      self.pass_time(5, logs)
-      logs.append("You rest.")
-      hp_gained = self.character.rest()
-      logs.append("You regain {} HP.".format(hp_gained))
+      self.rest(logs)
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
@@ -409,15 +406,21 @@ class GameState(object):
         self.add_state("LEVEL_UP")
       self.handle_treasure(logs)
 
+  def rest(self, logs, enc_chance=False):
+    """Rest to restore HP and possibly encounter a monster."""
+    self.pass_time(5, logs)
+    hp_gained = self.character.rest()
+    logs.append("You rest and regain {} HP.".format(hp_gained))
+    if enc_chance:
+        if random.random() < .2 or self.infinity_dungeon:
+            self.start_combat(logs, .1)
+
   def apply_choice_stronghold(self, logs, choice_text):
     if choice_text == "Enter Room":
       level = TOWER_LEVELS - 10 + (self.stronghold_room * 5)
       self.start_combat(logs, 1.0, level)
     elif choice_text == "Rest":
-      self.pass_time(5, logs)
-      logs.append("You rest.")
-      hp_gained = self.character.rest()
-      logs.append("You regain {} HP.".format(hp_gained))
+      self.rest(logs) # Cannot get attacked resting here
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
@@ -488,12 +491,7 @@ class GameState(object):
         else:
           assert False
     elif choice_text == "Rest":
-      self.pass_time(5, logs)
-      logs.append("You rest.")
-      hp_gained = self.character.rest()
-      logs.append("You regain {} HP.".format(hp_gained))
-      if random.random() < .2:
-        self.start_combat(logs, .1)
+      self.rest(logs, True) # May get attacked resting here
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
@@ -529,12 +527,7 @@ class GameState(object):
       else:
         self.handle_explore(logs, "Dungeon")
     elif choice_text == "Rest":
-      self.pass_time(5, logs)
-      logs.append("You rest.")
-      hp_gained = self.character.rest()
-      logs.append("You regain {} HP.".format(hp_gained))
-      if random.random() < .2 or self.infinity_dungeon:
-        self.start_combat(logs, .1)
+      self.rest(logs, True) # May get attacked resting here
     elif choice_text == "Item":
       self.pass_time(0, logs)
       self.add_state("USE_ITEM")
