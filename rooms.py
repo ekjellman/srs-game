@@ -616,9 +616,8 @@ class Alchemist(Room):
     super(Alchemist, self).__init__(level)
     self.level = level
     self.faction_rate = 1.0
-    self.possible_items = [items.MinorHealthPotion, items.MajorHealthPotion,
-                           items.HealthPotion, items.SuperHealthPotion,
-                           items.MagicPotion, items.MinorMagicPotion,
+    # TODO: HealthPotions are currently handled separately due to refactor
+    self.possible_items = [items.MagicPotion, items.MinorMagicPotion,
                            items.MajorMagicPotion,
                            items.SurgePotion, items.MajorSurgePotion,
                            items.MinorSurgePotion,
@@ -638,7 +637,9 @@ class Alchemist(Room):
   def generate_inventory(self):
     inventory = []
     for _ in range(3):
-      pots = [x() for x in self.possible_items]   # Shouldn't redefine item
+      # TODO: Temp testing fix
+      health_pots = [items.HealthPotion(x) for x in ("Minor", "Standard", "Major", "Super")]
+      pots = health_pots + [x() for x in self.possible_items]   # Shouldn't redefine item
       inventory.append(max((self.item_rate(p), p) for p in pots)[1])
     return inventory
 
