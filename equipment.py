@@ -215,13 +215,13 @@ class Equipment(object):
     for attr in self.attributes.keys():
       if attr in STATS:
         if self.attributes.get(attr, 0) > 0:
-          stat_pieces.append("{:+d} {} ".format(self.attributes.get(attr, 0), attr))
+          stat_pieces.append("{:+d} {}".format(self.attributes.get(attr, 0), attr))
       elif attr in DEFENSES:
         defense_pieces.append("{} {}".format(self.attributes.get(attr, 0),
                                          ABBREVIATIONS[attr]))
       else:
         assert attr in WEAPON_STATS
     pieces.append("({}) ".format(" / ".join(defense_pieces)))
-    pieces.append("".join(stat_pieces))
+    pieces.append(" ".join(stat_pieces))
     pieces.append("`0,0,0`")
     return "".join(pieces)
