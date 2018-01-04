@@ -20,8 +20,7 @@ import wx.richtext
 # TODO: Implement a swear word filter on names
 # TODO: Have a confirm screen on levelling up skills
 # TODO: Make inn bento restore 1 hp as an fu
-# TODO: Buff perserverance
-# TODO: Add "time to tower reset" text
+# TODO: Buff perseverance
 # TODO: In shops "Which item would you like to look at?"
 # TODO: Make sure in-game docs note that some attacks don't work on elites
 # TODO: Add a "encounters defeated" counter to Ascend Tower
