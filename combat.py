@@ -34,18 +34,18 @@ class Combat(object):
     while next_turn == cls.MONSTER_TURN:
       if Effect.get_combined_impact("Stunned", monster.buffs,
                                     monster.debuffs) > 0:
-        logs.append("{} is stunned".format(monster.name))
+        logs.append("{} has been stunned!".format(monster.name))
         return cls.CHARACTER_TURN
       action, info = monster.get_action(character)
       result = cls.perform_action(action, info, monster, character, logs)
       if result == cls.TARGET_DEAD:
         if Effect.get_combined_impact("Immortal", character.buffs,
                                       character.debuffs) > 0:
-          logs.append("You survive due to Last Stand")
+          logs.append("You survive due to Last Stand!")
           character.current_hp = 1
         elif Effect.get_combined_impact("Auto Life", character.buffs,
                                         character.debuffs) > 0:
-          logs.append("Your Auto Life effect restored your HP")
+          logs.append("Your Auto Life effect restored your HP.")
           effect = Effect.get_combined_impact("Auto Life", character.buffs,
                                               character.debuffs)
           character.current_hp = 1
@@ -68,7 +68,7 @@ class Combat(object):
       if next_turn == cls.MONSTER_TURN:
         if random.random() < combobreaker_chance:
           next_turn = cls.CHARACTER_TURN
-          logs.append("Combobreaker! prevented the next enemy turn")
+          logs.append("Combobreaker! prevented the next enemy turn.")
       combobreaker_chance += character.traits.get("Combobreaker!", 0) / 100.0
     return cls.CHARACTER_TURN
 
@@ -92,8 +92,8 @@ class Combat(object):
   @classmethod
   def apply_traits(cls, damage, damage_type, actor, target):
     if damage_type == "Physical":
-      attack_factor = 1.00 + (.05 * actor.traits.get("Beefy!", 0))
-      defense_factor = 0.95 ** target.traits.get("Stocky!", 0)
+      attack_factor = 1.00 + (.05 * actor.traits.get("Beefy", 0))
+      defense_factor = 0.95 ** target.traits.get("Stocky", 0)
     elif damage_type == "Magic":
       attack_factor = 1.00 + (.05 * actor.traits.get("Wizardry", 0))
       defense_factor = 0.95 ** target.traits.get("Mental Toughness", 0)
@@ -104,7 +104,7 @@ class Combat(object):
 
   @classmethod
   def action_skill(cls, info, actor, target, logs):
-    logs.append("{} uses {}".format(actor.name, info.get_name()))
+    logs.append("{} uses {}.".format(actor.name, info.get_name()))
     return info.apply_skill(actor, target, logs)
 
   @classmethod
@@ -112,7 +112,7 @@ class Combat(object):
                     multiplier=None, base_damage=None):
     """Attacks, applies damage, returns True if target dies."""
     assert (multiplier is None) or (base_damage is None)
-    logs.append("{} attacks {}".format(actor.name, target.name))
+    logs.append("{} attacks {}.".format(actor.name, target.name))
     damage = base_damage or actor.get_damage()
     damage_type = attack_type or actor.get_damage_type()
     damage = cls.apply_traits(damage, damage_type, actor, target)
@@ -135,10 +135,10 @@ class Combat(object):
     if damage > 9999: damage = 9999
     if Effect.get_combined_impact("Blinded", actor.buffs, actor.debuffs) > 0:
       if random.random() < .5:
-        logs.append("Misses due to Blindness")
+        logs.append("Misses due to Blindness.")
         return cls.TARGET_ALIVE
     color_string = "`255,0,0`" if isinstance(actor, Monster) else ""
-    logs.append("{}Hits for {} {} damage`0,0,0`".format(color_string, damage,
+    logs.append("{} Hits for {} {} damage.`0,0,0`".format(color_string, damage,
                                                     damage_type))
     return cls.apply_damage(target, damage)
 
