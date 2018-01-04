@@ -457,7 +457,7 @@ class GameState(object):
     elif random_number < sum(chances[0:4]):
       self.start_combat(logs, 1.0)  # Boss monster
     elif random_number < sum(chances):
-      logs.append("You find a teleport chamber.")
+      logs.append("You find a teleportation chamber!")
       self.character.restore_hp()
       self.character.restore_sp()
       chamber = rooms.TeleportChamber(self.floor)
