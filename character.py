@@ -404,7 +404,7 @@ class Character(object):
     total_xp_gain = int(exp_gained * xp_buff)
     self.exp += total_xp_gain
     added_xp = total_xp_gain - exp_gained
-    if added_exp:
+    if added_xp:
       logs.append("You have gained {} XP ({:+d} from buffs).".format(exp_gained, added_xp))
     else:
       logs.append("You have gained {} XP.".format(exp_gained))
