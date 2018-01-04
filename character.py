@@ -237,9 +237,9 @@ class Character(object):
     self.restore_sp()
     self.debuffs = []
     if penalty:
-      logs.append("You were found by a passerby, and brought back to town.")
+      logs.append("You were found by a passerby and brought back to town.")
       lost_gold = self.gold // 2
-      logs.append("You lost {} gold".format(lost_gold))
+      logs.append("You lost {} gold.".format(lost_gold))
       self.gold -= lost_gold
       self.buffs = []
 
@@ -286,13 +286,13 @@ class Character(object):
       increase = random.randint(1, 3)
       if increase > 0:
         self.stats[stat] += increase
-        logs.append("You have gained {} {}".format(increase, stat))
+        logs.append("You have gained {} {}.".format(increase, stat))
     hp_gain = random.randint(10, 20)
     sp_gain = random.randint(5, 10)
     self.base_hp += hp_gain
     self.base_sp += sp_gain
-    logs.append("You have gained {} HP".format(hp_gain))
-    logs.append("You have gained {} SP".format(sp_gain))
+    logs.append("You have gained {} HP.".format(hp_gain))
+    logs.append("You have gained {} SP.".format(sp_gain))
     self.recalculate_maxes()
 
   def train_xp(self, level, logs):
@@ -301,7 +301,7 @@ class Character(object):
   def train_stats(self, logs):
     stat = random.choice(self.stats.keys())
     self.stats[stat] += 1
-    logs.append("Gained +1 {}".format(stat))
+    logs.append("Gained +1 {}.".format(stat))
 
   def gain_materials(self, materials):
     for i in range(len(materials)):
@@ -404,7 +404,10 @@ class Character(object):
     total_xp_gain = int(exp_gained * xp_buff)
     self.exp += total_xp_gain
     added_xp = total_xp_gain - exp_gained
-    logs.append("You have gained {} XP ({:+d} buffs)".format(exp_gained, added_xp))
+    if added_exp:
+      logs.append("You have gained {} XP ({:+d} from buffs).".format(exp_gained, added_xp))
+    else:
+      logs.append("You have gained {} XP.".format(exp_gained)
     levels_gained = 0
     while self.exp >= self.next_level_exp():
       self.exp -= self.next_level_exp()
