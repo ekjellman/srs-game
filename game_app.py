@@ -23,7 +23,6 @@ import wx.richtext
 # TODO: Buff perseverance
 # TODO: In shops "Which item would you like to look at?"
 # TODO: Make sure in-game docs note that some attacks don't work on elites
-# TODO: Add a "encounters defeated" counter to Ascend Tower
 # TODO: Consider making everything work against elites instead
 # TODO: Consider allowing replacing skills
 # TODO: Add a trader to the inn that takes materials and gives materials or
