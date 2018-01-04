@@ -407,7 +407,7 @@ class Character(object):
     if added_exp:
       logs.append("You have gained {} XP ({:+d} from buffs).".format(exp_gained, added_xp))
     else:
-      logs.append("You have gained {} XP.".format(exp_gained)
+      logs.append("You have gained {} XP.".format(exp_gained))
     levels_gained = 0
     while self.exp >= self.next_level_exp():
       self.exp -= self.next_level_exp()
