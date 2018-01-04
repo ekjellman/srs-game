@@ -32,6 +32,7 @@ CHOICES = {"CHAR_CREATE": ["Strength", "Stamina", "Speed", "Intellect"],
            "DUNGEON": ["Explore", "Rest", "Item", "Leave Dungeon"],
            "LOOT_EQUIPMENT": ["", "Keep Current", "Keep New", ""],
            "VICTORY": [""] * 4,
+           "SHOP_WARNING": ["", "Enter Room", "", ""],
            "ACCEPT_QUEST": ["", "Accept Quest", "Decline Quest", ""]}
 
 #                           Hoard,Shop,Chest,Boss,Teleport
@@ -443,6 +444,7 @@ class GameState(object):
       self.character.restore_sp()
       shop = random.choice(TOWER_BUILDINGS)(self.floor)
       self.add_state("SHOP")
+      self.add_state("SHOP_WARNING")
       self.current_shop = shop
       if self.floor > TOWER_LEVELS:  # Infinity Dungeon
         faction = 1.0
@@ -460,6 +462,7 @@ class GameState(object):
       self.character.restore_sp()
       chamber = rooms.TeleportChamber(self.floor)
       self.add_state("SHOP")
+      self.add_state("SHOP_WARNING")
       self.current_shop = chamber
     else:
       if explore_type == "Tower" and "Sneaky" in self.character.traits:
@@ -686,6 +689,10 @@ class GameState(object):
         self.add_state("SHOP")
         shop.enter_shop(self.tower_faction[self.floor])
 
+  def apply_choice_shop_warning(self, logs, choice_text):
+    if choice_text == "Enter Room":
+      self.leave_state()
+
   def apply_choice_shop(self, logs, choice_text):
     time_cost, result = self.current_shop.apply_choice(choice_text, logs,
                                                        self.character)
@@ -876,6 +883,8 @@ class GameState(object):
       return str(self.tower_quests[self.floor])
     elif current_state == "SHOP":
       return self.current_shop.get_text(self.character)
+    elif current_state == "SHOP_WARNING":
+      return "You found a hidden room!"
     elif current_state == "USE_ITEM":
       return self.use_item_text()
     elif current_state == "RUNE_WORLD":
