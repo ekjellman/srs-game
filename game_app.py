@@ -21,7 +21,6 @@ import wx.richtext
 # TODO: Have a confirm screen on levelling up skills
 # TODO: Make inn bento restore 1 hp as an fu
 # TODO: Buff perserverance
-# TODO: Get rid of status bar
 # TODO: Add "time to tower reset" text
 # TODO: In shops "Which item would you like to look at?"
 # TODO: Make sure in-game docs note that some attacks don't work on elites
@@ -91,6 +90,15 @@ class CharacterPanel(wx.Panel):
   def update(self, game_state):
     self.text_field.SetValue("")
     write_color_text(self.text_field, str(game_state.character))
+    write_color_text(self.text_field, "\n---\n")
+    #write_color_text(self.text_field, "Energy: {}".format(self.game_state.energy))
+    write_color_text(self.text_field,
+                     "GP: {}\n".format(game_state.character.gold))
+    update = "(Tower update ready)" if game_state.tower_update_ready else ""
+    write_color_text(self.text_field,
+                     "Time: {} {}\n".format(game_state.time_spent, update))
+    write_color_text(self.text_field,
+                     "(Next tower refresh in {})\n".format(game_state.time_to_refresh()))
 
 class LogPanel(wx.Panel):
   def __init__(self, parent):
@@ -138,11 +146,6 @@ class MainWindow(wx.Frame):
   # pylint: disable=too-many-instance-attributes
   def __init__(self, parent, title):
     wx.Frame.__init__(self, parent, title=title, size=(1200, 600))
-    self.status_bar = self.CreateStatusBar(4)
-    self.status_bar.SetStatusText("Welcome to SRS Game")
-    self.status_bar.SetStatusText("Energy: 0", 1)
-    self.status_bar.SetStatusText("GP: 0", 2)
-    self.status_bar.SetStatusText("Time: 0", 3)
 
     # Make menus
     menu_bar = wx.MenuBar()
@@ -218,22 +221,7 @@ class MainWindow(wx.Frame):
     else:
       self.char_panel.text_field.Clear()
     self.set_labels(self.game_state.get_choices())
-    self.status_bar.SetStatusText(self.game_state.current_state(), 0)
     self.encounter_panel.update(self.game_state)
-    self.update_status_bars()
-
-  def update_status_bars(self):
-    #self.status_bar.SetStatusText(self.game_state.current_state(), 0)
-    # TODO: Revert to above
-    self.status_bar.SetStatusText(str(self.game_state.state), 0)
-    self.status_bar.SetStatusText("Energy: %d" % self.game_state.energy, 1)
-    self.status_bar.SetStatusText("GP: %d" % self.game_state.character.gold, 2)
-    time_spent = self.game_state.time_spent
-    time_left = self.game_state.time_to_refresh()
-    update_ready = "*" if self.game_state.tower_update_ready else ""
-    self.status_bar.SetStatusText("Time: %d (%s%d)" % (time_spent,
-                                                       update_ready,
-                                                       time_left), 3)
 
   def button_press(self, evt, number):  # pylint: disable=unused-argument
     if not self.button_panel.buttons[number].IsEnabled():
