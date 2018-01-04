@@ -29,8 +29,6 @@ import wx.richtext
 #       items (including pots and possibly corrupted runes, and maybe
 #       other items that cannot be obtained in other ways (elixirs)
 # TODO: Item names
-# TODO: When you find a shop in the tower, have the intermediate "you found a
-#       shop" state
 
 # TODO: Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
 
