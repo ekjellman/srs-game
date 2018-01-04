@@ -40,6 +40,7 @@ def write_color_text(rtc, string):
   # Colors are specified via `r,g,b` in the text
   # Note: Assumes there are no "`" in the text.
   tokens = string.split("`")
+  print "tokens: %r" % tokens
   rtc.SetInsertionPoint(rtc.GetLastPosition())
   rtc.BeginTextColour((0, 0, 0))
   rtc.BeginParagraphSpacing(0, 0)
@@ -142,6 +143,7 @@ class EncounterPanel(wx.Panel):
     self.SetSizerAndFit(bsizer)
 
   def update(self, game_state):
+    print game_state.last_turn_logs
     self.text_field.SetValue("")
     for log in game_state.last_turn_logs:
       if log.startswith("-----"):
