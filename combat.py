@@ -19,6 +19,7 @@ class Combat(object):
   @classmethod
   def perform_turn(cls, action, info, character, monster, logs):
     # Character action
+    logs.append("-------- Start combat turn")
     result = cls.perform_action(action, info, character, monster, logs)
     if result == cls.TARGET_DEAD:
       return cls.MONSTER_DEAD

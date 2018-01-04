@@ -29,7 +29,8 @@ import wx.richtext
 #       items (including pots and possibly corrupted runes, and maybe
 #       other items that cannot be obtained in other ways (elixirs)
 # TODO: Item names
-# TODO: Separator between combat turns for ease of understanding
+# TODO: When you find a shop in the tower, have the intermediate "you found a
+#       shop" state
 
 # TODO: Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
 
@@ -42,12 +43,16 @@ def write_color_text(rtc, string):
   rtc.SetInsertionPoint(rtc.GetLastPosition())
   rtc.BeginTextColour((0, 0, 0))
   rtc.BeginParagraphSpacing(0, 0)
-  rtc.WriteText(tokens.pop(0))
+  token = tokens.pop(0)
+  if token:
+    rtc.WriteText(token)
   while tokens:
     color_string = tokens.pop(0)
     r, g, b = map(int, color_string.split(","))  # pylint: disable=invalid-name
     rtc.BeginTextColour((r, g, b))
-    rtc.WriteText(tokens.pop(0))
+    token = tokens.pop(0)
+    if token:
+      rtc.WriteText(token)
   rtc.ShowPosition(rtc.GetLastPosition())
 
 class ButtonPanel(wx.Panel):
@@ -138,6 +143,17 @@ class EncounterPanel(wx.Panel):
 
   def update(self, game_state):
     self.text_field.SetValue("")
+    for log in game_state.last_turn_logs:
+      if log.startswith("-----"):
+        continue
+      if log == "\n":
+        continue
+      write_color_text(self.text_field, str(log))
+      if not (log.endswith("\n")):
+        write_color_text(self.text_field, "\n")
+    if game_state.last_turn_logs:
+      write_color_text(self.text_field, "______________________\n")
+      write_color_text(self.text_field, "\n")
     write_color_text(self.text_field, str(game_state.panel_text()))
 
 class MainWindow(wx.Frame):

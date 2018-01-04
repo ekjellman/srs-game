@@ -122,6 +122,7 @@ class GameState(object):
     self.trait_choices = []
     self.infinity_dungeon = False
     self.stronghold_room = 0
+    self.last_turn_logs = []
     if DEBUG_TOWER_START:
       self.frontier = DEBUG_TOWER_START
       self.floor = DEBUG_TOWER_START
@@ -808,6 +809,7 @@ class GameState(object):
     except IOError as exc:
       print(exc)  # pylint: disable=print-statement
       logs.append("apply_choice not implemented yet, state: {}".format(current_state))
+    self.last_turn_logs = logs[:]
     return logs
 
   def loot_choice_text(self):
