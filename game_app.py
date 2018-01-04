@@ -20,19 +20,17 @@ import wx.richtext
 # TODO: Implement a swear word filter on names
 # TODO: Have a confirm screen on levelling up skills
 # TODO: Make inn bento restore 1 hp as an fu
-# TODO: Buff perserverance
-# TODO: Get rid of status bar
-# TODO: Add "time to tower reset" text
+# TODO: Buff perseverance
 # TODO: In shops "Which item would you like to look at?"
 # TODO: Make sure in-game docs note that some attacks don't work on elites
-# TODO: Add a "encounters defeated" counter to Ascend Tower
 # TODO: Consider making everything work against elites instead
 # TODO: Consider allowing replacing skills
 # TODO: Add a trader to the inn that takes materials and gives materials or
 #       items (including pots and possibly corrupted runes, and maybe
 #       other items that cannot be obtained in other ways (elixirs)
 # TODO: Item names
-# TODO: Separator between combat turns for ease of understanding
+# TODO: When you find a shop in the tower, have the intermediate "you found a
+#       shop" state
 
 # TODO: Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
 
@@ -42,15 +40,20 @@ def write_color_text(rtc, string):
   # Colors are specified via `r,g,b` in the text
   # Note: Assumes there are no "`" in the text.
   tokens = string.split("`")
+  print "tokens: %r" % tokens
   rtc.SetInsertionPoint(rtc.GetLastPosition())
   rtc.BeginTextColour((0, 0, 0))
   rtc.BeginParagraphSpacing(0, 0)
-  rtc.WriteText(tokens.pop(0))
+  token = tokens.pop(0)
+  if token:
+    rtc.WriteText(token)
   while tokens:
     color_string = tokens.pop(0)
     r, g, b = map(int, color_string.split(","))  # pylint: disable=invalid-name
     rtc.BeginTextColour((r, g, b))
-    rtc.WriteText(tokens.pop(0))
+    token = tokens.pop(0)
+    if token:
+      rtc.WriteText(token)
   rtc.ShowPosition(rtc.GetLastPosition())
 
 class ButtonPanel(wx.Panel):
@@ -91,6 +94,15 @@ class CharacterPanel(wx.Panel):
   def update(self, game_state):
     self.text_field.SetValue("")
     write_color_text(self.text_field, str(game_state.character))
+    write_color_text(self.text_field, "\n---\n")
+    #write_color_text(self.text_field, "Energy: {}".format(self.game_state.energy))
+    write_color_text(self.text_field,
+                     "GP: {}\n".format(game_state.character.gold))
+    update = "(Tower update ready)" if game_state.tower_update_ready else ""
+    write_color_text(self.text_field,
+                     "Time: {} {}\n".format(game_state.time_spent, update))
+    write_color_text(self.text_field,
+                     "(Next tower refresh in {})\n".format(game_state.time_to_refresh()))
 
 class LogPanel(wx.Panel):
   def __init__(self, parent):
@@ -131,18 +143,25 @@ class EncounterPanel(wx.Panel):
     self.SetSizerAndFit(bsizer)
 
   def update(self, game_state):
+    print game_state.last_turn_logs
     self.text_field.SetValue("")
+    for log in game_state.last_turn_logs:
+      if log.startswith("-----"):
+        continue
+      if log == "\n":
+        continue
+      write_color_text(self.text_field, str(log))
+      if not (log.endswith("\n")):
+        write_color_text(self.text_field, "\n")
+    if game_state.last_turn_logs:
+      write_color_text(self.text_field, "______________________\n")
+      write_color_text(self.text_field, "\n")
     write_color_text(self.text_field, str(game_state.panel_text()))
 
 class MainWindow(wx.Frame):
   # pylint: disable=too-many-instance-attributes
   def __init__(self, parent, title):
     wx.Frame.__init__(self, parent, title=title, size=(1200, 600))
-    self.status_bar = self.CreateStatusBar(4)
-    self.status_bar.SetStatusText("Welcome to SRS Game")
-    self.status_bar.SetStatusText("Energy: 0", 1)
-    self.status_bar.SetStatusText("GP: 0", 2)
-    self.status_bar.SetStatusText("Time: 0", 3)
 
     # Make menus
     menu_bar = wx.MenuBar()
@@ -218,22 +237,7 @@ class MainWindow(wx.Frame):
     else:
       self.char_panel.text_field.Clear()
     self.set_labels(self.game_state.get_choices())
-    self.status_bar.SetStatusText(self.game_state.current_state(), 0)
     self.encounter_panel.update(self.game_state)
-    self.update_status_bars()
-
-  def update_status_bars(self):
-    #self.status_bar.SetStatusText(self.game_state.current_state(), 0)
-    # TODO: Revert to above
-    self.status_bar.SetStatusText(str(self.game_state.state), 0)
-    self.status_bar.SetStatusText("Energy: %d" % self.game_state.energy, 1)
-    self.status_bar.SetStatusText("GP: %d" % self.game_state.character.gold, 2)
-    time_spent = self.game_state.time_spent
-    time_left = self.game_state.time_to_refresh()
-    update_ready = "*" if self.game_state.tower_update_ready else ""
-    self.status_bar.SetStatusText("Time: %d (%s%d)" % (time_spent,
-                                                       update_ready,
-                                                       time_left), 3)
 
   def button_press(self, evt, number):  # pylint: disable=unused-argument
     if not self.button_panel.buttons[number].IsEnabled():

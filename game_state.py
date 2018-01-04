@@ -103,8 +103,9 @@ class GameState(object):
     self.tower_faction = [1.0] * (TOWER_LEVELS + 1)
     self.tower_update_ready = False
     self.tower_quests = self.generate_quests()
-    # Number of encounters remaining in current tower ascension
+    # Number of encounters completed in current tower ascension
     self.ascension_encounters = 0
+    self.ascension_encounters_required = 0
     self.current_shop = None
     # Monster currently in combat with
     self.monster = None
@@ -121,6 +122,7 @@ class GameState(object):
     self.trait_choices = []
     self.infinity_dungeon = False
     self.stronghold_room = 0
+    self.last_turn_logs = []
     if DEBUG_TOWER_START:
       self.frontier = DEBUG_TOWER_START
       self.floor = DEBUG_TOWER_START
@@ -473,14 +475,14 @@ class GameState(object):
     if choice_text == "Explore":
       self.pass_time(random.randint(1, 10), logs)
       logs.append("You explore the tower...")
-      if self.ascension_encounters > 0:
-        self.ascension_encounters -= 1
+      if self.ascension_encounters_required > self.ascension_encounters:
+        self.ascension_encounters += 1
         self.handle_explore(logs, "Tower")
-      elif self.ascension_encounters == 0:
-        self.ascension_encounters -= 1
+      elif self.ascension_encounters == self.ascension_encounters_required:
+        self.ascension_encounters += 1
         self.start_combat(logs, 1.0)  # Floor boss
       else:
-        assert self.ascension_encounters == -1
+        assert self.ascension_encounters > self.ascension_encounters_required
         self.floor += 1
         self.frontier = max(self.frontier, self.floor)
         logs.append("Congratulations, you have reached floor {}!".format(self.floor))
@@ -750,7 +752,8 @@ class GameState(object):
       self.pass_time(10, logs)
       if self.frontier <= self.floor:
         self.add_state("TOWER")
-        self.ascension_encounters = random.randint(5, 8)
+        self.ascension_encounters_required = random.randint(5, 8)
+        self.ascension_encounters = 0
         logs.append("You entered the tower.")
       else:
         self.floor += 1
@@ -801,6 +804,7 @@ class GameState(object):
     except IOError as exc:
       print(exc)  # pylint: disable=print-statement
       logs.append("apply_choice not implemented yet, state: {}".format(current_state))
+    self.last_turn_logs = logs[:]
     return logs
 
   def loot_choice_text(self):
@@ -863,7 +867,9 @@ class GameState(object):
     elif current_state == "SUMMIT":
       return "You stand at the summit of the tower."
     elif current_state == "TOWER":
-      return "You are inside the tower, ascending to level {}.".format(self.floor + 1)
+      text = "You are inside the tower, ascending to level {}.\n".format(self.floor + 1)
+      text += "(Encounters completed: {})".format(self.ascension_encounters)
+      return text
     elif current_state == "COMBAT":
       return self.combat_text()
     elif current_state == "LOOT_EQUIPMENT":
