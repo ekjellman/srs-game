@@ -175,7 +175,7 @@ class GameState(object):
     new_period = self.time_spent // UPDATE_TIME
     if old_period != new_period:
       self.tower_update_ready = True
-      logs.append("Tower ready for update.")
+      logs.append("The tower is ready to update.")
     self.character.pass_time(amount)
     if self.monster:
       self.monster.pass_time(amount)
@@ -259,7 +259,7 @@ class GameState(object):
         self.equipment_choice = item
         break  # Have to give choice to player
       elif item == "Rune":
-        logs.append("You found a corrupted rune.")
+        logs.append("You found a corrupted rune!")
         self.character.runes += 1
       else:
         assert False
@@ -317,7 +317,7 @@ class GameState(object):
       self.character.make_initial_equipment(choice_text)
     if DEBUG_MATERIALS:
       self.character.materials = DEBUG_MATERIALS
-    logs.append("Generated {} equipment.".format(choice_text))
+    logs.append("Generated {} starting equipment.".format(choice_text))
     self.change_state("TOWN")
 
   def start_combat(self, logs, boss_chance, level=None):
@@ -359,7 +359,7 @@ class GameState(object):
       item = self.character.items.pop(choice)
       result = item.apply(self.character, self.monster, logs)
       if result == Item.UNUSABLE:
-        logs.append("That item cannot be used right now.")
+        logs.append("You can't use that item right now.")
         self.character.items.append(item)
       else:
         self.leave_state()
@@ -386,7 +386,7 @@ class GameState(object):
       self.pass_time(1, logs)
       self.leave_state()
     elif choice_text == "Complete Quest":
-      logs.append("You complete the quest.")
+      logs.append("You have completed the quest.")
       amount_gained = self.character.gain_gold(self.quest.gp_reward)
       logs.append("You gain {} gold.".format(amount_gained))
       levelups = self.character.gain_exp(self.quest.xp_reward, self.floor, logs,
@@ -415,7 +415,7 @@ class GameState(object):
       self.start_combat(logs, 1.0, level)
     elif choice_text == "Rest":
       self.pass_time(5, logs)
-      logs.append("You rest")
+      logs.append("You rest.")
       hp_gained = self.character.rest()
       logs.append("You regain {} HP.".format(hp_gained))
     elif choice_text == "Item":
@@ -678,7 +678,7 @@ class GameState(object):
         self.change_state("SUMMIT")
       else:
         self.change_state("OUTSIDE")
-      logs.append("You left town.")
+      logs.append("You left the town.")
     else:
       shop = None
       for shop in self.towns[self.floor]:
@@ -742,12 +742,12 @@ class GameState(object):
     elif choice_text == "Town":
       self.pass_time(5, logs)
       self.change_state("TOWN")
-      logs.append("You went to town.")
+      logs.append("You went to the town.")
     elif choice_text == "Descend Tower":
       self.pass_time(10, logs)
       self.floor -= 1  # Bug if there's only one floor, I guess.
       self.change_state("OUTSIDE")
-      logs.append("Descended to floor {}.".format(self.floor))
+      logs.append("You descended to floor {}.".format(self.floor))
 
 
   def apply_choice_outside(self, logs, choice_text):
@@ -759,23 +759,23 @@ class GameState(object):
         logs.append("You entered the tower.")
       else:
         self.floor += 1
-        logs.append("Ascended to floor {}.".format(self.floor))
+        logs.append("You ascended to floor {}.".format(self.floor))
         if self.floor == TOWER_LEVELS:
           self.change_state("SUMMIT")
     elif choice_text == "Quest":
       self.pass_time(5, logs)
       self.add_state("ACCEPT_QUEST")
-      logs.append("You look for a quest giver...")
+      logs.append("You look for a quest giver.")
       self.quest = self.tower_quests[self.floor]
     elif choice_text == "Town":
       self.pass_time(5, logs)
       self.change_state("TOWN")
-      logs.append("Went to town.")
+      logs.append("You went to the town.")
     elif choice_text == "Descend Tower":
       self.pass_time(10, logs)
       if self.floor > 1:
         self.floor -= 1
-        logs.append("Descended to floor {}.".format(self.floor))
+        logs.append("You descended to floor {}.".format(self.floor))
       else:
         logs.append("Cannot descend while on floor 1.")
 
@@ -785,10 +785,10 @@ class GameState(object):
     elif choice_text == "Keep New":
       recycle = self.character.equip(self.equipment_choice)
       self.equipment_choice = None
-    logs.append("Recycled {}".format(recycle))
+    logs.append("You recycled {} for materials.".format(recycle))
     materials = recycle.get_recycled_materials()
     self.character.gain_materials(materials)
-    logs.append("Received {}.".format(Equipment.materials_string(materials)))
+    logs.append("It turned into {}.".format(Equipment.materials_string(materials)))
     # Add materials to character, add materials inventory to character string
     self.leave_state()
     self.handle_treasure(logs)
@@ -821,7 +821,7 @@ class GameState(object):
 
   def trait_text(self):
     pieces = []
-    pieces.append("Select a trait")
+    pieces.append("Select a trait.")
     choices = self.get_choices()
     for choice in choices:
       if choice in TRAITS:
@@ -830,7 +830,7 @@ class GameState(object):
 
   def skill_text(self):
     pieces = []
-    pieces.append("Select a skill")
+    pieces.append("Select a skill.")
     pieces.extend(self.get_choices())
     return "\n".join(pieces)
 
@@ -862,13 +862,13 @@ class GameState(object):
     if current_state == "CHAR_CREATE":
       return "Please choose the starting specialization for your character."
     elif current_state == "TOWN":
-      return "Town on tower level {}.".format(self.floor)
+      return "You are in the town on tower level {}.".format(self.floor)
     elif current_state == "OUTSIDE":
-      return "Outside town on tower level {}.".format(self.floor)
+      return "You are outside the town on tower level {}.".format(self.floor)
     elif current_state == "SUMMIT":
-      return "At the summit of the tower."
+      return "You stand at the summit of the tower."
     elif current_state == "TOWER":
-      return "Inside the tower ascending to level {}.".format(self.floor + 1)
+      return "You are inside the tower, ascending to level {}.".format(self.floor + 1)
     elif current_state == "COMBAT":
       return self.combat_text()
     elif current_state == "LOOT_EQUIPMENT":
@@ -880,9 +880,9 @@ class GameState(object):
     elif current_state == "USE_ITEM":
       return self.use_item_text()
     elif current_state == "RUNE_WORLD":
-      return "Rune world level {}".format(self.rune_level + 1)
+      return "You are in level {} of the rune world.".format(self.rune_level + 1)
     elif current_state == "DUNGEON":
-      return "Level {} Dungeon".format(self.floor)
+      return "You are in level {} of the dungeon.".format(self.floor)
     elif current_state == "LEVEL_UP":
       return self.trait_text()
     elif current_state == "LEVEL_UP_SKILL":
@@ -890,7 +890,7 @@ class GameState(object):
     elif current_state == "USE_SKILL":
       return self.skill_select_text()
     elif current_state == "STRONGHOLD":
-      return "Stronghold of the Ten: Room {}".format(self.stronghold_room + 1)
+      return "You are in the Stronghold of the Ten: Room {}.".format(self.stronghold_room + 1)
     elif current_state == "VICTORY":
       return "You win! Victory Time: {}.".format(self.time_spent)
     else:
