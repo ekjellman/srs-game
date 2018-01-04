@@ -53,11 +53,11 @@ DEBUG_CHARACTER = None
 DEBUG_TOWER_START = None
 
 #DEBUG_BUILDING = rooms.TeleportChamber
-#DEBUG_FLOOR = 39
-#DEBUG_GOLD = 100000
-#DEBUG_MATERIALS = [100, 100, 100, 100, 100]
-#DEBUG_CHARACTER = 70
-#DEBUG_TOWER_START = 39
+DEBUG_FLOOR = 39
+DEBUG_GOLD = 100000
+DEBUG_MATERIALS = [100, 100, 100, 100, 100]
+DEBUG_CHARACTER = 70
+DEBUG_TOWER_START = 39
 
 # TODO: http://www.pyinstaller.org/ to get packages
 # TODO: It is probably not best to be passing logs around to everything?
@@ -320,6 +320,8 @@ class GameState(object):
       self.character.make_initial_equipment(choice_text)
     if DEBUG_MATERIALS:
       self.character.materials = DEBUG_MATERIALS
+    if DEBUG_GOLD:
+      self.character.gold = DEBUG_GOLD
     logs.append("Generated {} starting equipment.".format(choice_text))
     self.change_state("TOWN")
 
@@ -457,7 +459,7 @@ class GameState(object):
     elif random_number < sum(chances[0:4]):
       self.start_combat(logs, 1.0)  # Boss monster
     elif random_number < sum(chances):
-      logs.append("You find a teleport chamber.")
+      logs.append("You find a teleportation chamber!")
       self.character.restore_hp()
       self.character.restore_sp()
       chamber = rooms.TeleportChamber(self.floor)

@@ -19,45 +19,24 @@ class Item(object):
   def get_item_level(self):
     return self.info["item_level"]
 
-class MinorHealthPotion(Item):
-  def __init__(self):
-    super(MinorHealthPotion, self).__init__()
-    self.info = {"name": "Minor HP Pot",
-                 "value": 100,
-                 "item_level": 1}
-  def apply(self, character, monster, logs):
-    hp_gained = character.restore_hp(200)
-    logs.append("You restored {} HP".format(hp_gained))
-
 class HealthPotion(Item):
-  def __init__(self):
+  HP_POTIONS = {"Minor": {"value": 100, "level": 1, "effect": 200},
+                "Standard": {"value": 500, "level": 10, "effect": 600},
+                "Major": {"value": 2500, "level": 30, "effect": 1800},
+                "Super": {"value": 15000, "level": 30, "effect": 5400},
+               }
+  def __init__(self, rank):
     super(HealthPotion, self).__init__()
-    self.info = {"name": "HP Pot",
-                 "value": 500,
-                 "item_level": 10}
-  def apply(self, character, monster, logs):
-    hp_gained = character.restore_hp(600)
-    logs.append("You restored {} HP".format(hp_gained))
+    # TODO: Currently only HealthPotions have ranks, add for more?
+    self.rank = rank
+    name = "{} HP Pot".format(rank)
+    value = self.HP_POTIONS[rank]["value"]
+    level = self.HP_POTIONS[rank]["level"]
+    self.info = {"name": name, "value": value, "item_level": level}
 
-class MajorHealthPotion(Item):
-  def __init__(self):
-    super(MajorHealthPotion, self).__init__()
-    self.info = {"name": "Major HP Pot",
-                 "value": 2500,
-                 "item_level": 30}
   def apply(self, character, monster, logs):
-    hp_gained = character.restore_hp(1800)
-    logs.append("You restored {} HP".format(hp_gained))
-
-class SuperHealthPotion(Item):
-  def __init__(self):
-    super(SuperHealthPotion, self).__init__()
-    self.info = {"name": "Super HP Pot",
-                 "value": 15000,
-                 "item_level": 30}
-  def apply(self, character, monster, logs):
-    hp_gained = character.restore_hp(5400)
-    logs.append("You restored {} HP".format(hp_gained))
+    hp_gained = character.restore_hp(self.HP_POTIONS[self.rank]["effect"])
+    logs.append("You restored {} HP.".format(hp_gained))
 
 class MinorMagicPotion(Item):
   def __init__(self):

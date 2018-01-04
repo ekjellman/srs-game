@@ -534,7 +534,7 @@ class TeleportChamber(Room):
     levels = ["Minor ", "", "Major "]
     mats = ["common", "uncommon", "rare"]
     for i in range(3):
-      pieces.append("{}Teleport ({} {} materials): teleport {} levels"
+      pieces.append("{}Teleport ({} {} materials): teleport {} levels."
                     .format(levels[i], self.level + i, mats[i], i+1))
     return "\n".join(pieces)
 
@@ -580,7 +580,7 @@ class Temple(Room):
 
   def get_text(self, character):
     pieces = []
-    pieces.append("Blessing: ({}g) Blessed buff".format(self.get_blessing_cost()))
+    pieces.append("Blessing: ({}g) gain the Blessed buff".format(self.get_blessing_cost()))
     pieces.append("Purify Rune: Enter the rune world to cleanse a rune")
     return "\n".join(pieces)
 
@@ -593,7 +593,7 @@ class Temple(Room):
       if cost <= character.gold:
         character.gold -= cost
         character.add_buff(Blessed(241))
-        logs.append("You were blessed.")
+        logs.append("The priest blesses you.")
         return (1, Room.NO_CHANGE)
       else:
         logs.append("You do not have sufficient money.")
@@ -616,9 +616,8 @@ class Alchemist(Room):
     super(Alchemist, self).__init__(level)
     self.level = level
     self.faction_rate = 1.0
-    self.possible_items = [items.MinorHealthPotion, items.MajorHealthPotion,
-                           items.HealthPotion, items.SuperHealthPotion,
-                           items.MagicPotion, items.MinorMagicPotion,
+    # TODO: HealthPotions are currently handled separately due to refactor
+    self.possible_items = [items.MagicPotion, items.MinorMagicPotion,
                            items.MajorMagicPotion,
                            items.SurgePotion, items.MajorSurgePotion,
                            items.MinorSurgePotion,
@@ -638,7 +637,9 @@ class Alchemist(Room):
   def generate_inventory(self):
     inventory = []
     for _ in range(3):
-      pots = [x() for x in self.possible_items]   # Shouldn't redefine item
+      # TODO: Temp testing fix
+      health_pots = [items.HealthPotion(x) for x in ("Minor", "Standard", "Major", "Super")]
+      pots = health_pots + [x() for x in self.possible_items]   # Shouldn't redefine item
       inventory.append(max((self.item_rate(p), p) for p in pots)[1])
     return inventory
 
