@@ -89,8 +89,7 @@ class CharacterPanel(wx.Panel):
   def update(self, game_state):
     self.text_field.SetValue("")
     write_color_text(self.text_field, str(game_state.character))
-    write_color_text(self.text_field, "\n---\n")
-    #write_color_text(self.text_field, "Energy: {}".format(self.game_state.energy))
+    write_color_text(self.text_field, "\n_______\n\n")
     write_color_text(self.text_field,
                      "GP: {}\n".format(game_state.character.gold))
     update = "(Tower update ready)" if game_state.tower_update_ready else ""
@@ -98,6 +97,27 @@ class CharacterPanel(wx.Panel):
                      "Time: {} {}\n".format(game_state.time_spent, update))
     write_color_text(self.text_field,
                      "(Next tower refresh in {})\n".format(game_state.time_to_refresh()))
+
+class LastTurnPanel(wx.Panel):
+  def __init__(self, parent):
+    wx.Panel.__init__(self, parent, wx.NewId())
+    style = wx.TE_READONLY | wx.TE_MULTILINE | wx.BORDER
+    self.text_field = wx.richtext.RichTextCtrl(self, value="", style=style)
+    bsizer = wx.BoxSizer(wx.VERTICAL)
+    bsizer.Add(self.text_field, 1, wx.EXPAND)
+    self.SetSizerAndFit(bsizer)
+
+  def update(self, game_state):
+    self.text_field.SetValue("")
+    for log in game_state.last_turn_logs:
+      if log.startswith("-----"):
+        continue
+      if log == "\n":
+        continue
+      write_color_text(self.text_field, str(log))
+      if not (log.endswith("\n")):
+        write_color_text(self.text_field, "\n")
+    #write_color_text(self.text_field, "Energy: {}".format(self.game_state.energy))
 
 class LogPanel(wx.Panel):
   def __init__(self, parent):
@@ -139,23 +159,12 @@ class EncounterPanel(wx.Panel):
 
   def update(self, game_state):
     self.text_field.SetValue("")
-    for log in game_state.last_turn_logs:
-      if log.startswith("-----"):
-        continue
-      if log == "\n":
-        continue
-      write_color_text(self.text_field, str(log))
-      if not (log.endswith("\n")):
-        write_color_text(self.text_field, "\n")
-    if game_state.last_turn_logs:
-      write_color_text(self.text_field, "______________________\n")
-      write_color_text(self.text_field, "\n")
     write_color_text(self.text_field, str(game_state.panel_text()))
 
 class MainWindow(wx.Frame):
   # pylint: disable=too-many-instance-attributes
   def __init__(self, parent, title):
-    wx.Frame.__init__(self, parent, title=title, size=(1200, 600))
+    wx.Frame.__init__(self, parent, title=title, size=(1200, 750))
 
     # Make menus
     menu_bar = wx.MenuBar()
@@ -174,7 +183,9 @@ class MainWindow(wx.Frame):
     self.left_sizer = wx.BoxSizer(wx.VERTICAL)
     self.button_panel = ButtonPanel(self)
     self.encounter_panel = EncounterPanel(self)
-    self.left_sizer.Add(self.encounter_panel, 4, wx.EXPAND)
+    self.last_turn_panel = LastTurnPanel(self)
+    self.left_sizer.Add(self.last_turn_panel, 3, wx.EXPAND)
+    self.left_sizer.Add(self.encounter_panel, 2, wx.EXPAND)
     self.left_sizer.Add(self.button_panel, 1, wx.EXPAND)
 
     self.right_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -232,6 +243,7 @@ class MainWindow(wx.Frame):
       self.char_panel.text_field.Clear()
     self.set_labels(self.game_state.get_choices())
     self.encounter_panel.update(self.game_state)
+    self.last_turn_panel.update(self.game_state)
 
   def button_press(self, evt, number):  # pylint: disable=unused-argument
     if not self.button_panel.buttons[number].IsEnabled():
