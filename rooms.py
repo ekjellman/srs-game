@@ -580,7 +580,7 @@ class Temple(Room):
 
   def get_text(self, character):
     pieces = []
-    pieces.append("Blessing: ({}g) Blessed buff".format(self.get_blessing_cost()))
+    pieces.append("Blessing: ({}g) gain the Blessed buff".format(self.get_blessing_cost()))
     pieces.append("Purify Rune: Enter the rune world to cleanse a rune")
     return "\n".join(pieces)
 
@@ -593,7 +593,7 @@ class Temple(Room):
       if cost <= character.gold:
         character.gold -= cost
         character.add_buff(Blessed(241))
-        logs.append("You were blessed.")
+        logs.append("The priest blesses you.")
         return (1, Room.NO_CHANGE)
       else:
         logs.append("You do not have sufficient money.")
