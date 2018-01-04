@@ -534,7 +534,7 @@ class TeleportChamber(Room):
     levels = ["Minor ", "", "Major "]
     mats = ["common", "uncommon", "rare"]
     for i in range(3):
-      pieces.append("{}Teleport ({} {} materials): teleport {} levels"
+      pieces.append("{}Teleport ({} {} materials): teleport {} levels."
                     .format(levels[i], self.level + i, mats[i], i+1))
     return "\n".join(pieces)
 
