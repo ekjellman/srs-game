@@ -11,8 +11,6 @@ import wx.richtext
 # TODO: Either show current time or time passed in the log
 # TODO: Add text describing skills to level up dialog
 # TODO: Disable rest if HP/SP full? But Infinity Dungeon...
-# TODO: Rename chest armor to torso/shirt/something
-#       Hat / Shirt / Pants
 # TODO: Change "insufficient payment" and "gold or materials" to give
 #       the actual reason. Possibly snarky if you have neither
 # TODO: If you have three skills, don't activate scholar (if it does)

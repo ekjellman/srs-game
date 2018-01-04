@@ -37,7 +37,7 @@ BLACK = "`0,0,0`"
 
 class Character(object):
   def __init__(self):
-    # Weapon, Helm, Chest, Legs, Accessory
+    # Weapon, Hat, Shirt, Pants, Accessory
     self.equipment = [None, None, None, None, None]
     self.items = []
     self.skills = []

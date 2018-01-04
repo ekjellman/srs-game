@@ -114,7 +114,7 @@ class Enchanter(Room):
 
   def get_buttons(self, character):
     if self.enchanting_armor:
-      return ["Enchant Helm", "Enchant Chest", "Enchant Legs", "Never Mind"]
+      return ["Enchant Hat", "Enchant Shirt", "Enchant Pants", "Never Mind"]
     else:
       return ["Enchant Weapon", "Enchant Armor", "Enchant Accessory",
               "Leave Shop"]
@@ -129,7 +129,7 @@ class Enchanter(Room):
 
   def armor_text(self, character):
     pieces = []
-    for name, slot in (("Helm", 1), ("Chest", 2), ("Legs", 3)):
+    for name, slot in (("Hat", 1), ("Shirt", 2), ("Pants", 3)):
       item = character.equipment[slot]
       cost = self.enchant_cost_gold(item)
       material_cost = self.enchant_cost_materials(item)
@@ -190,11 +190,11 @@ class Enchanter(Room):
 
   def apply_choice_enchant_armor(self, choice_text, logs, character):
     item = None
-    if choice_text == "Enchant Helm":
+    if choice_text == "Enchant Hat":
       item = character.equipment[1]
-    elif choice_text == "Enchant Chest":
+    elif choice_text == "Enchant Shirt":
       item = character.equipment[2]
-    elif choice_text == "Enchant Legs":
+    elif choice_text == "Enchant Pants":
       item = character.equipment[3]
     elif choice_text == "Never Mind":
       self.enchanting_armor = False
@@ -226,7 +226,7 @@ class Forge(Room):
   def get_buttons(self, character):
     choices = []
     if self.forging_armor:
-      for name, slot in (("Helm", 1), ("Chest", 2), ("Legs", 3)):
+      for name, slot in (("Hat", 1), ("Shirt", 2), ("Pants", 3)):
         if self.reforgable(character.equipment[slot]):
           choices.append("Reforge {}".format(name))
         else:
@@ -269,7 +269,7 @@ class Forge(Room):
 
   def forge_armor_text(self, character):
     pieces = []
-    for name, slot in (("Helm", 1), ("Chest", 2), ("Legs", 3)):
+    for name, slot in (("Hat", 1), ("Shirt", 2), ("Pants", 3)):
       item = character.equipment[slot]
       if self.reforgable(item):
         cost = self.reforge_cost_gold(item)
@@ -305,11 +305,11 @@ class Forge(Room):
     item = None
     if choice_text == "Reforge Weapon":
       item = character.equipment[0]
-    elif choice_text == "Reforge Helm":
+    elif choice_text == "Reforge Hat":
       item = character.equipment[1]
-    elif choice_text == "Reforge Chest":
+    elif choice_text == "Reforge Shirt":
       item = character.equipment[2]
-    elif choice_text == "Reforge Legs":
+    elif choice_text == "Reforge Pants":
       item = character.equipment[3]
     elif choice_text == "Reforge Armor":
       self.forging_armor = True

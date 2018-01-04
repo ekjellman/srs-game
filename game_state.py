@@ -35,7 +35,7 @@ CHOICES = {"CHAR_CREATE": ["Strength", "Stamina", "Speed", "Intellect"],
            "SHOP_WARNING": ["", "Enter Room", "", ""],
            "ACCEPT_QUEST": ["", "Accept Quest", "Decline Quest", ""]}
 
-#                           Hoard,Shop,Chest,Boss,Teleport
+#                           Hoard,Shop,Box,Boss,Teleport
 EXPLORE_CHANCES = {"Tower": [.01, .02, .15, .04, .01],
                    "Dungeon": [.02, .00, .20, .05, .02],
                    "Infinity Dungeon": [.03, .03, .25, .06, .00]}
@@ -53,11 +53,11 @@ DEBUG_CHARACTER = None
 DEBUG_TOWER_START = None
 
 #DEBUG_BUILDING = rooms.TeleportChamber
-DEBUG_FLOOR = 39
-DEBUG_GOLD = 100000
-DEBUG_MATERIALS = [100, 100, 100, 100, 100]
-DEBUG_CHARACTER = 70
-DEBUG_TOWER_START = 39
+#DEBUG_FLOOR = 39
+#DEBUG_GOLD = 100000
+#DEBUG_MATERIALS = [100, 100, 100, 100, 100]
+#DEBUG_CHARACTER = 70
+#DEBUG_TOWER_START = 39
 
 # TODO: http://www.pyinstaller.org/ to get packages
 # TODO: It is probably not best to be passing logs around to everything?
@@ -454,7 +454,7 @@ class GameState(object):
         faction = self.tower_faction[self.floor]
       shop.enter_shop(faction)
     elif random_number < sum(chances[0:3]):
-      logs.append("You find a treasure chest!")
+      logs.append("You find a treasure box!")
       self.find_treasure(logs, 1)
     elif random_number < sum(chances[0:4]):
       self.start_combat(logs, 1.0)  # Boss monster

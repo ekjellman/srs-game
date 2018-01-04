@@ -5,7 +5,7 @@ import random
 # TODO: Should probably move these to a different place
 STATS = ["Strength", "Stamina", "Speed", "Intellect"]
 DEFENSES = ["Defense", "Magic Defense"]
-SLOTS = ["Weapon", "Helm", "Chest", "Legs", "Accessory"]
+SLOTS = ["Weapon", "Hat", "Shirt", "Pants", "Accessory"]
 RARITY = ["Common", "Uncommon", "Rare", "Epic", "Legendary"]
 RARITY_COLORS = ["`160,160,160`", "`0,160,0`", "`0,0,160`", "`160,0,160`",
                  "`255,140,0`"]
@@ -21,7 +21,7 @@ class Equipment(object):
     self.attributes = attributes
     # Common / Uncommon / Rare / Epic / Legendary
     self.rarity = rarity
-    # 0-4, Weapon, Helm, Chest, Legs, Accessory
+    # 0-4, Weapon, Hat, Shirt, Pants, Accessory
     self.slot = slot
     self.enchant_count = 0
     self.reforge_count = 0
