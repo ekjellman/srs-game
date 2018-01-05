@@ -177,7 +177,8 @@ class Equipment(object):
       attributes[require] = cls.make_stat_value(item_level, rarity)
       slots -= 1
     for _ in range(slots):
-      attributes[random.choice(STATS)] = attributes.get(random.choice(STATS), 0) + cls.make_stat_value(item_level, rarity)
+      stat = random.choice(STATS)
+      attributes[stat] = attributes.get(stat, 0) + cls.make_stat_value(item_level, rarity)
     for defense in DEFENSES:
       attributes[defense] = cls.make_stat_value(item_level, rarity)
     if SLOTS[slot] == "Weapon":
