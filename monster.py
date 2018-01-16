@@ -1,7 +1,6 @@
 import srs_random
 from equipment import Equipment
 from effect import Debuff, Effect
-from name_generator import NameGenerator
 
 STAT_ORDER = ["Strength", "Intellect", "Speed", "Stamina", "Defense",
               "Magic Defense"]
@@ -19,14 +18,12 @@ STAT_DICE = {"Strength": (12, 1),
              "Speed": (12, 1),
              "Stamina": (10, 1)}
 
-NAME_GENERATOR = NameGenerator("monsters.txt", "banned.txt")
-
 class Monster(object):
-  def __init__(self, level, boss):
+  def __init__(self, game, level, boss):
+    self.game = game
     self.stats = {}
     self.level = level
     self.boss = boss
-    self.name_gen = NAME_GENERATOR
 
     # If you modify these, make sure to modify the XP calc
     for stat in STAT_DICE.keys():
@@ -44,10 +41,10 @@ class Monster(object):
     self.max_hp = self.stats["Stamina"] * 5
     self.current_hp = self.max_hp
     if boss:
-      self.name = "{} (Level {} Elite)".format(self.name_gen.generate_name(),
+      self.name = "{} (Level {} Elite)".format(self.game.name_gen.generate_name(),
                                            self.level)
     else:
-      self.name = "{} (Level {})".format(self.name_gen.generate_name(), self.level)
+      self.name = "{} (Level {})".format(self.game.name_gen.generate_name(), self.level)
     self.traits = {}
     self.buffs = []
     self.debuffs = []
@@ -130,7 +127,7 @@ class Monster(object):
     chances = CHANCE_TIERS[treasure_tier]
     for rarity in range(1, len(chances)):
       while srs_random.random() < chances[rarity]:
-        treasure.append(Equipment.get_new_armor(self.level, None, None, rarity))
+        treasure.append(Equipment.get_new_armor(self.game, self.level, None, None, rarity))
     if rune_world:
       rune_chance = 0.0
     else:

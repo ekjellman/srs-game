@@ -35,7 +35,8 @@ BLACK = "`0,0,0`"
 # -- Dodge (chance to avoid all damage from an attack)
 
 class Character(object):
-  def __init__(self):
+  def __init__(self, game):
+    self.game = game
     # Weapon, Hat, Shirt, Pants, Accessory
     self.equipment = [None, None, None, None, None]
     self.items = []
@@ -71,8 +72,8 @@ class Character(object):
     return "{}{} / {}{}".format(color, int(self.current_hp), self.max_hp, BLACK)
 
   @classmethod
-  def debug_character(cls, level, choice_text):
-    character = Character()
+  def debug_character(cls, game, level, choice_text):
+    character = Character(game)
     for i in range(1, level):
       character.level_up([])
       trait_choices = character.get_trait_choices()
@@ -95,7 +96,7 @@ class Character(object):
 
   def make_debug_equipment(self, level, choice):
     for i in range(len(self.equipment)):
-      self.equip(Equipment.get_new_armor(level, i, choice, 3))
+      self.equip(Equipment.get_new_armor(self.game, level, i, choice, 3))
 
   def add_item(self, item):
     if len(self.items) >= 3:
@@ -166,7 +167,7 @@ class Character(object):
 
   def make_initial_equipment(self, choice):
     for i in range(len(self.equipment)):
-      self.equip(Equipment.get_new_armor(1, i, choice))
+      self.equip(Equipment.get_new_armor(self.game, 1, i, choice))
 
   def __str__(self):
     pieces = []
@@ -396,7 +397,7 @@ class Character(object):
       assert len(self.skills) < 3
       new_skill = None
       for skill in SKILLS:
-        skill_instance = skill()
+        skill_instance = skill(self.game)
         if skill_instance.get_name() == skill_name:
           new_skill = skill_instance
       self.skills.insert(0, new_skill)

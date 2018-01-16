@@ -12,7 +12,8 @@ def get_skill(skill_name, level):
   return skill
 
 class Skill(object):
-  def __init__(self, level=1):
+  def __init__(self, game, level=1):
+    self.game = game
     self.level = level
   def get_name(self):
     return "Not Implemented"
@@ -442,4 +443,4 @@ SKILLS = [QuickAttack, Blind, Bash, Protection, HeavySwing, LastStand, Surge,
           Concentrate, Swiftness, BulkUp, Cannibalize, PoisonedBlade,
           Meditate, Heal, Drain, Wither, ChainLightning, FinalStrike, Renew,
           AutoLife, HolyBlade]
-SKILL_NAMES = [skill().get_name() for skill in SKILLS]
+SKILL_NAMES = [skill(None).get_name() for skill in SKILLS]

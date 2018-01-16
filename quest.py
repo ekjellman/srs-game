@@ -5,14 +5,15 @@ from equipment import Equipment
 TREASURE_CHANCES = [1.0, 1.0, 0.500, 0.080, 0.015]
 
 class Quest(object):
-  def __init__(self, level):
+  def __init__(self, game, level):
+    self.game = game
     self.monsters = []
     self.treasures = 0
     for _ in range(srs_random.randint(3, 10)):
-      self.monsters.append(Monster(level, False))
+      self.monsters.append(Monster(game, level, False))
       self.treasures += 1
     for _ in range(srs_random.randint(0, 1)):
-      self.monsters.append(Monster(level, True))
+      self.monsters.append(Monster(game, level, True))
       self.treasures += 5
     self.gp_reward = 0
     self.xp_reward = 0
@@ -56,6 +57,6 @@ class Quest(object):
     while len(treasure) < self.treasure_reward:
       for rarity in range(4, -1, -1):
         if srs_random.random() < TREASURE_CHANCES[rarity]:
-          treasure.append(Equipment.get_new_armor(self.level, None, None, rarity))
+          treasure.append(Equipment.get_new_armor(self.game, self.level, None, None, rarity))
           break
     return treasure

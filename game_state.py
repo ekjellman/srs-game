@@ -9,6 +9,7 @@ from effect import Effect
 import rooms
 from items import Item
 import skills
+from name_generator import NameGenerator
 
 # TODO: Log more. Certainly including victory
 
@@ -75,7 +76,8 @@ class GameState(object):
   """
   def __init__(self):
     self.state = ["CHAR_CREATE"]
-    self.character = Character()
+    self.character = Character(self)
+    self.name_gen = NameGenerator(self, "monsters.txt", "banned.txt")
     if DEBUG_GOLD:
       self.character.gold = DEBUG_GOLD
     self.floor = 1
@@ -119,15 +121,13 @@ class GameState(object):
   # Helper methods for changing state
   ###
 
-  @staticmethod
-  def generate_quests():
+  def generate_quests(self):
     quests = [None]
     for i in range(1, TOWER_LEVELS + 1):
-      quests.append(Quest(i))
+      quests.append(Quest(self, i))
     return quests
 
-  @staticmethod
-  def generate_towns():
+  def generate_towns(self):
     # Level 0 does not exist
     tower = [None]
     for level in range(1, TOWER_LEVELS):
@@ -136,14 +136,17 @@ class GameState(object):
         shop_set.add(srs_random.choice(TOWN_BUILDINGS))
       shops = []
       for shop in shop_set:
-        shops.append(shop(level))
+        shops.append(shop(self, level))
       tower.append(shops)
     if DEBUG_BUILDING:
       tower[DEBUG_FLOOR][0] = DEBUG_BUILDING(DEBUG_FLOOR)
-    summit_shops = [rooms.Inn(TOWER_LEVELS), rooms.Temple(TOWER_LEVELS),
-                    rooms.Crafthall(TOWER_LEVELS)]
+    summit_shops = [rooms.Inn(self, TOWER_LEVELS),
+                    rooms.Temple(self, TOWER_LEVELS),
+                    rooms.Crafthall(self, TOWER_LEVELS)]
     tower.append(summit_shops)
-    base_floor_shops = [rooms.Inn(1), rooms.Temple(1), rooms.Alchemist(1)]
+    base_floor_shops = [rooms.Inn(self, 1),
+                        rooms.Temple(self, 1),
+                        rooms.Alchemist(self, 1)]
     tower[1] = base_floor_shops
     return tower
 
@@ -259,7 +262,7 @@ class GameState(object):
     if self.rune_level == 0:
       logs.append("Unpurified, the rune dissolves into dust.")
       return
-    item = Equipment.get_new_armor(self.rune_level, slot=4, rarity=4)
+    item = Equipment.get_new_armor(self, self.rune_level, slot=4, rarity=4)
     self.treasure_queue.append(item)
     self.rune_level = -1
     self.handle_treasure(logs)
@@ -302,7 +305,7 @@ class GameState(object):
 
   def apply_choice_char_create(self, logs, choice_text):
     if DEBUG_CHARACTER:
-      self.character = Character.debug_character(DEBUG_CHARACTER, choice_text)
+      self.character = Character.debug_character(self, DEBUG_CHARACTER, choice_text)
       self.character.runes = 5
     else:
       self.character.make_initial_equipment(choice_text)
@@ -318,7 +321,7 @@ class GameState(object):
       level = self.floor
     boss = srs_random.random() < boss_chance
     self.add_state("COMBAT")
-    self.monster = Monster(level, boss)
+    self.monster = Monster(self, level, boss)
     logs.append("You have encountered a monster.")
 
   def apply_choice_rune_world(self, logs, choice_text):
@@ -388,7 +391,7 @@ class GameState(object):
       self.leave_state()
       if self.current_state() == "OUTSIDE":
         if regenerate_quest:
-          self.tower_quests[self.floor] = Quest(self.floor)
+          self.tower_quests[self.floor] = Quest(self, self.floor)
         else:
           self.tower_quests[self.floor] = None
       if levelups > 0:
@@ -443,7 +446,7 @@ class GameState(object):
       logs.append("You find a shop.")
       self.character.restore_hp()
       self.character.restore_sp()
-      shop = srs_random.choice(TOWER_BUILDINGS)(self.floor)
+      shop = srs_random.choice(TOWER_BUILDINGS)(self, self.floor)
       self.add_state("SHOP")
       self.add_state("SHOP_WARNING")
       self.current_shop = shop
@@ -461,7 +464,7 @@ class GameState(object):
       logs.append("You find a teleportation chamber!")
       self.character.restore_hp()
       self.character.restore_sp()
-      chamber = rooms.TeleportChamber(self.floor)
+      chamber = rooms.TeleportChamber(self, self.floor)
       self.add_state("SHOP")
       self.add_state("SHOP_WARNING")
       self.current_shop = chamber
@@ -518,7 +521,7 @@ class GameState(object):
         if self.infinity_dungeon:
           rarity = max(rarity, min(srs_random.randint(1, 4) for _ in range(4)))
         level = max(1, int(self.floor + srs_random.gauss(0, 1)))
-        treasure.append(Equipment.get_new_armor(level, None, None, rarity))
+        treasure.append(Equipment.get_new_armor(self, level, None, None, rarity))
     self.treasure_queue = treasure
     self.handle_treasure(logs)
 
@@ -530,7 +533,7 @@ class GameState(object):
           self.max_infinity_dungeon = self.floor
           crafthall_level = (TOWER_LEVELS + self.floor) / 2
           assert isinstance(self.towns[TOWER_LEVELS][2], rooms.Crafthall)
-          self.towns[TOWER_LEVELS][2] = rooms.Crafthall(crafthall_level)
+          self.towns[TOWER_LEVELS][2] = rooms.Crafthall(self, crafthall_level)
       self.pass_time(srs_random.randint(1, 5), logs)
       logs.append("You explore the dungeon...")
       if self.infinity_dungeon:

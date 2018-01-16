@@ -13,7 +13,8 @@ ABBREVIATIONS = {"Defense": "Def",
 WEAPON_STATS = ["Low", "High", "Type"]
 
 class Equipment(object):
-  def __init__(self, item_level, attributes, slot, rarity):
+  def __init__(self, game, item_level, attributes, slot, rarity):
+    self.game = game
     # int, power level of the item
     self.item_level = item_level
     # dictionary from attribute -> value
@@ -177,7 +178,7 @@ class Equipment(object):
     return value
 
   @classmethod
-  def get_new_armor(cls, item_level, slot=None, require=None, rarity=1):
+  def get_new_armor(cls, game, item_level, slot=None, require=None, rarity=1):
     attributes = {}
     if slot is None:
       slot = srs_random.randint(0, len(SLOTS) - 1)
@@ -206,7 +207,7 @@ class Equipment(object):
         attributes["Type"] = "Magic"
       else:
         attributes["Type"] = srs_random.choice(("Magic", "Physical"))
-    return Equipment(item_level, attributes, slot, rarity)
+    return Equipment(game, item_level, attributes, slot, rarity)
 
   def __str__(self):
     pieces = []

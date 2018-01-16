@@ -63,7 +63,8 @@ class TestGameState(unittest.TestCase):
     # TODO: Test tower when quest has been done
     # TODO: Test tower when quest has not been done
     def test_generate_quests(self):
-        quests = game_state.GameState.generate_quests()
+        mock_game_state = mock.MagicMock()
+        quests = game_state.GameState.generate_quests(mock_game_state)
         self.assertEqual(quests[0], None)
         for i in range(1, game_state.TOWER_LEVELS + 1):
             # Test specifics of quest separately
@@ -85,7 +86,8 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(type(shop), types[shop_number])
 
     def test_generate_towns(self):
-        towns = game_state.GameState.generate_towns()
+        mock_game_state = mock.MagicMock()
+        towns = game_state.GameState.generate_towns(mock_game_state)
         levels = game_state.TOWER_LEVELS
         self.assertEqual(towns[0], None)
         # Base floor (1) shops are always the same

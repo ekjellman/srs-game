@@ -10,7 +10,8 @@ import srs_random
 
 class Item(object):
   UNUSABLE = 0
-  def __init__(self):
+  def __init__(self, game):
+    self.game = game
     self.info = {"name": "Not Implemented",
                  "value": 2**100,
                  "item_level": 100}
@@ -30,8 +31,8 @@ class HealthPotion(Item):
                 "Major": {"value": 2500, "level": 30, "effect": 1800},
                 "Super": {"value": 15000, "level": 30, "effect": 5400},
                }
-  def __init__(self, rank):
-    super().__init__()
+  def __init__(self, game, rank):
+    super().__init__(game)
     self.rank = rank
     name = "{} HP Pot".format(rank)
     value = self.HP_POTIONS[rank]["value"]
@@ -47,8 +48,8 @@ class MagicPotion(Item):
                 "Standard": {"value": 1200, "level": 10, "effect": 200},
                 "Major": {"value": 7500, "level": 30, "effect": 600},
                }
-  def __init__(self, rank):
-    super().__init__()
+  def __init__(self, game, rank):
+    super().__init__(game)
     self.rank = rank
     name = "{} SP Pot".format(rank)
     value = self.SP_POTIONS[rank]["value"]
@@ -60,8 +61,8 @@ class MagicPotion(Item):
     logs.append("You restored {} SP.".format(sp_gained))
 
 class InnFood(Item):
-  def __init__(self):
-    super().__init__()
+  def __init__(self, game):
+    super().__init__(game)
     self.info = {"name": "Inn-made Bento",
                  "value": 0,
                  "item_level": 1}
@@ -89,8 +90,8 @@ class EffectPotion(Item):
                     "BulkUp": {"value": 1500, "level": 10, "effect": effect.BulkUp(10, 1.7)},
                     "Major BulkUp": {"value": 7500, "level": 30, "effect": effect.BulkUp(15, 2.0)},
   }
-  def __init__(self, name):
-    super().__init__()
+  def __init__(self, game, name):
+    super().__init__(game)
     self.effect = self.EFFECT_POTIONS[name]["effect"]
     value = self.EFFECT_POTIONS[name]["value"]
     level = self.EFFECT_POTIONS[name]["level"]
@@ -107,7 +108,8 @@ class EffectPotion(Item):
 # These are all applied outside of combat, and should NOT appear in other shops
 
 class RareCandy(Item):
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.info = {"name": "Rare Candy",
                  "value": 50,
                  "item_level": 1}
@@ -120,7 +122,8 @@ class RareCandy(Item):
     # Start here: Finish the Inn, and test this.
 
 class TeleportStone(Item):
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.info = {"name": "Teleport Stone",
                  "value": 70,
                  "item_level": 1}
@@ -130,7 +133,8 @@ class TeleportStone(Item):
 
 class StatStone(Item):
   STONE_TYPES = STAT_ORDER + ["Rainbow"]
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.stone_type = srs_random.choice(self.STONE_TYPES)
     self.info = {"name": "{} Stone".format(self.stone_type),
                  "value": 100,
@@ -147,7 +151,8 @@ class StatStone(Item):
       character.stats[self.stone_type] += amount
 
 class MaterialPack(Item):
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.material_type = srs_random.randint(0, 4)
     value = 40 * (2**self.material_type)
     self.info = {"name": "{} Materials Pack".format(RARITY[self.material_type]),
@@ -168,7 +173,8 @@ class Tome(Item):
   TOME_TYPES = list(TRAITS.keys()) + ["Rainbow"]
   TOME_TYPES.remove("Libra")
 
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.tome_type = srs_random.choice(self.TOME_TYPES)
     value = 200 if self.tome_type == "Rainbow" else 100
     self.info = {"name": "{} Tome".format(self.tome_type),
@@ -188,7 +194,8 @@ class Tome(Item):
       character.traits[self.tome_type] = character.traits.get(self.tome_type, 0) + levels
 
 class CorruptedRune(Item):
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.info = {"name": "Corrupted Rune",
                  "value": 150,
                  "item_level": 1}
@@ -197,7 +204,8 @@ class CorruptedRune(Item):
 
 class GoldSack(Item):
   SIZES = ["Small", "Medium", "Large", "Huge", "Gigantic"]
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.size = srs_random.randint(0, 4)
     value = 50 * (2**self.size)
     self.info = {"name": "{} Sack of Gold".format(self.SIZES[self.size]),
@@ -210,7 +218,8 @@ class GoldSack(Item):
     logs.append("You found {} gold in the sack.".format(gold_gained))
 
 class HPStone(Item):
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.info = {"name": "HP Stone",
                  "value": 75,
                  "item_level": 1}
@@ -220,7 +229,8 @@ class HPStone(Item):
     logs.append("Your maximum HP increases by 50.")
 
 class SPStone(Item):
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.info = {"name": "SP Stone",
                  "value": 150,
                  "item_level": 1}
@@ -230,7 +240,8 @@ class SPStone(Item):
     logs.append("Your maximum SP increases by 30.")
 
 class SacrificialJizo(Item):
-  def __init__(self):
+  def __init__(self, game):
+    super().__init__(game)
     self.info = {"name": "Sacrificial 地蔵",
                  "value": 100,
                  "item_level": 1}

@@ -15,7 +15,8 @@ class Room(object):
   TELEPORT = 7
   MAJOR_TELEPORT = 8
 
-  def __init__(self, level):
+  def __init__(self, game, level):
+    self.game = game
     self.level = level
     self.faction_rate = 1.0
 
@@ -39,8 +40,8 @@ class Room(object):
     self.faction_rate = faction_rate
 
 class TrainingRoom(Room):
-  def __init__(self, level):
-    super().__init__(level)
+  def __init__(self, game, level):
+    super().__init__(game, level)
     self.train_count = 0
     self.forgetting = False
 
@@ -128,8 +129,8 @@ class TrainingRoom(Room):
       assert False
 
 class Enchanter(Room):
-  def __init__(self, level):
-    super().__init__(level)
+  def __init__(self, game, level):
+    super().__init__(game, level)
     self.enchanting_armor = False
 
   @classmethod
@@ -238,8 +239,8 @@ class Enchanter(Room):
     self.faction_rate = faction_rate
 
 class Forge(Room):
-  def __init__(self, level):
-    super().__init__(level)
+  def __init__(self, game, level):
+    super().__init__(game, level)
     self.level = level
     self.forging_armor = False
 
@@ -352,8 +353,8 @@ class Forge(Room):
     self.faction_rate = faction_rate
 
 class EquipmentShop(Room):
-  def __init__(self, level, shop_type):
-    super().__init__(level)
+  def __init__(self, game, level, shop_type):
+    super().__init__(game, level)
     self.inventory = None
     self.buying = False
     self.shop_choice = None
@@ -432,12 +433,12 @@ class EquipmentShop(Room):
     self.faction_rate = faction_rate
 
 class ArmorShop(EquipmentShop):
-  def __init__(self, level):
-    super().__init__(level, "Armor")
+  def __init__(self, game, level):
+    super().__init__(game, level, "Armor")
     self.refresh()
 
   def refresh(self):
-    self.inventory = [Equipment.get_new_armor(self.level, slot)
+    self.inventory = [Equipment.get_new_armor(self.game, self.level, slot)
                       for slot in range(1, 4)]
 
   @classmethod
@@ -445,32 +446,32 @@ class ArmorShop(EquipmentShop):
     return "Armorer"
 
 class WeaponShop(EquipmentShop):
-  def __init__(self, level):
-    super().__init__(level, "Weapon")
+  def __init__(self, game, level):
+    super().__init__(game, level, "Weapon")
     self.refresh()
 
   def refresh(self):
-    self.inventory = [Equipment.get_new_armor(self.level, 0) for _ in range(3)]
+    self.inventory = [Equipment.get_new_armor(self.game, self.level, 0) for _ in range(3)]
 
   @classmethod
   def get_name(cls):
     return "Weaponsmith"
 
 class Jeweler(EquipmentShop):
-  def __init__(self, level):
-    super().__init__(level, "Accessory")
+  def __init__(self, game, level):
+    super().__init__(game, level, "Accessory")
     self.refresh()
 
   def refresh(self):
-    self.inventory = [Equipment.get_new_armor(self.level, 4) for _ in range(3)]
+    self.inventory = [Equipment.get_new_armor(self.game, self.level, 4) for _ in range(3)]
 
   @classmethod
   def get_name(cls):
     return "Jeweler"
 
 class RareGoodsShop(EquipmentShop):
-  def __init__(self, level):
-    super().__init__(level, "Equipment")
+  def __init__(self, game, level):
+    super().__init__(game, level, "Equipment")
     self.refresh()
 
   def refresh(self):
@@ -479,7 +480,7 @@ class RareGoodsShop(EquipmentShop):
       level = max(1, self.level + int(srs_random.gauss(0, 3)))
       rarity = srs_random.randint(2, 4)
       slot = srs_random.randint(0, 4)
-      equip = Equipment.get_new_armor(level, slot, None, rarity)
+      equip = Equipment.get_new_armor(self.game, level, slot, None, rarity)
       self.inventory.append(equip)
 
   @classmethod
@@ -495,8 +496,8 @@ class Inn(Room):
                   items.GoldSack, items.HPStone, items.SPStone,
                   items.SacrificialJizo]
 
-  def __init__(self, level):
-    super().__init__(level)
+  def __init__(self, game, level):
+    super().__init__(game, level)
     self.inventory = self.generate_inventory()
     self.trading = False
 
@@ -507,7 +508,7 @@ class Inn(Room):
   def generate_inventory(self):
     inventory = []
     for i in range(3):
-      item = srs_random.choice(Inn.TRADER_ITEMS)()
+      item = srs_random.choice(Inn.TRADER_ITEMS)(self.game)
       base_cost = item.get_value() * srs_random.gauss(1, .2)
       material_type = srs_random.randint(0, 4)
       material_cost = base_cost / (2**material_type)
@@ -595,7 +596,7 @@ class Inn(Room):
     # TODO: There's a lot of very similar "buying things" code to consolidate
     elif choice_text == "Buy Food":
       if character.can_afford(self.get_food_cost()):
-        item = items.InnFood()
+        item = items.InnFood(self.game)
         result = character.add_item(item)
         if result:
           character.spend_gold(self.get_food_cost(), logs)
@@ -730,8 +731,8 @@ class Temple(Room):
     self.faction_rate = faction_rate
 
 class Alchemist(Room):
-  def __init__(self, level):
-    super().__init__(level)
+  def __init__(self, game, level):
+    super().__init__(game, level)
     self.faction_rate = 1.0
     self.inventory = self.generate_inventory()
 
@@ -743,9 +744,9 @@ class Alchemist(Room):
     inventory = []
     for _ in range(3):
       # Health, magic, and buff potions each have their own constructors
-      health_pots = [items.HealthPotion(x) for x in ("Minor", "Standard", "Major", "Super")]
-      magic_pots = [items.MagicPotion(x) for x in ("Minor", "Standard", "Major")] # Super Magic Potion doesn't exist
-      pots = health_pots + magic_pots + [items.EffectPotion(x) for x in items.EffectPotion.EFFECT_POTIONS]
+      health_pots = [items.HealthPotion(self.game, x) for x in ("Minor", "Standard", "Major", "Super")]
+      magic_pots = [items.MagicPotion(self.game, x) for x in ("Minor", "Standard", "Major")] # Super Magic Potion doesn't exist
+      pots = health_pots + magic_pots + [items.EffectPotion(self.game, x) for x in items.EffectPotion.EFFECT_POTIONS]
       inventory.append(max((self.item_rate(p), p) for p in pots)[1])
     return inventory
 
@@ -804,8 +805,8 @@ class Alchemist(Room):
     self.faction_rate = faction_rate
 
 class Crafthall(Room):
-  def __init__(self, level):
-    super().__init__(level)
+  def __init__(self, game, level):
+    super().__init__(game, level)
     self.faction_rate = 1.0  # Ignored
     self.crafting = False
     self.crafted_piece = None
@@ -853,7 +854,7 @@ class Crafthall(Room):
       rarity = self.get_craft_rarity(rarity)
       self.crafting = True
       level = int(self.level + max(0, srs_random.gauss(0, 1)))
-      self.crafted_piece = Equipment.get_new_armor(level, None, None, rarity)
+      self.crafted_piece = Equipment.get_new_armor(self.game, level, None, None, rarity)
       return (3, Room.NO_CHANGE)
     else:
       logs.append("You do not have enough money or materials.")
