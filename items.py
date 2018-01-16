@@ -38,35 +38,22 @@ class HealthPotion(Item):
     hp_gained = character.restore_hp(self.HP_POTIONS[self.rank]["effect"])
     logs.append("You restored {} HP.".format(hp_gained))
 
-class MinorMagicPotion(Item):
-  def __init__(self):
-    super(MinorMagicPotion, self).__init__()
-    self.info = {"name": "Minor SP Pot",
-                 "value": 200,
-                 "item_level": 1}
-  def apply(self, character, monster, logs):
-    sp_gained = character.restore_sp(50)
-    logs.append("You restored {} SP".format(sp_gained))
-
 class MagicPotion(Item):
-  def __init__(self):
+  SP_POTIONS = {"Minor": {"value": 200, "level": 1, "effect": 50},
+                "Standard": {"value": 1200, "level": 10, "effect": 200},
+                "Major": {"value": 7500, "level": 30, "effect": 600},
+               }
+  def __init__(self, rank):
     super(MagicPotion, self).__init__()
-    self.info = {"name": "SP Pot",
-                 "value": 1200,
-                 "item_level": 10}
-  def apply(self, character, monster, logs):
-    sp_gained = character.restore_sp(200)
-    logs.append("You restored {} SP".format(sp_gained))
+    self.rank = rank
+    name = "{} SP Pot".format(rank)
+    value = self.SP_POTIONS[rank]["value"]
+    level = self.SP_POTIONS[rank]["level"]
+    self.info = {"name": name, "value": value, "item_level": level}
 
-class MajorMagicPotion(Item):
-  def __init__(self):
-    super(MajorMagicPotion, self).__init__()
-    self.info = {"name": "Major SP Pot",
-                 "value": 7500,
-                 "item_level": 30}
   def apply(self, character, monster, logs):
-    sp_gained = character.restore_sp(600)
-    logs.append("You restored {} SP".format(sp_gained))
+    sp_gained = character.restore_sp(self.SP_POTIONS[self.rank]["effect"])
+    logs.append("You restored {} SP.".format(sp_gained))
 
 class InnFood(Item):
   def __init__(self):
