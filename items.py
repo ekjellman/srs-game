@@ -68,7 +68,7 @@ class InnFood(Item):
       return Item.UNUSABLE
     else:
       character.add_buff(effect.WellFed(300))
-      logs.append("You ate the Inn-made Bento")
+      logs.append("You ate the Inn-made Bento.")
 
 class MinorSurgePotion(Item):
   def __init__(self):
