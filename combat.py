@@ -139,7 +139,7 @@ class Combat(object):
         logs.append("Misses due to Blindness.")
         return cls.TARGET_ALIVE
     color_string = "`255,0,0`" if isinstance(actor, Monster) else ""
-    logs.append("{} Hits for {} {} damage.`0,0,0`".format(color_string, damage,
+    logs.append("{}Hits for {} {} damage.`0,0,0`".format(color_string, damage,
                                                     damage_type))
     return cls.apply_damage(target, damage)
 
@@ -168,5 +168,5 @@ class Combat(object):
     if result == cls.ACTOR_SUCCEEDED:
       return cls.ACTOR_ESCAPED
     else:
-      logs.append("Escape unsuccessful")
+      logs.append("Your escape was unsuccessful.")
       return cls.ACTOR_FAILED
