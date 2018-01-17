@@ -27,7 +27,6 @@ class HealthPotion(Item):
                }
   def __init__(self, rank):
     super(HealthPotion, self).__init__()
-    # TODO: Currently only HealthPotions have ranks, add for more?
     self.rank = rank
     name = "{} HP Pot".format(rank)
     value = self.HP_POTIONS[rank]["value"]
@@ -38,35 +37,22 @@ class HealthPotion(Item):
     hp_gained = character.restore_hp(self.HP_POTIONS[self.rank]["effect"])
     logs.append("You restored {} HP.".format(hp_gained))
 
-class MinorMagicPotion(Item):
-  def __init__(self):
-    super(MinorMagicPotion, self).__init__()
-    self.info = {"name": "Minor SP Pot",
-                 "value": 200,
-                 "item_level": 1}
-  def apply(self, character, monster, logs):
-    sp_gained = character.restore_sp(50)
-    logs.append("You restored {} SP".format(sp_gained))
-
 class MagicPotion(Item):
-  def __init__(self):
+  SP_POTIONS = {"Minor": {"value": 200, "level": 1, "effect": 50},
+                "Standard": {"value": 1200, "level": 10, "effect": 200},
+                "Major": {"value": 7500, "level": 30, "effect": 600},
+               }
+  def __init__(self, rank):
     super(MagicPotion, self).__init__()
-    self.info = {"name": "SP Pot",
-                 "value": 1200,
-                 "item_level": 10}
-  def apply(self, character, monster, logs):
-    sp_gained = character.restore_sp(200)
-    logs.append("You restored {} SP".format(sp_gained))
+    self.rank = rank
+    name = "{} SP Pot".format(rank)
+    value = self.SP_POTIONS[rank]["value"]
+    level = self.SP_POTIONS[rank]["level"]
+    self.info = {"name": name, "value": value, "item_level": level}
 
-class MajorMagicPotion(Item):
-  def __init__(self):
-    super(MajorMagicPotion, self).__init__()
-    self.info = {"name": "Major SP Pot",
-                 "value": 7500,
-                 "item_level": 30}
   def apply(self, character, monster, logs):
-    sp_gained = character.restore_sp(600)
-    logs.append("You restored {} SP".format(sp_gained))
+    sp_gained = character.restore_sp(self.SP_POTIONS[self.rank]["effect"])
+    logs.append("You restored {} SP.".format(sp_gained))
 
 class InnFood(Item):
   def __init__(self):
@@ -81,124 +67,33 @@ class InnFood(Item):
       return Item.UNUSABLE
     else:
       character.add_buff(effect.WellFed(300))
-      logs.append("You ate the Inn-made Bento")
+      logs.append("You ate the Inn-made Bento.")
 
-class MinorSurgePotion(Item):
-  def __init__(self):
-    super(MinorSurgePotion, self).__init__()
-    self.info = {"name": "Minor Surge Pot",
-                 "value": 100,
-                 "item_level": 1}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.Surge(5, 1.5))
-    logs.append("You gain the Surge buff")
+class EffectPotion(Item):
+  # No "Standard" potions because there is no "default" effect to conflict with
+  EFFECT_POTIONS = {"Minor Surge": {"value": 100, "level": 1, "effect": effect.Surge(5, 1.5)},
+                    "Surge": {"value": 500, "level": 10, "effect": effect.Surge(10, 2.0)},
+                    "Major Surge": {"value": 2500, "level": 30, "effect": effect.Surge(15, 2.5)},
+                    "Minor Concentrate": {"value": 100, "level": 1, "effect": effect.Concentrate(5, 1.5)},
+                    "Concentrate": {"value": 500, "level": 10, "effect": effect.Concentrate(10, 2.0)},
+                    "Major Concentrate": {"value": 2500, "level": 30, "effect": effect.Concentrate(15, 2.5)},
+                    "Minor Swiftness": {"value": 100, "level": 1, "effect": effect.Swiftness(5, 1.5)},
+                    "Swiftness": {"value": 500, "level": 10, "effect": effect.Swiftness(10, 2.0)},
+                    "Major Swiftness": {"value": 2500, "level": 30, "effect": effect.Swiftness(15, 2.5)},
+                    "Minor BulkUp": {"value": 300, "level": 1, "effect": effect.BulkUp(5, 1.4)},
+                    "BulkUp": {"value": 1500, "level": 10, "effect": effect.BulkUp(10, 1.7)},
+                    "Major BulkUp": {"value": 7500, "level": 30, "effect": effect.BulkUp(15, 2.0)},
+  }
+  def __init__(self, name):
+    super(EffectPotion, self).__init__()
+    self.effect = self.EFFECT_POTIONS[name]["effect"]
+    value = self.EFFECT_POTIONS[name]["value"]
+    level = self.EFFECT_POTIONS[name]["level"]
+    pot_name = "{} Pot".format(name)
+    # TODO: Pull buff names from effect classes
+    self.buff_name = name.split(' ')[-1] # Example: "Minor Surge" class gives "Surge" buff
+    self.info = {"name": pot_name, "value": value, "item_level": level}
 
-class SurgePotion(Item):
-  def __init__(self):
-    super(SurgePotion, self).__init__()
-    self.info = {"name": "Surge Pot",
-                 "value": 500,
-                 "item_level": 10}
   def apply(self, character, monster, logs):
-    character.add_buff(effect.Surge(10, 2.0))
-    logs.append("You gain the Surge buff")
-
-class MajorSurgePotion(Item):
-  def __init__(self):
-    super(MajorSurgePotion, self).__init__()
-    self.info = {"name": "Major Surge Pot",
-                 "value": 2500,
-                 "item_level": 30}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.Surge(15, 2.5))
-    logs.append("You gain the Surge buff")
-
-class MinorConcentratePotion(Item):
-  def __init__(self):
-    super(MinorConcentratePotion, self).__init__()
-    self.info = {"name": "Minor Concentrate Pot",
-                 "value": 100,
-                 "item_level": 1}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.Concentrate(5, 1.5))
-    logs.append("You gain the Concentrate buff")
-
-class ConcentratePotion(Item):
-  def __init__(self):
-    super(ConcentratePotion, self).__init__()
-    self.info = {"name": "Concentrate Pot",
-                 "value": 500,
-                 "item_level": 10}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.Concentrate(10, 2.0))
-    logs.append("You gain the Concentrate buff")
-
-class MajorConcentratePotion(Item):
-  def __init__(self):
-    super(MajorConcentratePotion, self).__init__()
-    self.info = {"name": "Major Concentrate Pot",
-                 "value": 2500,
-                 "item_level": 30}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.Concentrate(15, 2.5))
-    logs.append("You gain the Concentrate buff")
-
-class MinorSwiftnessPotion(Item):
-  def __init__(self):
-    super(MinorSwiftnessPotion, self).__init__()
-    self.info = {"name": "Minor Swiftness Pot",
-                 "value": 100,
-                 "item_level": 1}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.Swiftness(5, 1.5))
-    logs.append("You gain the Swiftness buff")
-
-class SwiftnessPotion(Item):
-  def __init__(self):
-    super(SwiftnessPotion, self).__init__()
-    self.info = {"name": "Swiftness Pot",
-                 "value": 500,
-                 "item_level": 10}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.Swiftness(10, 2.0))
-    logs.append("You gain the Swiftness buff")
-
-class MajorSwiftnessPotion(Item):
-  def __init__(self):
-    super(MajorSwiftnessPotion, self).__init__()
-    self.info = {"name": "Major Swiftness Pot",
-                 "value": 2500,
-                 "item_level": 30}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.Swiftness(15, 2.5))
-    logs.append("You gain the Swiftness buff")
-
-class MinorBulkUpPotion(Item):
-  def __init__(self):
-    super(MinorBulkUpPotion, self).__init__()
-    self.info = {"name": "Minor BulkUp Pot",
-                 "value": 300,
-                 "item_level": 1}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.BulkUp(5, 1.4))
-    logs.append("You gain the BulkUp buff")
-
-class BulkUpPotion(Item):
-  def __init__(self):
-    super(BulkUpPotion, self).__init__()
-    self.info = {"name": "BulkUp Pot",
-                 "value": 1500,
-                 "item_level": 10}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.BulkUp(10, 1.7))
-    logs.append("You gain the BulkUp buff")
-
-class MajorBulkUpPotion(Item):
-  def __init__(self):
-    super(MajorBulkUpPotion, self).__init__()
-    self.info = {"name": "Major BulkUp Pot",
-                 "value": 7500,
-                 "item_level": 30}
-  def apply(self, character, monster, logs):
-    character.add_buff(effect.BulkUp(15, 2.0))
-    logs.append("You gain the BulkUp buff")
+    character.add_buff(self.effect)
+    logs.append("You have gained the {} buff.".format(self.buff_name))
