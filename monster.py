@@ -1,4 +1,4 @@
-import random
+import srs_random as random
 from equipment import Equipment
 from effect import Debuff, Effect
 from name_generator import NameGenerator

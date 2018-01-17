@@ -1,5 +1,5 @@
 import collections
-import random
+import srs_random as random
 
 class NameGenerator(object):
   def __init__(self, filename, shortest=3, longest=100):

@@ -1,4 +1,4 @@
-import random
+import srs_random as random
 from skills import SKILLS, SKILL_NAMES
 from equipment import Equipment, RARITY
 from effect import Effect, Buff, Debuff
@@ -58,7 +58,6 @@ class Character(object):
     self.debuffs = []
     self.runes = 1
     self.traits = {}
-    random.seed()
     self.reroll_counter = random.randint(0, 1000000)
 
   def colored_hp(self):
@@ -327,6 +326,7 @@ class Character(object):
     return choices
 
   def learn_trait(self, trait):
+    # START HERE: Get New Traits is broken
     if trait == "Get New Traits":
       self.reroll_counter += 1
       return False
@@ -339,7 +339,6 @@ class Character(object):
     #       three skills? In this case, we'd have to replace one of the existing
     #       skills, which might get tricky.
     choices = []
-    random.seed((self.exp, self.current_hp, self.gold, self.reroll_counter))
     choices.append("Improve stats")
     # If we have three skills already, we can just choose from those
     if len(self.skills) == 3:

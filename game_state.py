@@ -1,5 +1,5 @@
 """Represents the current state of the game. Main game logic module."""
-import random
+import srs_random as random
 from character import Character, TRAITS
 from monster import Monster
 from combat import Combat
@@ -603,6 +603,7 @@ class GameState(object):
         self.stronghold_room += 1
         if self.stronghold_room == 10:
           self.change_state("VICTORY")
+          logs.append("Victory! [{}]".format(self.time_spent))
       if levelups > 0:
         self.levelups = levelups
         self.skillups = levelups
@@ -803,6 +804,7 @@ class GameState(object):
     logs = []
     current_state = self.current_state()
     choice_text = self.get_choices()[choice]
+    logs.append("Action selected: [{}]".format(choice_text))
     method_name = "apply_choice_" + current_state.lower()
     try:
       method = getattr(GameState, method_name)
@@ -811,6 +813,19 @@ class GameState(object):
     except IOError as exc:
       print(exc)  # pylint: disable=print-statement
       logs.append("apply_choice not implemented yet, state: {}".format(current_state))
+    self.last_turn_logs = logs[:]
+    return logs
+
+  def verification_apply_choice(self, choice_text):
+    logs = []
+    current_state = self.current_state()
+    choices = self.get_choices()
+    if choice_text not in choices:
+      raise ValueError("{} not a valid choice (choices: {})".format(choice_text, choices))
+    method_name = "apply_choice_" + current_state.lower()
+    method = getattr(GameState, method_name)
+    # TODO: Verify the logs are the same?
+    method(self, logs, choice_text)
     self.last_turn_logs = logs[:]
     return logs
 

@@ -1,4 +1,4 @@
-import random
+import srs_random as random
 from monster import Monster
 from equipment import Equipment
 

@@ -1,4 +1,4 @@
-import random
+import srs_random as random
 from equipment import Equipment, RARITY
 from effect import WellRested, Blessed
 import items

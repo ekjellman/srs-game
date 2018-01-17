@@ -1,4 +1,4 @@
-import random
+import srs_random as random
 
 # TODO: Make stats always be in a specific order [OrderedDict or array]
 

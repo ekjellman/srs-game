@@ -1,4 +1,4 @@
-import random
+import srs_random as random
 from effect import Effect
 from monster import Monster
 

@@ -4,6 +4,11 @@ import time
 from game_state import GameState
 import wx
 import wx.richtext
+import random
+import srs_random
+import sys
+import re
+import subprocess
 
 # TODO: Look into using unicode graphics for some of this stuff
 # TODO: Consider making the log stuff be in the encounter panel
@@ -165,6 +170,9 @@ class MainWindow(wx.Frame):
   # pylint: disable=too-many-instance-attributes
   def __init__(self, parent, title):
     wx.Frame.__init__(self, parent, title=title, size=(1200, 750))
+    # Not srs_random. This random number generator should be separate from
+    # the generator the game system uses.
+    self.random_generator = random.SystemRandom()
 
     # Make menus
     menu_bar = wx.MenuBar()
@@ -233,7 +241,9 @@ class MainWindow(wx.Frame):
     self.Show()
 
   def initialize(self):
+    seed = srs_random.init()
     self.game_state = GameState()
+    self.log_panel.add_entry("Game initialized [Seed: {}]".format(seed))
     self.update_ui(character=False)
 
   def update_ui(self, character=True):
@@ -269,5 +279,43 @@ def run_app():
   wx_frame = MainWindow(None, "SRS Game")  # pylint: disable=unused-variable
   wx_app.MainLoop()
 
+def verify_log(filename):
+  # TODO re compile
+  action_counter = 0
+  game_state = None
+  with open(filename, "r") as log_file:
+    for log_line in log_file:
+      if "[" not in log_line:
+        continue
+      m = re.search("Action selected: \[(.*)\]", log_line)
+      if m:
+        print "Action found: {}".format(m.group(1))
+        if not game_state:
+          raise ValueError("Action found before game initialized")
+        game_state.verification_apply_choice(m.group(1))
+        action_counter += 1
+        continue
+      m = re.search("Game initialized \[Seed: (\d+)\]", log_line)
+      if m:
+        seed = int(m.group(1))
+        print "Game found"
+        srs_random.seed(seed)
+        game_state = GameState()
+        # TODO: Start game state
+        continue
+      m = re.search("Victory! \[(.*)\]", log_line)
+      if m:
+        log_time = int(m.group(1))
+        game_state_time = game_state.time_spent
+        if log_time != game_state_time:
+          raise ValueError("Victory time does not match (log: {} game: {})".format(log_time, game_state_time))
+        print "Victory: {}".format(log_time)
+        continue
+      raise ValueError("Unhandled line: " + log_line)
+
 if __name__ == "__main__":
-  run_app()
+  if len(sys.argv) > 1:
+    log_file = sys.argv[1]
+    verify_log(log_file)
+  else:
+    run_app()
