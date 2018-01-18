@@ -1,5 +1,6 @@
 from nose.tools import assert_equals
 import game_state
+import rooms
 
 # This test should fail if any of the debug statements are active or changed
 def test_debug_off():
@@ -53,3 +54,38 @@ def test_generate_quests():
     for i in range(1, game_state.TOWER_LEVELS + 1):
         # Test specifics of quest separately
         assert quests[i] is not None 
+
+def test_generate_towns():
+    towns = game_state.GameState.generate_towns()
+    levels = game_state.TOWER_LEVELS
+    assert_equals(towns[0], None)
+    # Base floor (1) shops are always the same
+    for index, shop in enumerate(towns[1]):
+        generate_towns_first_floor(index, shop)
+        assert_equals(len(towns[1]), 3)
+    # No extra shops
+    assert_equals(len(towns[1]), 3)
+    # Every town in the tower should have 3 different shops
+    for level in range(2, levels):
+        assert_equals(len(towns[level]), 3)
+        assert_equals(len(set(towns[level])), 3)
+    # Does not test debug code
+    # Summit shops are always the same
+    for index, shop in enumerate(towns[levels]):
+        generate_towns_summit(index, shop)
+    assert_equals(len(towns[levels]), 3)
+
+# TODO: Combine these two functions?
+# TODO: Replace type checks with mocks of Room classes
+def generate_towns_first_floor(shop_number, shop):
+    assert_equals(shop.level, 1)
+    types = {0: rooms.Inn, 1: rooms.Temple, 2: rooms.Alchemist}
+    # Each Room() object is unique, so they can't be compared directly.
+    # It's possible to implement __eq__ or __cmp__ for some Rooms with constant
+    #     choices (Inn, Temple), but others (Alchemist) have random options.
+    assert_equals(type(shop), types[shop_number])
+
+def generate_towns_summit(shop_number, shop):
+    assert_equals(shop.level, game_state.TOWER_LEVELS)
+    types = {0: rooms.Inn, 1: rooms.Temple, 2: rooms.Crafthall}
+    assert_equals(type(shop), types[shop_number])
