@@ -1,13 +1,21 @@
 from nose.tools import assert_equals
 import game_state
 
-# This test should fail if any of the debug statements are active
-# TODO: Currently, only DEBUG_TOWER_START changes are caught by this test
+# This test should fail if any of the debug statements are active or changed
+def test_debug_off():
+    assert_equals(game_state.DEBUG_FLOOR, None)
+    assert_equals(game_state.DEBUG_BUILDING, None)
+    assert_equals(game_state.DEBUG_GOLD, None)
+    assert_equals(game_state.DEBUG_MATERIALS, None)
+    assert_equals(game_state.DEBUG_CHARACTER, None)
+    assert_equals(game_state.DEBUG_TOWER_START, None)
+
 def test_game_state_constructor():
     s = game_state.GameState()
     assert_equals(s.state, ["CHAR_CREATE"])
     # TODO: Test Character constructor
     assert s.character # checking for non-None
+    # Frontier, floor, and tower_lock will fail if DEBUG_TOWER_START is set
     assert_equals(s.floor, 1)
     assert_equals(s.frontier, 1)
     assert_equals(s.time_spent, 0)
