@@ -2,6 +2,7 @@ from nose.tools import assert_equals
 import game_state
 
 # This test should fail if any of the debug statements are active
+# TODO: Currently, only DEBUG_TOWER_START changes are caught by this test
 def test_game_state_constructor():
     s = game_state.GameState()
     assert_equals(s.state, ["CHAR_CREATE"])
@@ -20,8 +21,7 @@ def test_game_state_constructor():
             assert s.tower_lock[level]
         assert_equals(s.tower_faction[level], 1.0)
     assert not s.tower_update_ready
-    # TODO: Test generate_quests
-    assert s.tower_quests
+    assert s.tower_quests # generate_quests is tested separately
     assert_equals(s.ascension_encounters, 0)
     assert_equals(s.ascension_encounters_required, 0)
     assert_equals(s.current_shop, None)
@@ -38,3 +38,10 @@ def test_game_state_constructor():
     assert not s.infinity_dungeon
     assert_equals(s.stronghold_room, 0)
     assert_equals(s.last_turn_logs, [])
+
+def test_generate_quests():
+    quests = game_state.GameState.generate_quests()
+    assert_equals(quests[0], None)
+    for i in range(1, game_state.TOWER_LEVELS + 1):
+        # Test specifics of quest separately
+        assert quests[i] is not None 
