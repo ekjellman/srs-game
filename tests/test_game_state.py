@@ -26,8 +26,7 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(s.frontier, 1)
         self.assertEqual(s.time_spent, 0)
         self.assertEqual(s.energy, 200)
-        # TODO: Test generate_towns
-        assert s.towns
+        assert s.towns # generate_towns is tested separately
         # Only first level should be unlocked
         assert not s.tower_lock[1]
         for level in range(game_state.TOWER_LEVELS + 1):
