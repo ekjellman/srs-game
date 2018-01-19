@@ -1,5 +1,6 @@
 import unittest
 #from nose.tools import assert_equals
+import mock
 import game_state
 import rooms
 
@@ -16,6 +17,7 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(game_state.DEBUG_CHARACTER, None)
         self.assertEqual(game_state.DEBUG_TOWER_START, None)
 
+    # TODO: Remove checks for most constants
     def test_game_state_constructor(self):
         s = game_state.GameState()
         self.assertEqual(s.state, ["CHAR_CREATE"])
@@ -52,6 +54,8 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(s.stronghold_room, 0)
         self.assertEqual(s.last_turn_logs, [])
 
+    # TODO: Test tower when quest has been done
+    # TODO: Test tower when quest has not been done
     def test_generate_quests(self):
         quests = game_state.GameState.generate_quests()
         self.assertEqual(quests[0], None)
@@ -93,6 +97,19 @@ class TestGameState(unittest.TestCase):
         for index, shop in enumerate(towns[levels]):
             self.generate_towns_summit(index, shop)
         self.assertEqual(len(towns[levels]), 3)
+
+    # TODO: Create setup function of character in town on level 1
+    # TODO: Test refresh for each type of shop (in Rooms)
+    def test_tower_update(self):
+        game = game_state.GameState()
+        old_quests = game.tower_quests
+        room_class = rooms.Room
+        room_class.refresh = mock.MagicMock()
+        # Can call this function without leaving the char_create state
+        game.tower_update()
+        self.assertNotEqual(old_quests, game.tower_quests)
+        # TODO: Mock refresh() for each shop to verify it gets called
+        room_class.refresh.assert_called()
 
 if __name__ == '__main__':
     unittest.main()
