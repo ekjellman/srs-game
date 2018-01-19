@@ -70,7 +70,7 @@ class Character(object):
       color = ORANGE_HP
     else:
       color = RED_HP
-    return "{}{:d} / {}{}".format(color, self.current_hp, self.max_hp, BLACK)
+    return "{}{} / {}{}".format(color, int(self.current_hp), self.max_hp, BLACK)
 
   @classmethod
   def debug_character(cls, level, choice_text):
