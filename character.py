@@ -70,7 +70,7 @@ class Character(object):
       color = ORANGE_HP
     else:
       color = RED_HP
-    return "{}{} / {}{}".format(color, self.current_hp, self.max_hp, BLACK)
+    return "{}{} / {}{}".format(color, int(self.current_hp), self.max_hp, BLACK)
 
   @classmethod
   def debug_character(cls, level, choice_text):
@@ -326,11 +326,10 @@ class Character(object):
     return choices
 
   def learn_trait(self, trait):
-    # START HERE: Get New Traits is broken
     if trait == "Get New Traits":
       self.reroll_counter += 1
       return False
-    #assert trait in TRAITS
+    assert trait in TRAITS
     self.traits[trait] = self.traits.get(trait, 0) + 1
     return True
 

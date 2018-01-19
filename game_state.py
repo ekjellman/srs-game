@@ -661,6 +661,8 @@ class GameState(object):
         self.change_state("LEVEL_UP_SKILL")
       else:
         self.trait_choices = self.character.get_trait_choices()
+    else:
+      self.trait_choices = self.character.get_trait_choices()
 
   def apply_choice_level_up_skill(self, logs, choice_text):
     assert self.skillups > 0
@@ -671,6 +673,9 @@ class GameState(object):
         self.leave_state()
       else:
         self.skill_choices = self.character.get_skill_choices()
+    else:
+      self.skill_choices = self.character.get_skill_choices()
+
 
   def apply_choice_town(self, logs, choice_text):
     if choice_text == "Leave Town":
