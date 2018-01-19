@@ -326,11 +326,10 @@ class Character(object):
     return choices
 
   def learn_trait(self, trait):
-    # START HERE: Get New Traits is broken
     if trait == "Get New Traits":
       self.reroll_counter += 1
       return False
-    #assert trait in TRAITS
+    assert trait in TRAITS
     self.traits[trait] = self.traits.get(trait, 0) + 1
     return True
 
