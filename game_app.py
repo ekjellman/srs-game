@@ -11,27 +11,19 @@ import re
 import subprocess
 
 # TODO: Look into using unicode graphics for some of this stuff
-# TODO: Consider making the log stuff be in the encounter panel
-#       Alternate: Put last turn of logs in there
 # TODO: Either show current time or time passed in the log
 # TODO: Add text describing skills to level up dialog
 # TODO: Disable rest if HP/SP full? But Infinity Dungeon...
 # TODO: Change "insufficient payment" and "gold or materials" to give
 #       the actual reason. Possibly snarky if you have neither
 # TODO: If you have three skills, don't activate scholar (if it does)
-# TODO: AutoLife seems very strong early. Could remove buffs on trigger?
 # TODO: Implement a swear word filter on names
 # TODO: Have a confirm screen on levelling up skills
 # TODO: Make inn bento restore 1 hp as an fu
-# TODO: Buff perseverance
 # TODO: In shops "Which item would you like to look at?"
 # TODO: Make sure in-game docs note that some attacks don't work on elites
 # TODO: Consider making everything work against elites instead
 # TODO: Consider allowing replacing skills
-# TODO: Add a trader to the inn that takes materials and gives materials or
-#       items (including pots and possibly corrupted runes, and maybe
-#       other items that cannot be obtained in other ways (elixirs)
-# TODO: Item names
 # TODO: Make Merchant Warrior so you lose less money when you die. (10%/lvl)
 # TODO: Make crafthall at summit craft at the max infinity dungeon level reached?
 #       Or at least something like halfway. (i.e. reached 70  -> 55)
@@ -218,8 +210,6 @@ class MainWindow(wx.Frame):
       button.Bind(wx.EVT_BUTTON,
                   lambda evt, number=i: self.button_press(evt, number))
 
-    # TODO: This accepts multiple key presses from one key press when held,
-    #       which is not great.
     # Bind u/d/l/r for our four buttons
     bindings = [(wx.ACCEL_NORMAL, wx.WXK_UP, 0),
                 (wx.ACCEL_NORMAL, wx.WXK_DOWN, 3),
@@ -304,7 +294,6 @@ def verify_log(filename):
         print "Game found"
         srs_random.seed(seed)
         game_state = GameState()
-        # TODO: Start game state
         continue
       m = re.search("Victory! \[(.*)\]", log_line)
       if m:

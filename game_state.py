@@ -9,9 +9,7 @@ import rooms
 from items import Item
 import skills
 
-# TODO: Start here: Write Jolt Cup-level external docs
 # TODO: Log more. Certainly including victory
-# TODO: Equipment keeping predictor?
 
 TOWN_BUILDINGS = [rooms.ArmorShop, rooms.Enchanter, rooms.Forge,
                   rooms.Alchemist, rooms.TrainingRoom, rooms.Temple,
@@ -65,20 +63,8 @@ DEBUG_TOWER_START = None
 # TODO: add traits to weapons/armor
 # TODO: Add an "acknowledgement" state, to make certain uncommon states harder
 #       to skip past (levelling up, finding a shop in a tower, etc)
-# TODO: Add a few options boxes. One in particular to "value" stats, so you can
-#       quickly get a value for whether a piece of equipment is better or not
-#       Maybe one for name, too, eh?
 
-# Game Balance notes:
-# -- Make it so dying in a quest and dungeon takes less time than in the Tower
-#    That allows the player to use the quest as a guide to whether they should
-#    attempt the tower, somewhat.
-# -- Is there any way to have a build that doesn't require a heal? This is a
-#    real weakness to physical builds right now.
-# To Test:
-# -- Max buff percentage? (like say 50%)
-
-# -- Floating point error on buffs. (39% for 9 turns at level 2)
+# TODO: Floating point error on buffs. (39% for 9 turns at level 2)
 
 class GameState(object):
   """

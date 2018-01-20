@@ -384,7 +384,6 @@ class Character(object):
     else:
       assert len(self.skills) < 3
       new_skill = None
-      # TODO: Use a dictionary
       for skill in SKILLS:
         skill_instance = skill()
         if skill_instance.get_name() == skill_name:

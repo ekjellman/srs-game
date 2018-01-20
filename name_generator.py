@@ -18,7 +18,7 @@ class NameGenerator(object):
       if len(line) > 2:
         monsters.append(line)
     return set(monsters)
-  
+
   def make_markov_table(self, monsters):
     table = {}
     for letter in "abcdefghijklmnopqrstuvwxyz ":

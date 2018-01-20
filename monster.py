@@ -24,7 +24,6 @@ STAT_DICE = {"Strength": (12, 1),
 class Monster(object):
   def __init__(self, level, boss):
     self.stats = {}
-    # TODO: Gaussian variance was not great, something else?
     self.level = level
     self.boss = boss
     # If you modify these, make sure to modify the XP calc

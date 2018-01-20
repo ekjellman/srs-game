@@ -1,7 +1,6 @@
 import srs_random as random
 
 # TODO: Make stats always be in a specific order [OrderedDict or array]
-
 # TODO: Should probably move these to a different place
 STATS = ["Strength", "Stamina", "Speed", "Intellect"]
 DEFENSES = ["Defense", "Magic Defense"]
