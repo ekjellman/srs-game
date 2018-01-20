@@ -24,7 +24,6 @@ import subprocess
 # TODO: Make sure in-game docs note that some attacks don't work on elites
 # TODO: Consider making everything work against elites instead
 # TODO: Consider allowing replacing skills
-# TODO: Make Merchant Warrior so you lose less money when you die. (10%/lvl)
 # TODO: Make crafthall at summit craft at the max infinity dungeon level reached?
 #       Or at least something like halfway. (i.e. reached 70  -> 55)
 
