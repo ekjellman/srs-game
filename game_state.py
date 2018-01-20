@@ -108,6 +108,7 @@ class GameState(object):
     self.skill_choices = []
     self.trait_choices = []
     self.infinity_dungeon = False
+    self.max_infinity_dungeon = TOWER_LEVELS
     self.stronghold_room = 0
     self.last_turn_logs = []
     if DEBUG_TOWER_START:
@@ -513,6 +514,11 @@ class GameState(object):
     if choice_text == "Explore":
       if self.infinity_dungeon:
         self.floor += 1
+        if self.floor > self.max_infinity_dungeon:
+          self.max_infinity_dungeon = self.floor
+          crafthall_level = (TOWER_LEVELS + self.floor) / 2
+          assert isinstance(self.towns[TOWER_LEVELS][2], rooms.Crafthall)
+          self.towns[TOWER_LEVELS][2] = rooms.Crafthall(crafthall_level)
       self.pass_time(random.randint(1, 5), logs)
       logs.append("You explore the dungeon...")
       if self.infinity_dungeon:
