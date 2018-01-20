@@ -319,7 +319,7 @@ class GameState(object):
     else:
       self.character.make_initial_equipment(choice_text)
     if DEBUG_MATERIALS:
-      self.character.materials = DEBUG_MATERIALS
+      self.character.materials = DEBUG_MATERIALS[:]
     if DEBUG_GOLD:
       self.character.gold = DEBUG_GOLD
     logs.append("Generated {} starting equipment.".format(choice_text))
