@@ -148,7 +148,7 @@ class Character(object):
     self.recalculate_maxes()
 
   def gain_gold(self, amount):
-    amount_gained = amount * (1.00 + (0.05 * self.traits.get("Merchant Warrior", 0)))
+    amount_gained = amount * (1.00 + (0.08 * self.traits.get("Merchant Warrior", 0)))
     amount_gained = int(amount_gained)
     self.gold += amount_gained
     return amount_gained
@@ -236,7 +236,7 @@ class Character(object):
     self.debuffs = []
     if penalty:
       logs.append("You were found by a passerby and brought back to town.")
-      lost_gold = self.gold // 2
+      lost_gold = int((self.gold / 2) * (.8 ** self.traits["Merchant Warrior"]))
       logs.append("You lost {} gold.".format(lost_gold))
       self.gold -= lost_gold
       self.buffs = []

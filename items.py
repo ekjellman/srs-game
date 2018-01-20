@@ -205,9 +205,8 @@ class GoldSack(Item):
   def apply(self, character, monster, logs):
     gold = 2500 * (2**self.size)
     gold *= random.gauss(1, .05)
-    gold = int(gold)
-    logs.append("You gained {} gold".format(gold))
-    character.gold += gold
+    gold_gained = character.gain_gold(gold)
+    logs.append("You gained {} gold".format(gold_gained))
 
 class HPStone(Item):
   def __init__(self):
