@@ -97,3 +97,18 @@ class EffectPotion(Item):
   def apply(self, character, monster, logs):
     character.add_buff(self.effect)
     logs.append("You have gained the {} buff.".format(self.buff_name))
+
+# Mystery Trader items
+# These are all applied outside of combat, and should NOT appear in other shops
+
+
+class RareCandy(Item):
+  def __init__(self):
+    self.info = {"name": "Rare Candy",
+                 "value": 50,
+                 "item_level": 1}
+  def apply(self, character, monster, logs):  # monsters don't get items
+    character.level += 1
+    logs.append("You have reached level {}!".format(character.level))
+    character.level_up(logs)
+    # Start here: Finish the Inn, and test this.

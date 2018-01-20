@@ -32,6 +32,9 @@ import subprocess
 #       items (including pots and possibly corrupted runes, and maybe
 #       other items that cannot be obtained in other ways (elixirs)
 # TODO: Item names
+# TODO: Make Merchant Warrior so you lose less money when you die. (10%/lvl)
+# TODO: Make crafthall at summit craft at the max infinity dungeon level reached?
+#       Or at least something like halfway. (i.e. reached 70  -> 55)
 
 # TODO: Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
 
@@ -289,7 +292,7 @@ def verify_log(filename):
         continue
       m = re.search("Action selected: \[(.*)\]", log_line)
       if m:
-        print "Action found: {}".format(m.group(1))
+        #print "Action found: {}".format(m.group(1))
         if not game_state:
           raise ValueError("Action found before game initialized")
         game_state.verification_apply_choice(m.group(1))

@@ -286,7 +286,7 @@ class GameState(object):
       self.character.restore_sp()
       if self.tower_lock[self.floor]:
         self.tower_lock[self.floor] = False
-    if self.current_state() == "OUTSIDE" or self.current_state == "TOWN":
+    if self.current_state() in ["OUTSIDE", "TOWN", "SUMMIT"]:
       if self.tower_update_ready:
         self.tower_update()
         self.tower_update_ready = False

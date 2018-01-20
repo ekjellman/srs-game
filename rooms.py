@@ -3,10 +3,6 @@ from equipment import Equipment, RARITY
 from effect import WellRested, Blessed
 import items
 
-# TODO: Rooms ideas:
-#       Trader: For 5g? per piece, "trades" materials. Gaussian distribution
-#               again.
-
 class Room(object):
   NO_CHANGE = 0
   LEAVE_ROOM = 1
@@ -466,12 +462,45 @@ class RareGoodsShop(EquipmentShop):
     return "Rare Goods Shop"
 
 class Inn(Room):
+  TRADER_ITEMS = [items.RareCandy]
+
+  def __init__(self, level):
+    super(Inn, self).__init__(level)
+    self.inventory = self.generate_inventory()
+    self.trading = False
+
+  # Level stones, teleport stones, other materials, stat boosts,
+  # items to level up traits, corrupted runes, gold,
+  # HP or SP boosts, random enchants, random super buffs, sacks of gold
+  # Always applied immediately
+
   @classmethod
   def get_name(cls):
     return "Inn"
 
+  def generate_inventory(self):
+    inventory = []
+    for i in range(3):
+      item = random.choice(Inn.TRADER_ITEMS)()
+      base_cost = item.get_value() * random.gauss(1, .2)
+      material_type = random.randint(0, 4)
+      material_cost = base_cost / (2**material_type)
+      material_cost = max(1, int(material_cost + random.gauss(1, 1)))
+      inventory.append((item, material_cost, material_type))
+    return inventory
+
   def get_buttons(self, character):
-    return ["", "Rest", "Buy Food", "Leave Inn"]
+    if self.trading:
+      choices = []
+      for i in range(len(self.inventory)):
+        if self.inventory[i]:
+          choices.append("Trade #{}".format(i + 1))
+        else:
+          choices.append("")
+      choices.append("Never Mind")
+      return choices
+    else:
+      return ["Mysteries Trader", "Rest", "Buy Food", "Leave Inn"]
 
   def get_rest_cost(self):
     return int(self.level * 10 * self.faction_rate)
@@ -481,10 +510,41 @@ class Inn(Room):
 
   def get_text(self, character):
     pieces = []
-    pieces.append("Rest: ({}g + 30 time) Well Rested buff".format
-                  (self.get_rest_cost()))
-    pieces.append("Buy Food: {} gold".format(self.get_food_cost()))
+    if self.trading:
+      for i in range(3):
+        if self.inventory[i]:
+          item = self.inventory[i]
+          format_string = "Trade #{}: {} for {} {} materials"
+          pieces.append(format_string.format(i + 1, item[0].get_name(),
+                                             item[1], RARITY[item[2]]))
+    else:
+      pieces.append("Rest: ({}g + 30 time) Well Rested buff".format
+                    (self.get_rest_cost()))
+      pieces.append("Buy Food: {} gold".format(self.get_food_cost()))
+    if not pieces:
+      pieces.append("You cleaned 'em out!")
     return "\n".join(pieces)
+
+  def handle_trade(self, choice, logs, character):
+    if not self.inventory[choice]:
+      return (0, Room.NO_CHANGE)
+    else:
+      trade = self.inventory[choice]
+      item = trade[0]
+      cost = trade[1]
+      rarity = trade[2]
+      if character.materials[rarity] >= cost:
+        logs.append("You trade for the {}".format(item.get_name()))
+        character.materials[rarity] -= cost
+        item.apply(character, None, logs)
+        self.inventory[choice] = None
+        if isinstance(item, items.RareCandy):
+          return (1, Room.LEVEL_UP)
+        else:
+          return (1, Room.NO_CHANGE)
+      else:
+        logs.append("You don't have enough to trade for that.")
+        return (0, Room.NO_CHANGE)
 
   def apply_choice(self, choice_text, logs, character):
     if choice_text == "Rest":
@@ -497,6 +557,13 @@ class Inn(Room):
       else:
         logs.append("You do not have sufficient money.")
         return (0, Room.NO_CHANGE)
+    elif choice_text == "Mysteries Trader":
+      logs.append("You visit the trader of mysteries.")
+      self.trading = True
+      return (0, Room.NO_CHANGE)
+    elif choice_text == "Never Mind":
+      self.trading = False
+      return (0, Room.NO_CHANGE)
     # TODO: There's a lot of very similar "buying things" code to consolidate
     elif choice_text == "Buy Food":
       if character.gold >= self.get_food_cost():
@@ -512,11 +579,17 @@ class Inn(Room):
       else:
         logs.append("You do not have enough gold to buy that.")
         return (0, Room.NO_CHANGE)
+    elif choice_text.startswith("Trade"):
+      choice = int(choice_text[-1]) - 1
+      return self.handle_trade(choice, logs, character)
     elif choice_text == "Leave Inn":
       return (0, Room.LEAVE_ROOM)
 
   def enter_shop(self, faction_rate):
-    self.faction_rate = faction_rate
+    pass
+
+  def refresh(self):
+    self.inventory = self.generate_inventory()
 
 class TeleportChamber(Room):
   @classmethod
