@@ -105,7 +105,6 @@ class EffectPotion(Item):
 # Mystery Trader items
 # These are all applied outside of combat, and should NOT appear in other shops
 
-
 class RareCandy(Item):
   def __init__(self):
     self.info = {"name": "Rare Candy",
@@ -210,3 +209,22 @@ class GoldSack(Item):
     logs.append("You gained {} gold".format(gold))
     character.gold += gold
 
+class HPStone(Item):
+  def __init__(self):
+    self.info = {"name": "HP Stone",
+                 "value": 75,
+                 "item_level": 1}
+  def apply(self, character, monster, logs):
+    character.base_hp += 50
+    character.recalculate_maxes()
+    logs.append("You gain 50 HP")
+
+class SPStone(Item):
+  def __init__(self):
+    self.info = {"name": "SP Stone",
+                 "value": 150,
+                 "item_level": 1}
+  def apply(self, character, monster, logs):
+    character.base_sp += 30
+    character.recalculate_maxes()
+    logs.append("You gain 30 SP")

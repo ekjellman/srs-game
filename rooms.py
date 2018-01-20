@@ -462,21 +462,17 @@ class RareGoodsShop(EquipmentShop):
     return "Rare Goods Shop"
 
 class Inn(Room):
-  #TRADER_ITEMS = [items.RareCandy, items.TeleportStone, items.StatStone,
-  #                items.MaterialPack, items.Tome, items.CorruptedRune,
-  #                items.GoldSack]
-  TRADER_ITEMS = [items.GoldSack]
+  # TODO: Add gold payment trades
+  # TODO: Add enduring buffs, random weapon enchants
+  # TODO: Maybe trader should not always appear
+  TRADER_ITEMS = [items.RareCandy, items.TeleportStone, items.StatStone,
+                  items.MaterialPack, items.Tome, items.CorruptedRune,
+                  items.GoldSack, items.HPStone, items.SPStone]
 
   def __init__(self, level):
     super(Inn, self).__init__(level)
     self.inventory = self.generate_inventory()
     self.trading = False
-
-  # items to level up traits, corrupted runes, gold,
-  # HP or SP boosts, random enchants, random super buffs, sacks of gold
-  # Always applied immediately
-
-  # add chance to pay in gold
 
   @classmethod
   def get_name(cls):
