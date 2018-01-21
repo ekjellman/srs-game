@@ -1,8 +1,8 @@
 import effect
 from equipment import RARITY
-import srs_random as random
 from character import TRAITS
 from character import STAT_ORDER
+import srs_random as random
 
 # TODO: Add substitute (automatic rez when you die)
 # TODO: Add names to items (based on stats / slot)

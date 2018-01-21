@@ -5,9 +5,9 @@ import time
 # Should be replaced with ctrueden's implementation when appropriate
 
 def init():
-  seed = int(time.time() * 1000)
-  python_random.seed(seed)
-  return seed
+  rng_seed = int(time.time() * 1000)
+  python_random.seed(rng_seed)
+  return rng_seed
 
 def seed(number):
   # Will differ from Python's implementation in that the input is assumed

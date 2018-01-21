@@ -278,7 +278,7 @@ def verify_log(filename):
         continue
       m = re.search("Action selected: \[(.*)\]", log_line)
       if m:
-        #print "Action found: {}".format(m.group(1))
+        print "Action found: {}".format(m.group(1))
         if not game_state:
           raise ValueError("Action found before game initialized")
         game_state.verification_apply_choice(m.group(1))
