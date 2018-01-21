@@ -236,7 +236,7 @@ class Character(object):
     self.debuffs = []
     if penalty:
       logs.append("You were found by a passerby and brought back to town.")
-      lost_gold = int((self.gold / 2) * (.8 ** self.traits["Merchant Warrior"]))
+      lost_gold = int((self.gold / 2) * (.8 ** self.traits.get("Merchant Warrior", 0)))
       logs.append("You lost {} gold.".format(lost_gold))
       self.gold -= lost_gold
       self.buffs = []
