@@ -65,6 +65,8 @@ DEBUG_TOWER_START = None
 #       to skip past (levelling up, finding a shop in a tower, etc)
 
 # TODO: Floating point error on buffs. (39% for 9 turns at level 2)
+# TODO: Add skill forgetting shop. Could give some bonus for the skill you
+#       forget based on levels
 
 class GameState(object):
   """
