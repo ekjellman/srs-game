@@ -856,7 +856,21 @@ class GameState(object):
   def skill_text(self):
     pieces = []
     pieces.append("Select a skill.")
-    pieces.extend(self.get_choices())
+    pieces.append("Improve stats: Add 1 to all stats")
+    for choice in self.get_choices()[1:]:
+      if choice == "Get New Skills": continue
+      pieces.append("{}:".format(choice))
+      char_skill = self.character.have_skill(choice)
+      if char_skill:
+        current_level = char_skill.level
+      else:
+        current_level = 0
+      new_skill = skills.get_skill(choice, current_level + 1)
+      if char_skill:
+        pieces.append("  Was: {} ({} sp)".format(char_skill.get_description(), char_skill.sp_cost()))
+      else:
+        pieces.append("  (New Skill)")
+      pieces.append("  New: {} ({} sp)".format(new_skill.get_description(), new_skill.sp_cost()))
     return "\n".join(pieces)
 
   def skill_select_text(self):

@@ -11,7 +11,6 @@ import subprocess
 
 # TODO: Look into using unicode graphics for some of this stuff
 # TODO: Either show current time or time passed in the log
-# TODO: Add text describing skills to level up dialog
 # TODO: Disable rest if HP/SP full? But Infinity Dungeon...
 # TODO: Change "insufficient payment" and "gold or materials" to give
 #       the actual reason. Possibly snarky if you have neither
