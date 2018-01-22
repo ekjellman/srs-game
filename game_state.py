@@ -1,5 +1,5 @@
 """Represents the current state of the game. Main game logic module."""
-import srs_random as random
+import srs_random
 from character import Character, TRAITS
 from monster import Monster
 from combat import Combat
@@ -137,7 +137,7 @@ class GameState(object):
     for level in range(1, TOWER_LEVELS):
       shop_set = set()
       while len(shop_set) < 3:
-        shop_set.add(random.choice(TOWN_BUILDINGS))
+        shop_set.add(srs_random.choice(TOWN_BUILDINGS))
       shops = []
       for shop in shop_set:
         shops.append(shop(level))
@@ -317,7 +317,7 @@ class GameState(object):
   def start_combat(self, logs, boss_chance, level=None):
     if level is None:
       level = self.floor
-    boss = random.random() < boss_chance
+    boss = srs_random.random() < boss_chance
     self.add_state("COMBAT")
     self.monster = Monster(level, boss)
     logs.append("You have encountered a monster.")
@@ -363,7 +363,7 @@ class GameState(object):
 
   def apply_choice_quest(self, logs, choice_text):
     if choice_text == "Continue Quest":
-      self.pass_time(random.randint(1, 3), logs)
+      self.pass_time(srs_random.randint(1, 3), logs)
       logs.append("You continue the quest...")
       self.add_state("COMBAT")
       self.monster = self.quest.get_monster()
@@ -406,7 +406,7 @@ class GameState(object):
     hp_gained = self.character.rest()
     logs.append("You rest and regain {} HP.".format(hp_gained))
     if enc_chance:
-        if random.random() < .2 or self.infinity_dungeon:
+        if srs_random.random() < .2 or self.infinity_dungeon:
             self.start_combat(logs, .1)
 
   def apply_choice_stronghold(self, logs, choice_text):
@@ -425,7 +425,7 @@ class GameState(object):
 
   def handle_explore(self, logs, explore_type):
     chances = EXPLORE_CHANCES[explore_type]
-    random_number = random.random()
+    random_number = srs_random.random()
     if random_number < chances[0]:
       logs.append("You find a treasure hoard!")
       self.find_treasure(logs, 8)
@@ -433,7 +433,7 @@ class GameState(object):
       logs.append("You find a shop.")
       self.character.restore_hp()
       self.character.restore_sp()
-      shop = random.choice(TOWER_BUILDINGS)(self.floor)
+      shop = srs_random.choice(TOWER_BUILDINGS)(self.floor)
       self.add_state("SHOP")
       self.add_state("SHOP_WARNING")
       self.current_shop = shop
@@ -458,14 +458,14 @@ class GameState(object):
     else:
       if explore_type == "Tower" and "Sneaky" in self.character.traits:
         sneak_chance = self.character.traits["Sneaky"] * 0.02
-        if random.random() < sneak_chance:
+        if srs_random.random() < sneak_chance:
           logs.append("You encountered a monster, but sneaked past.")
           return
       self.start_combat(logs, 0.0)
 
   def apply_choice_tower(self, logs, choice_text):
     if choice_text == "Explore":
-      self.pass_time(random.randint(1, 10), logs)
+      self.pass_time(srs_random.randint(1, 10), logs)
       logs.append("You explore the tower...")
       if self.ascension_encounters_required > self.ascension_encounters:
         self.ascension_encounters += 1
@@ -499,15 +499,15 @@ class GameState(object):
   def find_treasure(self, logs, item_count):
     treasure = []
     for i in range(item_count):
-      if random.random() < .7:
+      if srs_random.random() < .7:
         min_gold = self.floor * 10
         max_gold = self.floor * 20
-        treasure.append(random.randint(min_gold, max_gold))
+        treasure.append(srs_random.randint(min_gold, max_gold))
       else:
-        rarity = min(random.randint(1, 4) for _ in range(4))
+        rarity = min(srs_random.randint(1, 4) for _ in range(4))
         if self.infinity_dungeon:
-          rarity = max(rarity, min(random.randint(1, 4) for _ in range(4)))
-        level = max(1, int(self.floor + random.gauss(0, 1)))
+          rarity = max(rarity, min(srs_random.randint(1, 4) for _ in range(4)))
+        level = max(1, int(self.floor + srs_random.gauss(0, 1)))
         treasure.append(Equipment.get_new_armor(level, None, None, rarity))
     self.treasure_queue = treasure
     self.handle_treasure(logs)
@@ -521,7 +521,7 @@ class GameState(object):
           crafthall_level = (TOWER_LEVELS + self.floor) / 2
           assert isinstance(self.towns[TOWER_LEVELS][2], rooms.Crafthall)
           self.towns[TOWER_LEVELS][2] = rooms.Crafthall(crafthall_level)
-      self.pass_time(random.randint(1, 5), logs)
+      self.pass_time(srs_random.randint(1, 5), logs)
       logs.append("You explore the dungeon...")
       if self.infinity_dungeon:
         self.handle_explore(logs, "Infinity Dungeon")
@@ -564,7 +564,7 @@ class GameState(object):
     self.character.apply_death(logs)
     self.change_state("TOWN")
     factor = DEATH_TIME_FACTOR[state]
-    time_lost = random.randint(1, int(3 * self.floor * factor))
+    time_lost = srs_random.randint(1, int(3 * self.floor * factor))
     self.pass_time(time_lost, logs)
     logs.append("You lost {} time units.".format(time_lost))
 
@@ -759,7 +759,7 @@ class GameState(object):
       self.pass_time(10, logs)
       if self.frontier <= self.floor:
         self.add_state("TOWER")
-        self.ascension_encounters_required = random.randint(5, 8)
+        self.ascension_encounters_required = srs_random.randint(5, 8)
         self.ascension_encounters = 0
         logs.append("You entered the tower.")
       else:

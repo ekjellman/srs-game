@@ -1,4 +1,4 @@
-import srs_random as random
+import srs_random
 from combat import Combat
 import effect
 
@@ -39,7 +39,7 @@ class QuickAttack(Skill):
                                   self.get_attack_multiple())
     if result == Combat.TARGET_DEAD:
       return result
-    if random.random() < self.go_again_chance():
+    if srs_random.random() < self.go_again_chance():
       logs.append("Quick attack succeeded!")
       return Combat.ACTOR_TURN
     else:
@@ -62,7 +62,7 @@ class Blind(Skill):
   def apply_skill(self, actor, opponent, logs):
     result = Combat.action_attack(None, actor, opponent, logs, "Physical",
                                   self.get_attack_multiple())
-    if random.random() < self.blind_chance():
+    if srs_random.random() < self.blind_chance():
       if opponent.boss:
         logs.append("Blind resisted.")
       else:
@@ -86,7 +86,7 @@ class Bash(Skill):
   def apply_skill(self, actor, opponent, logs):
     result = Combat.action_attack(None, actor, opponent, logs, "Physical",
                                   self.get_attack_multiple())
-    if random.random() < self.stun_chance():
+    if srs_random.random() < self.stun_chance():
       if opponent.boss:
         logs.append("Stun resisted.")
       else:
@@ -121,7 +121,7 @@ class HeavySwing(Skill):
   def sp_cost(self):
     return int(self.level * 6 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
-    if random.random() < self.miss_chance():
+    if srs_random.random() < self.miss_chance():
       logs.append("Heavy Swing missed.")
       return Combat.TARGET_ALIVE
     else:
@@ -241,7 +241,7 @@ class PoisonedBlade(Skill):
   def sp_cost(self):
     return int(self.level * 4 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
-    if random.random() < self.kill_chance() and not opponent.boss:
+    if srs_random.random() < self.kill_chance() and not opponent.boss:
       logs.append("Assassinated!")
       return Combat.TARGET_DEAD
     else:
@@ -262,7 +262,7 @@ class Meditate(Skill):
   def chance_to_fail(self, actor):
     return (actor.current_sp / float(actor.max_sp) * (.99 ** self.level))
   def apply_skill(self, actor, opponent, logs):
-    if random.random() > self.chance_to_fail(actor):
+    if srs_random.random() > self.chance_to_fail(actor):
       sp_gained = actor.restore_sp(actor.max_sp * self.percent_gained() // 100)
       logs.append("{} SP gained".format(sp_gained))
     else:
@@ -344,7 +344,7 @@ class ChainLightning(Skill):
     repeat_chance = self.get_repeat_chance()
     result = Combat.action_attack(None, actor, opponent, logs, "Magic",
                                   self.get_attack_multiple())
-    while result == Combat.TARGET_ALIVE and random.random() < repeat_chance:
+    while result == Combat.TARGET_ALIVE and srs_random.random() < repeat_chance:
       repeat_chance *= .9
       result = Combat.action_attack(None, actor, opponent, logs, "Magic",
                                     self.get_attack_multiple())

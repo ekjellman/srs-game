@@ -4,7 +4,6 @@ import time
 from game_state import GameState
 import wx
 import wx.richtext
-import random
 import srs_random
 import sys
 import re
@@ -25,6 +24,14 @@ import subprocess
 # TODO: Consider making everything work against elites instead
 # TODO: Consider allowing replacing skills
 # TODO: Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
+# TODO: Bug, Auto Life can trigger multiple times in the same combat round
+# TODO: Bug, Victory [] should absolutely end the game (even if you level up)
+# TODO: Bug, something broke replays, I think in the adding a trader to the inn.
+#            I haven't figured out what yet, but even the full srs_random fix
+#            does not fix it
+#            But: It is inconsistent even with the same log. If you have a
+#                 victory log, and you pass it several times, it seems to work
+#                 eventually?
 
 def write_color_text(rtc, string):
   # Takes a wx.richtext.RichTextCtrl and writes my wacky custom color-coded
@@ -161,9 +168,6 @@ class MainWindow(wx.Frame):
   # pylint: disable=too-many-instance-attributes
   def __init__(self, parent, title):
     wx.Frame.__init__(self, parent, title=title, size=(1200, 750))
-    # Not srs_random. This random number generator should be separate from
-    # the generator the game system uses.
-    self.random_generator = random.SystemRandom()
 
     # Make menus
     menu_bar = wx.MenuBar()

@@ -1,4 +1,4 @@
-import srs_random as random
+import srs_random
 from equipment import Equipment
 from effect import Debuff, Effect
 from name_generator import NameGenerator
@@ -36,7 +36,7 @@ class Monster(object):
       self.stats["Stamina"] *= 4   # Effectively x5.2
     for stat in self.stats.keys():
       # 75-125% change
-      self.stats[stat] *= (random.random() * 0.5) + 0.75
+      self.stats[stat] *= (srs_random.random() * 0.5) + 0.75
       self.stats[stat] = int(self.stats[stat])
       self.stats[stat] = max(1, self.stats[stat])
     self.max_hp = self.stats["Stamina"] * 5
@@ -121,16 +121,16 @@ class Monster(object):
     boss_factor = 4 if self.boss else 1
     min_gold = 5 * self.level * boss_factor
     max_gold = 15 * self.level * boss_factor
-    treasure.append(random.randint(min_gold, max_gold))
+    treasure.append(srs_random.randint(min_gold, max_gold))
     treasure_tier = 1
     treasure_tier += (1 if self.boss else 0)
     treasure_tier += (1 if infinity else 0)
     chances = CHANCE_TIERS[treasure_tier]
     for rarity in range(1, len(chances)):
-      while random.random() < chances[rarity]:
+      while srs_random.random() < chances[rarity]:
         treasure.append(Equipment.get_new_armor(self.level, None, None, rarity))
     rune_chance = RUNE_CHANCES[treasure_tier]
-    while random.random() < rune_chance:
+    while srs_random.random() < rune_chance:
       treasure.append("Rune")
     return treasure
 
@@ -145,7 +145,7 @@ class Monster(object):
     low = (10 + (7 * self.level)) * boss_factor
     high = (20 + (14 * self.level)) * boss_factor
     low, high = int(low), int(high)
-    return random.randint(low, high)
+    return srs_random.randint(low, high)
 
   def get_damage_type(self):
     if (self.get_effective_stat("Intellect") >
@@ -156,7 +156,7 @@ class Monster(object):
 
   @classmethod
   def roll_stat(cls, level, die, modifier):
-    return sum(random.randint(1, die) + modifier for _ in range(level))
+    return sum(srs_random.randint(1, die) + modifier for _ in range(level))
 
   def get_action(self, character):
     # Monster AI

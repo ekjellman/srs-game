@@ -2,7 +2,7 @@ import effect
 from equipment import RARITY
 from character import TRAITS
 from character import STAT_ORDER
-import srs_random as random
+import srs_random
 
 # TODO: Add substitute (automatic rez when you die)
 # TODO: Add names to items (based on stats / slot)
@@ -130,24 +130,24 @@ class TeleportStone(Item):
 class StatStone(Item):
   STONE_TYPES = STAT_ORDER + ["Rainbow"]
   def __init__(self):
-    self.stone_type = random.choice(self.STONE_TYPES)
+    self.stone_type = srs_random.choice(self.STONE_TYPES)
     self.info = {"name": "{} Stone".format(self.stone_type),
                  "value": 100,
                  "item_level": 1}
   def apply(self, character, monster, logs):
     if self.stone_type == "Rainbow":
       for stat in character.stats:
-        amount = random.randint(2, 4)
+        amount = srs_random.randint(2, 4)
         logs.append("You gained {} {}".format(amount, stat))
         character.stats[stat] += amount
     else:
-      amount = random.randint(8, 12)
+      amount = srs_random.randint(8, 12)
       logs.append("You gained {} {}".format(amount, self.stone_type))
       character.stats[self.stone_type] += amount
 
 class MaterialPack(Item):
   def __init__(self):
-    self.material_type = random.randint(0, 4)
+    self.material_type = srs_random.randint(0, 4)
     value = 40 * (2**self.material_type)
     self.info = {"name": "{} Materials Pack".format(RARITY[self.material_type]),
                  "value": value,
@@ -155,7 +155,7 @@ class MaterialPack(Item):
   def apply(self, character, monster, logs):
     counts = [0] * 5
     for i in range(40):
-      rarity = self.material_type + random.gauss(.5, 1)
+      rarity = self.material_type + srs_random.gauss(.5, 1)
       rarity = max(0, min(4, int(rarity)))
       counts[rarity] += 1
     for i, count in enumerate(counts):
@@ -168,7 +168,7 @@ class Tome(Item):
   TOME_TYPES.remove("Libra")
 
   def __init__(self):
-    self.tome_type = random.choice(self.TOME_TYPES)
+    self.tome_type = srs_random.choice(self.TOME_TYPES)
     value = 200 if self.tome_type == "Rainbow" else 100
     self.info = {"name": "{} Tome".format(self.tome_type),
                  "value": value,
@@ -177,11 +177,11 @@ class Tome(Item):
     if self.tome_type == "Rainbow":
       for trait in TRAITS.keys():
         if trait == "Libra": continue
-        if random.random() > .5:
+        if srs_random.random() > .5:
           logs.append("You improved the {} trait.".format(trait))
           character.traits[trait] = character.traits.get(trait, 0) + 1
     else:
-      levels = random.randint(1, 3)
+      levels = srs_random.randint(1, 3)
       logs.append("You gained {} levels of the {} trait".format(levels,
                                                                 self.tome_type))
       character.traits[self.tome_type] = character.traits.get(self.tome_type, 0) + levels
@@ -197,14 +197,14 @@ class CorruptedRune(Item):
 class GoldSack(Item):
   SIZES = ["Small", "Medium", "Large", "Huge", "Gigantic"]
   def __init__(self):
-    self.size = random.randint(0, 4)
+    self.size = srs_random.randint(0, 4)
     value = 50 * (2**self.size)
     self.info = {"name": "{} Sack of Gold".format(self.SIZES[self.size]),
                  "value": value,
                  "item_level": 1}
   def apply(self, character, monster, logs):
     gold = 2500 * (2**self.size)
-    gold *= random.gauss(1, .05)
+    gold *= srs_random.gauss(1, .05)
     gold_gained = character.gain_gold(gold)
     logs.append("You gained {} gold".format(gold_gained))
 

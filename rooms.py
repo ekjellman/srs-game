@@ -1,4 +1,4 @@
-import srs_random as random
+import srs_random
 from equipment import Equipment, RARITY
 from effect import WellRested, Blessed
 import items
@@ -451,9 +451,9 @@ class RareGoodsShop(EquipmentShop):
   def refresh(self):
     self.inventory = []
     for _ in range(3):
-      level = max(1, self.level + int(random.gauss(0, 3)))
-      rarity = random.randint(2, 4)
-      slot = random.randint(0, 4)
+      level = max(1, self.level + int(srs_random.gauss(0, 3)))
+      rarity = srs_random.randint(2, 4)
+      slot = srs_random.randint(0, 4)
       equip = Equipment.get_new_armor(level, slot, None, rarity)
       self.inventory.append(equip)
 
@@ -481,11 +481,11 @@ class Inn(Room):
   def generate_inventory(self):
     inventory = []
     for i in range(3):
-      item = random.choice(Inn.TRADER_ITEMS)()
-      base_cost = item.get_value() * random.gauss(1, .2)
-      material_type = random.randint(0, 4)
+      item = srs_random.choice(Inn.TRADER_ITEMS)()
+      base_cost = item.get_value() * srs_random.gauss(1, .2)
+      material_type = srs_random.randint(0, 4)
       material_cost = base_cost / (2**material_type)
-      material_cost = max(1, int(material_cost + random.gauss(1, 1)))
+      material_cost = max(1, int(material_cost + srs_random.gauss(1, 1)))
       inventory.append((item, material_cost, material_type))
     return inventory
 
@@ -695,7 +695,7 @@ class Alchemist(Room):
 
   def item_rate(self, item):
     """Returns a number representing how much it should appear in the shop."""
-    return random.random() / (abs(self.level - item.get_item_level()) + 1)
+    return srs_random.random() / (abs(self.level - item.get_item_level()) + 1)
 
   def generate_inventory(self):
     inventory = []
@@ -798,7 +798,7 @@ class Crafthall(Room):
   @classmethod
   def get_craft_rarity(cls, starting_rarity):
     rarity = starting_rarity
-    while random.random() < .1:
+    while srs_random.random() < .1:
       rarity += 1
     return min(rarity, 4)
 
@@ -811,7 +811,7 @@ class Crafthall(Room):
       character.gold -= 10 * rarity * self.level
       rarity = self.get_craft_rarity(rarity)
       self.crafting = True
-      level = int(self.level + max(0, random.gauss(0, 1)))
+      level = int(self.level + max(0, srs_random.gauss(0, 1)))
       self.crafted_piece = Equipment.get_new_armor(level, None, None, rarity)
       return (3, Room.NO_CHANGE)
     else:

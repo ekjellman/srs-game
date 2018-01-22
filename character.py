@@ -1,4 +1,4 @@
-import srs_random as random
+import srs_random
 from skills import SKILLS, SKILL_NAMES
 from equipment import Equipment, RARITY
 from effect import Effect, Buff, Debuff
@@ -57,7 +57,7 @@ class Character(object):
     self.debuffs = []
     self.runes = 1
     self.traits = {}
-    self.reroll_counter = random.randint(0, 1000000)
+    self.reroll_counter = srs_random.randint(0, 1000000)
 
   def colored_hp(self):
     hp_percent = self.current_hp * 100 // self.max_hp
@@ -79,14 +79,14 @@ class Character(object):
       trait_choices = character.get_trait_choices()
       choice = ""
       while choice not in TRAITS:
-        choice = random.choice(trait_choices)
+        choice = srs_random.choice(trait_choices)
       character.learn_trait(choice)
       skill_choices = character.get_skill_choices()
       choice = ""
       while choice not in SKILL_NAMES + ["Improve stats"]:
-        choice = random.choice(skill_choices)
+        choice = srs_random.choice(skill_choices)
       chance = 10.0 / i
-      if random.random() < chance:
+      if srs_random.random() < chance:
         character.learn_skill(choice)
       else:
         character.learn_skill("Improve stats")
@@ -281,12 +281,12 @@ class Character(object):
 
   def level_up(self, logs):
     for stat in self.stats.keys():
-      increase = random.randint(1, 3)
+      increase = srs_random.randint(1, 3)
       if increase > 0:
         self.stats[stat] += increase
         logs.append("You have gained {} {}.".format(increase, stat))
-    hp_gain = random.randint(10, 20)
-    sp_gain = random.randint(5, 10)
+    hp_gain = srs_random.randint(10, 20)
+    sp_gain = srs_random.randint(5, 10)
     self.base_hp += hp_gain
     self.base_sp += sp_gain
     logs.append("You have gained {} HP.".format(hp_gain))
@@ -297,7 +297,7 @@ class Character(object):
     return self.gain_exp(level * 25, level, logs, level_adjust=False)
 
   def train_stats(self, logs):
-    stat = random.choice(self.stats.keys())
+    stat = srs_random.choice(self.stats.keys())
     self.stats[stat] += 1
     logs.append("Gained +1 {}.".format(stat))
 
@@ -309,13 +309,13 @@ class Character(object):
     choices = [""]
     reroll_trait_level = self.traits.get("Self-Improvement", 0)
     reroll_chance = float(reroll_trait_level) / (reroll_trait_level + 1)
-    if random.random() < reroll_chance:
+    if srs_random.random() < reroll_chance:
       choices.append("Get New Traits")
     while len(choices) < 4:
       best_roll, best_trait = 0.0, None
       for trait in TRAITS.keys():
         rerolls = max(1, int((self.traits.get(trait, 0) + 1) ** .5))
-        roll = min(random.random() for _ in range(rerolls))
+        roll = min(srs_random.random() for _ in range(rerolls))
         if trait == "Libra" and self.traits.get(trait, 0) > 0:  # Only one libra level
           roll = 0.0
         if roll > best_roll:
@@ -344,7 +344,7 @@ class Character(object):
     else:
       reroll_skill_level = self.traits.get("Scholar", 0)
       reroll_chance = float(reroll_skill_level) / (reroll_skill_level + 1)
-      if random.random() < reroll_chance:
+      if srs_random.random() < reroll_chance:
         choices.append("Get New Skills")
       while len(choices) < 4:
         best_roll, best_skill = 0.0, None
@@ -354,7 +354,7 @@ class Character(object):
             rerolls = 1
           else:
             rerolls = int(current_skill.level ** .5)
-          roll = min(random.random() for _ in range(rerolls))
+          roll = min(srs_random.random() for _ in range(rerolls))
           if roll > best_roll:
             best_roll, best_skill = roll, skill_name
         if best_skill not in choices:

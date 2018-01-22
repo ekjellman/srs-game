@@ -1,5 +1,5 @@
 import collections
-import srs_random as random
+import srs_random
 
 class NameGenerator(object):
   def __init__(self, filename, shortest=3, longest=100):
@@ -43,7 +43,7 @@ class NameGenerator(object):
       for candidate in entry:
         count = entry[candidate]
         total += count
-        if random.randint(1, total) <= count:
+        if srs_random.randint(1, total) <= count:
           next_letter = candidate
       if next_letter == "END":
         if len(name) >= self.shortest and len(name) <= self.longest:

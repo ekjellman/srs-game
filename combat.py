@@ -1,4 +1,4 @@
-import srs_random as random
+import srs_random
 from effect import Effect
 from monster import Monster
 
@@ -57,7 +57,7 @@ class Combat(object):
               buff.duration = 0
         else:
           death_chance = 0.95 ** character.traits.get("Perseverance", 0)
-          if random.random() < death_chance:
+          if srs_random.random() < death_chance:
             return cls.CHARACTER_DEAD
           else:
             logs.append("Your perseverance saved you from death.")
@@ -67,7 +67,7 @@ class Combat(object):
       next_turn = cls.get_next_actor(character, monster)
       # Combobreaker
       if next_turn == cls.MONSTER_TURN:
-        if random.random() < combobreaker_chance:
+        if srs_random.random() < combobreaker_chance:
           next_turn = cls.CHARACTER_TURN
           logs.append("Combobreaker! prevented the next enemy turn.")
       combobreaker_chance += character.traits.get("Combobreaker!", 0) / 100.0
@@ -135,7 +135,7 @@ class Combat(object):
     damage = int(damage * factor * level_factor)
     if damage > 9999: damage = 9999
     if Effect.get_combined_impact("Blinded", actor.buffs, actor.debuffs) > 0:
-      if random.random() < .5:
+      if srs_random.random() < .5:
         logs.append("Misses due to Blindness.")
         return cls.TARGET_ALIVE
     color_string = "`255,0,0`" if isinstance(actor, Monster) else ""
@@ -157,7 +157,7 @@ class Combat(object):
     target_stat = target.get_effective_stat(stat)
     total_stat = actor_stat + target_stat
     actor_chance = float(actor_stat) / total_stat
-    if random.random() < actor_chance:
+    if srs_random.random() < actor_chance:
       return cls.ACTOR_SUCCEEDED
     else:
       return cls.ACTOR_FAILED

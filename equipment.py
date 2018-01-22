@@ -1,4 +1,4 @@
-import srs_random as random
+import srs_random
 
 # TODO: Make stats always be in a specific order [OrderedDict or array]
 # TODO: Should probably move these to a different place
@@ -64,8 +64,8 @@ class Equipment(object):
 
   def enchant(self):
     self.enchant_count += 1
-    enchanted_stat = random.choice(STATS)
-    amount = random.randint(max(1, self.item_level // 4),
+    enchanted_stat = srs_random.choice(STATS)
+    amount = srs_random.randint(max(1, self.item_level // 4),
                             max(1, self.item_level // 2))
     amount = int(amount * (1.0 + 0.25 * self.rarity))
     self.attributes[enchanted_stat] = self.attributes.get(enchanted_stat, 0) + amount
@@ -80,9 +80,9 @@ class Equipment(object):
     max_gains = (self.rarity + 1) * (level - self.item_level)
     stat_gains = [0, 0, 0, 0]
     for _ in range(max_gains):
-      stat_gains[random.randint(0, 3)] += 1
+      stat_gains[srs_random.randint(0, 3)] += 1
     for i in range(4):
-      stat_gains[i] = random.randint(stat_gains[i] // 2, stat_gains[i])
+      stat_gains[i] = srs_random.randint(stat_gains[i] // 2, stat_gains[i])
       self.attributes[STATS[i]] = self.attributes.get(STATS[i], 0) + stat_gains[i]
       if stat_gains[i] > 0:
         result_pieces.append("{:+d} {}".format(stat_gains[i], STATS[i]))
@@ -90,17 +90,17 @@ class Equipment(object):
     max_gains = 2 * (level - self.item_level)
     def_gains = [0, 0]
     for _ in range(max_gains):
-      def_gains[random.randint(0, 1)] += 1
+      def_gains[srs_random.randint(0, 1)] += 1
     for i in range(2):
-      def_gains[i] = random.randint(def_gains[i] // 2, def_gains[i])
+      def_gains[i] = srs_random.randint(def_gains[i] // 2, def_gains[i])
       self.attributes[DEFENSES[i]] = self.attributes.get(DEFENSES[i], 0) + def_gains[i]
       if def_gains[i] > 0:
         result_pieces.append("{:+d} {}".format(def_gains[i], DEFENSES[i]))
     # Weapon Stats
     if self.slot == 0:
       rarity_factor = 1.0 + (.1 * self.rarity)
-      low = int((10 + 5 * level) * random.gauss(1, .2) * rarity_factor)
-      high = int((20 + 7 * level) * random.gauss(1, .2) * rarity_factor)
+      low = int((10 + 5 * level) * srs_random.gauss(1, .2) * rarity_factor)
+      high = int((20 + 7 * level) * srs_random.gauss(1, .2) * rarity_factor)
       old_low = self.attributes.get("Low", 0)
       old_high = self.attributes.get("High", 0)
       old_average = (old_low + old_high) / 2.0
@@ -122,10 +122,10 @@ class Equipment(object):
   def make_stat_value(cls, item_level, rarity):
     min_stat = max(1, item_level // 2)
     max_stat = min_stat + item_level + rarity
-    return random.randint(min_stat, max_stat)
+    return srs_random.randint(min_stat, max_stat)
 
   def get_damage(self):
-    return random.randint(self.attributes.get("Low", 0), self.attributes.get("High", 0))
+    return srs_random.randint(self.attributes.get("Low", 0), self.attributes.get("High", 0))
 
   def get_damage_type(self):
     return self.attributes.get("Type", 0)
@@ -134,9 +134,9 @@ class Equipment(object):
     materials = [0] * len(RARITY)
     count = 0
     for _ in range(self.item_level):
-      if random.random() > .85 ** count:
+      if srs_random.random() > .85 ** count:
         continue
-      rarity = int(self.rarity + random.gauss(0, 1))
+      rarity = int(self.rarity + srs_random.gauss(0, 1))
       if rarity < 0:
         continue
       if rarity >= len(RARITY):
@@ -170,20 +170,20 @@ class Equipment(object):
   def get_new_armor(cls, item_level, slot=None, require=None, rarity=1):
     attributes = {}
     if slot is None:
-      slot = random.randint(0, len(SLOTS) - 1)
+      slot = srs_random.randint(0, len(SLOTS) - 1)
     slots = 1 + rarity
     if require:
       attributes[require] = cls.make_stat_value(item_level, rarity)
       slots -= 1
     for _ in range(slots):
-      stat = random.choice(STATS)
+      stat = srs_random.choice(STATS)
       attributes[stat] = attributes.get(stat, 0) + cls.make_stat_value(item_level, rarity)
     for defense in DEFENSES:
       attributes[defense] = cls.make_stat_value(item_level, rarity)
     if SLOTS[slot] == "Weapon":
       rarity_factor = 1.0 + (.1 * rarity)
-      low = int((10 + 5 * item_level) * random.gauss(1, .2) * rarity_factor)
-      high = int((20 + 7 * item_level) * random.gauss(1, .2) * rarity_factor)
+      low = int((10 + 5 * item_level) * srs_random.gauss(1, .2) * rarity_factor)
+      high = int((20 + 7 * item_level) * srs_random.gauss(1, .2) * rarity_factor)
       if low > high:
         low, high = high, low
       if low < 1:
@@ -195,7 +195,7 @@ class Equipment(object):
       elif require == "Intellect":
         attributes["Type"] = "Magic"
       else:
-        attributes["Type"] = random.choice(("Magic", "Physical"))
+        attributes["Type"] = srs_random.choice(("Magic", "Physical"))
     return Equipment(item_level, attributes, slot, rarity)
 
   def __str__(self):
