@@ -602,6 +602,7 @@ class GameState(object):
         if self.stronghold_room == 10:
           self.change_state("VICTORY")
           logs.append("Victory! [{}]".format(self.time_spent))
+          return
       if levelups > 0:
         self.levelups = levelups
         self.skillups = levelups
