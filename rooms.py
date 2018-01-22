@@ -1,6 +1,6 @@
 import srs_random
 from equipment import Equipment, RARITY
-from effect import WellRested, Blessed
+from effect import WellRested, Blessed, Lucky
 import items
 
 class Room(object):
@@ -651,13 +651,17 @@ class Temple(Room):
     pass
 
   def get_buttons(self, character):
-    return ["", "Blessing", "Purify Rune", "Leave Temple"]
+    return ["Offering", "Blessing", "Purify Rune", "Leave Temple"]
 
   def get_text(self, character):
     pieces = []
+    pieces.append("Offering: ({}g) Make an offering to the gods.".format(self.get_offering_cost()))
     pieces.append("Blessing: ({}g) gain the Blessed buff".format(self.get_blessing_cost()))
     pieces.append("Purify Rune: Enter the rune world to cleanse a rune")
     return "\n".join(pieces)
+
+  def get_offering_cost(self):
+    return int(100 * self.level * self.faction_rate)
 
   def get_blessing_cost(self):
     return int(50 * self.level * self.faction_rate)
@@ -669,6 +673,19 @@ class Temple(Room):
         character.gold -= cost
         character.add_buff(Blessed(241))
         logs.append("The priest blesses you.")
+        return (1, Room.NO_CHANGE)
+      else:
+        logs.append("You do not have sufficient money.")
+        return (0, Room.NO_CHANGE)
+    elif choice_text == "Offering":
+      cost = self.get_offering_cost()
+      if cost <= character.gold:
+        character.gold -= cost
+        logs.append("You make an offering to the gods.")
+        if srs_random.random() < .25:
+          logs.append("The gods accept your offering")
+          # TODO: Other effects?
+          character.add_buff(Lucky(241))
         return (1, Room.NO_CHANGE)
       else:
         logs.append("You do not have sufficient money.")

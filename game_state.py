@@ -5,6 +5,7 @@ from monster import Monster
 from combat import Combat
 from equipment import Equipment
 from quest import Quest
+from effect import Effect
 import rooms
 from items import Item
 import skills
@@ -67,9 +68,6 @@ DEBUG_TOWER_START = None
 # TODO: Floating point error on buffs. (39% for 9 turns at level 2)
 # TODO: Add skill forgetting shop. Could give some bonus for the skill you
 #       forget based on levels
-# TODO: Add "Wishing Well" shop. Luck buff? Something else?
-# TODO: Add "Donate" to temple. For a donation (100 / 300 / 900 * level?)
-#       chance of a "wish" (random item from mysteries shop?)
 # TODO: Renew bug, displays decimal for number of HP/Turn
 
 class GameState(object):
@@ -428,7 +426,13 @@ class GameState(object):
       self.leave_state()
 
   def handle_explore(self, logs, explore_type):
-    chances = EXPLORE_CHANCES[explore_type]
+    chances = EXPLORE_CHANCES[explore_type][:]
+    if Effect.get_combined_impact("Lucky", self.character.buffs,
+                                  self.character.debuffs) > 0:
+      chances[0] *= 1.5
+      chances[1] *= 1.5
+      chances[2] *= 1.5
+      chances[4] *= 1.5
     random_number = srs_random.random()
     if random_number < chances[0]:
       logs.append("You find a treasure hoard!")

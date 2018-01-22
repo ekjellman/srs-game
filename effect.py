@@ -1,7 +1,7 @@
 from equipment import STATS, DEFENSES
 
 STACK_MULTIPLY = ["XP Gain"] + STATS + DEFENSES
-STACK_MAX = ["Blinded", "Stunned", "Immortal", "Auto Life"]
+STACK_MAX = ["Blinded", "Stunned", "Immortal", "Auto Life", "Lucky"]
 STACK_ADD = ["HP Restore"]
 
 class Effect(object):
@@ -129,6 +129,12 @@ class Blessed(Buff):
 
   def get_name(self):
     return "Blessed"
+
+class Lucky(Buff):
+  def get_impacts(self):
+    return {"Lucky": 1}
+  def get_name(self):
+    return "Lucky"
 
 class Protection(Buff):
   # 100% increase to def / mdef
