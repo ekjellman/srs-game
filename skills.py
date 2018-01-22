@@ -277,7 +277,7 @@ class Heal(Skill):
   def get_description(self):
     return "Gain {} HP (base).".format(self.base_hp_gain())
   def sp_cost(self):
-    return int(self.level * 7 * (1.1 ** self.level))
+    return int(self.level * 5 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
     effective_int = actor.get_effective_stat("Intellect")
     hp_gained = int(self.base_hp_gain() * ((effective_int / 100.0) ** .5))
@@ -392,7 +392,7 @@ class AutoLife(Skill):
   def get_name(self):
     return "Auto Life"
   def hp_gain(self):
-    return 300 * self.level
+    return 250 * self.level
   def buff_duration(self):
     return 20
   def get_description(self):

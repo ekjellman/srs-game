@@ -71,7 +71,6 @@ DEBUG_TOWER_START = None
 # TODO: Add "Donate" to temple. For a donation (100 / 300 / 900 * level?)
 #       chance of a "wish" (random item from mysteries shop?)
 # TODO: Renew bug, displays decimal for number of HP/Turn
-# TODO: Nerf Auto-Life and buff Heal
 
 class GameState(object):
   """
