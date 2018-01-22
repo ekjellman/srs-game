@@ -12,8 +12,6 @@ CHANCE_TIERS = {1: [0.0, 0.100, 0.050, 0.010, 0.001],
                 3: [0.0, 0.300, 0.150, 0.060, 0.025]}
 RUNE_CHANCES = {1: 0.002, 2: 0.01, 3: 0.02}
 
-NAME_GENERATOR = NameGenerator("monsters.txt", "banned.txt")
-
 STAT_DICE = {"Strength": (12, 1),
              "Defense": (12, 1),
              "Magic Defense": (12, 1),
@@ -26,6 +24,8 @@ class Monster(object):
     self.stats = {}
     self.level = level
     self.boss = boss
+    self.name_gen = NameGenerator("monsters.txt", "banned.txt")
+
     # If you modify these, make sure to modify the XP calc
     for stat in STAT_DICE.keys():
       die, modifier = STAT_DICE[stat]
@@ -42,10 +42,10 @@ class Monster(object):
     self.max_hp = self.stats["Stamina"] * 5
     self.current_hp = self.max_hp
     if boss:
-      self.name = "{} (Level {} Elite)".format(NAME_GENERATOR.generate_name(),
+      self.name = "{} (Level {} Elite)".format(self.name_gen.generate_name(),
                                            self.level)
     else:
-      self.name = "{} (Level {})".format(NAME_GENERATOR.generate_name(), self.level)
+      self.name = "{} (Level {})".format(self.name_gen.generate_name(), self.level)
     self.traits = {}
     self.buffs = []
     self.debuffs = []
