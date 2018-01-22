@@ -67,6 +67,11 @@ DEBUG_TOWER_START = None
 # TODO: Floating point error on buffs. (39% for 9 turns at level 2)
 # TODO: Add skill forgetting shop. Could give some bonus for the skill you
 #       forget based on levels
+# TODO: Add "Wishing Well" shop. Luck buff? Something else?
+# TODO: Add "Donate" to temple. For a donation (100 / 300 / 900 * level?)
+#       chance of a "wish" (random item from mysteries shop?)
+# TODO: Renew bug, displays decimal for number of HP/Turn
+# TODO: Nerf Auto-Life and buff Heal
 
 class GameState(object):
   """
