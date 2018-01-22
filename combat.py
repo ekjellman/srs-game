@@ -52,9 +52,7 @@ class Combat(object):
           character.current_hp = 1
           character.restore_hp(effect - 1)
           # TODO: Fix cohesion
-          for buff in character.buffs:
-            if buff.get_name() == "Auto Life":
-              buff.duration = 0
+          character.buffs = [b for b in character.buffs if b.get_name() != "Auto Life"]
         else:
           death_chance = 0.95 ** character.traits.get("Perseverance", 0)
           if srs_random.random() < death_chance:

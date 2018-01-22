@@ -24,7 +24,6 @@ import subprocess
 # TODO: Consider making everything work against elites instead
 # TODO: Consider allowing replacing skills
 # TODO: Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
-# TODO: Bug, Auto Life can trigger multiple times in the same combat round
 # TODO: Bug, Victory [] should absolutely end the game (even if you level up)
 # TODO: Bug, something broke replays, I think in the adding a trader to the inn.
 #            I haven't figured out what yet, but even the full srs_random fix
