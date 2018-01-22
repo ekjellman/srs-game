@@ -284,7 +284,7 @@ def verify_log(filename):
       if "[" not in log_line:
         continue
       if re.search(action, log_line):
-        print "Action found: {}".format(m.group(1))
+        print("Action found: {}".format(m.group(1)))
         if not game_state:
           raise ValueError("Action found before game initialized")
         game_state.verification_apply_choice(m.group(1))
@@ -292,7 +292,7 @@ def verify_log(filename):
         continue
       if re.search(init, log_line):
         seed = int(m.group(1))
-        print "Game found"
+        print("Game found")
         srs_random.seed(seed)
         game_state = GameState()
         continue
@@ -301,7 +301,7 @@ def verify_log(filename):
         game_state_time = game_state.time_spent
         if log_time != game_state_time:
           raise ValueError("Victory time does not match (log: {} game: {})".format(log_time, game_state_time))
-        print "Victory: {}".format(log_time)
+        print("Victory: {}".format(log_time))
         continue
       raise ValueError("Unhandled line: " + log_line)
 
