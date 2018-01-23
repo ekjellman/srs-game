@@ -90,3 +90,17 @@ class TestCharacter(unittest.TestCase):
         prev_sp = c.current_sp
         c.pass_time(1)
         self.assertEqual(c.current_sp, prev_sp)
+
+    def test_gain_gold_zero_not_merchant_warrior(self):
+        c = character.Character() 
+        c.gold = 0
+        gained = c.gain_gold(0)
+        self.assertEqual(c.gold, 0)
+        self.assertEqual(gained, 0)
+
+    def test_gain_gold_nonzero_not_merchant_warrior(self):
+        c = character.Character() 
+        c.gold = 0
+        gained = c.gain_gold(100)
+        self.assertEqual(c.gold, 100)
+        self.assertEqual(gained, 100)
