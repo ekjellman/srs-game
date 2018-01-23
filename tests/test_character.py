@@ -48,12 +48,45 @@ class TestCharacter(unittest.TestCase):
     #       Test restored_hp with Regeneration
     #       Test restored_sp with Clarity of Mind
     #       Test that buff.pass_time, restore_hp, restore_sp don't break with non-positive time_passed
-        def test_pass_time_no_buffs_no_traits(self):
-            # No Regeneration or Clarity of Mind
-            c = character.Character()
-            prev_hp = c.current_hp
-            prev_sp = c.current_sp
-            c.pass_time(1)
-            assert not c.buffs
-            self.assertEqual(c.current_hp, prev_hp)
-            self.assertEqual(c.current_sp, prev_sp)
+    def test_pass_time_no_buffs_no_traits_full_hp(self):
+        # No Regeneration or Clarity of Mind
+        c = character.Character()
+        prev_hp = c.current_hp
+        prev_sp = c.current_sp
+        c.pass_time(1)
+        self.assertEqual(c.current_hp, prev_hp)
+        self.assertEqual(c.current_sp, prev_sp)
+
+    def test_pass_time_no_buffs_regeneration_partial_hp(self):
+        c = character.Character()
+        c.traits["Regeneration"] = 1
+        c.current_hp = int(c.max_hp * 0.75)
+        assert c.current_hp < c.max_hp
+        prev_hp = c.current_hp
+        c.pass_time(1)
+        assert c.current_hp > prev_hp
+
+    def test_pass_time_no_buffs_regeneration_full_hp(self):
+        c = character.Character()
+        c.traits["Regeneration"] = 1
+        assert c.current_hp == c.max_hp
+        prev_hp = c.current_hp
+        c.pass_time(1)
+        self.assertEqual(c.current_hp, prev_hp)
+
+    def test_pass_time_no_buffs_clarity_partial_sp(self):
+        c = character.Character()
+        c.traits["Clarity of Mind"] = 1
+        c.current_sp = int(c.max_sp * 0.75)
+        assert c.current_sp < c.max_sp
+        prev_sp = c.current_sp
+        c.pass_time(1)
+        assert c.current_sp > prev_sp
+
+    def test_pass_time_no_buffs_clarity_full_sp(self):
+        c = character.Character()
+        c.traits["Clarity of Mind"] = 1
+        assert c.current_sp == c.max_sp
+        prev_sp = c.current_sp
+        c.pass_time(1)
+        self.assertEqual(c.current_sp, prev_sp)
