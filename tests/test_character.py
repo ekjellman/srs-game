@@ -28,3 +28,32 @@ class TestCharacter(unittest.TestCase):
         assert not c.debuffs
         assert c.runes # Currently set to 1
         assert not c.traits
+
+    # TODO: Test colored_hp()
+    # TODO: Test add_item with no items
+    #       Test add_item with 3 items
+    # TODO: Test use_item with no item
+    #       Test use_item with bento in combat
+    #       Test use_item with normal item
+    # TODO: Test add_buff with no buffs on
+    #       Test add_buff with same buff already on
+    # TODO: Test add_debuff
+
+    # TODO: Test that buffs fall off when they should
+    #       Test that debuffs fall off when they should
+    #       Test Effect.get_combined_impact separately
+    #       Test buffs individually (pass_time, active, turn_by_turn)
+    #       Test restore_hp
+    #       Test recalculate_maxes()
+    #       Test restored_hp with Regeneration
+    #       Test restored_sp with Clarity of Mind
+    #       Test that buff.pass_time, restore_hp, restore_sp don't break with non-positive time_passed
+        def test_pass_time_no_buffs_no_traits(self):
+            # No Regeneration or Clarity of Mind
+            c = character.Character()
+            prev_hp = c.current_hp
+            prev_sp = c.current_sp
+            c.pass_time(1)
+            assert not c.buffs
+            self.assertEqual(c.current_hp, prev_hp)
+            self.assertEqual(c.current_sp, prev_sp)
