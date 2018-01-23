@@ -1,5 +1,4 @@
 import unittest
-#from nose.tools import assert_equals
 import mock
 import game_state
 import rooms
