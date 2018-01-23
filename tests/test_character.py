@@ -104,5 +104,19 @@ class TestCharacter(unittest.TestCase):
         self.assertEqual(c.gold, 100)
         self.assertEqual(gained, 100)
 
+    # Test for Character.rest, not the 'Rest' option within the game
+    @mock.patch('character.Character.restore_hp')
+    def test_rest(self, mock_restore):
+        c = character.Character() 
+        old_hp = c.current_hp
+        assert c.current_hp == c.max_hp
+        mock_restore.return_value = 10
+        # rest() should return whatever value restore_hp returned
+        self.assertEqual(c.rest(), 10)
+        mock_restore.assert_called_once()
+
+    # Actual HP restoration is done by restore_hp, so don't test rest() separately 
+    #       with various hp values.
+
 # TODO: Test make_initial_equipment
 # TODO: Test restore_hp with full HP, partial HP, some restored, none restored
