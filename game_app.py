@@ -10,7 +10,6 @@ import re
 import subprocess
 
 # TODO: Look into using unicode graphics for some of this stuff
-# TODO: Either show current time or time passed in the log
 # TODO: Disable rest if HP/SP full? But Infinity Dungeon...
 # TODO: Change "insufficient payment" and "gold or materials" to give
 #       the actual reason. Possibly snarky if you have neither
@@ -131,8 +130,9 @@ class LogPanel(wx.Panel):
     self.filehandle = open(self.filename, "w")
     self.max_length = 16384
 
-  def add_entry(self, text):
-    line = time.strftime("%m/%d/%y %H:%M:%S: ", time.localtime()) + text + "\n"
+  def add_entry(self, text, time_spent=0):
+    time_string = time.strftime("%m/%d/%y %H:%M:%S", time.localtime())
+    line = "{} ({}): {}\n".format(time_string, time_spent, text)
     write_color_text(self.text_field, line)
     self.filehandle.write(line)
     self.filehandle.flush()
@@ -250,7 +250,7 @@ class MainWindow(wx.Frame):
     logs = self.game_state.apply_choice(number)
     for log in logs:
       # TODO: We should add more logging to just the file
-      self.log_panel.add_entry(log)
+      self.log_panel.add_entry(log, self.game_state.time_spent)
     self.update_ui()
 
   def on_exit(self, evt):  # pylint: disable=unused-argument
