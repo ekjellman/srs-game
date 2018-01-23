@@ -2,13 +2,14 @@ import collections
 import srs_random
 
 class NameGenerator(object):
-  def __init__(self, filename, shortest=3, longest=100):
-    self.monsters = self.read_monster_list(filename)
+  def __init__(self, monster_file, banned_file, shortest=3, longest=100):
+    self.monsters = self.read_list_from_file(monster_file)
+    self.banned = self.read_list_from_file(banned_file)
     self.table = self.make_markov_table(self.monsters)
     self.shortest = shortest
     self.longest = longest
 
-  def read_monster_list(self, filename):
+  def read_list_from_file(self, filename):
     with open(filename, "r") as file_in:
       lines = file_in.readlines()
     monsters = []
@@ -32,6 +33,15 @@ class NameGenerator(object):
       table[current]["END"] += 1
     return table
 
+  def valid_name(self, name):
+    if len(name) < self.shortest: return False
+    if len(name) > self.longest: return False
+    lower_name = name.lower()
+    for word in self.banned:
+      if word in lower_name:
+        return False
+    return True
+
   def generate_name(self):
     # Hacky and inefficient. TODO, maybe
     name = []
@@ -46,7 +56,7 @@ class NameGenerator(object):
         if srs_random.randint(1, total) <= count:
           next_letter = candidate
       if next_letter == "END":
-        if len(name) >= self.shortest and len(name) <= self.longest:
+        if self.valid_name(name):
           return "".join(name).title()
         else:
           return self.generate_name()

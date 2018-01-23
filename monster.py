@@ -12,7 +12,7 @@ CHANCE_TIERS = {1: [0.0, 0.100, 0.050, 0.010, 0.001],
                 3: [0.0, 0.300, 0.150, 0.060, 0.025]}
 RUNE_CHANCES = {1: 0.002, 2: 0.01, 3: 0.02}
 
-NAME_GENERATOR = NameGenerator("monsters.txt")
+NAME_GENERATOR = NameGenerator("monsters.txt", "banned.txt")
 
 STAT_DICE = {"Strength": (12, 1),
              "Defense": (12, 1),
