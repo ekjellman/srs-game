@@ -132,7 +132,6 @@ class Character(object):
         remaining_buffs.append(buff)
     self.buffs = remaining_buffs
     restored_hp = self.traits.get("Regeneration", 0) * 3 * time_passed
-    # Not used yet
     restored_sp = self.traits.get("Clarity of Mind", 0) * time_passed
     self.restore_hp(restored_hp)
     self.restore_sp(restored_sp)
