@@ -13,7 +13,6 @@ import subprocess
 # TODO: Disable rest if HP/SP full? But Infinity Dungeon...
 # TODO: Change "insufficient payment" and "gold or materials" to give
 #       the actual reason. Possibly snarky if you have neither
-# TODO: Implement a swear word filter on names
 # TODO: Have a confirm screen on levelling up skills
 # TODO: Make inn bento restore 1 hp as an fu
 # TODO: In shops "Which item would you like to look at?"
