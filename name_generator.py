@@ -36,7 +36,7 @@ class NameGenerator(object):
   def valid_name(self, name):
     if len(name) < self.shortest: return False
     if len(name) > self.longest: return False
-    lower_name = [x.lower() for x in name]
+    lower_name = set(x.lower() for x in name)
     for word in self.banned:
       if word in lower_name:
         return False
