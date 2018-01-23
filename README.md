@@ -8,3 +8,9 @@ source ~/anaconda3/bin/activate python2
 conda install wxpython
 pythonw game_app.py
 ```
+
+## Run tests
+
+```
+python -m unittest discover tests "test*.py" -v
+```
