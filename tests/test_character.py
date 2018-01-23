@@ -43,7 +43,6 @@ class TestCharacter(unittest.TestCase):
     #       Test that debuffs fall off when they should
     #       Test Effect.get_combined_impact separately
     #       Test buffs individually (pass_time, active, turn_by_turn)
-    #       Test restore_hp
     #       Test recalculate_maxes()
     #       Test restored_hp with Regeneration
     #       Test restored_sp with Clarity of Mind
@@ -104,3 +103,6 @@ class TestCharacter(unittest.TestCase):
         gained = c.gain_gold(100)
         self.assertEqual(c.gold, 100)
         self.assertEqual(gained, 100)
+
+# TODO: Test make_initial_equipment
+# TODO: Test restore_hp with full HP, partial HP, some restored, none restored
