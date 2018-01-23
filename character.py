@@ -57,7 +57,6 @@ class Character(object):
     self.debuffs = []
     self.runes = 1
     self.traits = {}
-    self.reroll_counter = srs_random.randint(0, 1000000)
 
   def colored_hp(self):
     hp_percent = self.current_hp * 100 // self.max_hp
@@ -326,7 +325,6 @@ class Character(object):
 
   def learn_trait(self, trait):
     if trait == "Get New Traits":
-      self.reroll_counter += 1
       return False
     assert trait in TRAITS
     self.traits[trait] = self.traits.get(trait, 0) + 1
@@ -374,7 +372,6 @@ class Character(object):
       self.recalculate_maxes()
       return True
     if skill_name == "Get New Skills":
-      self.reroll_counter += 1
       return False
     assert skill_name in SKILL_NAMES
     current_skill = self.have_skill(skill_name)
