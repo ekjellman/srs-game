@@ -2,6 +2,7 @@ import unittest
 import mock
 import game_state
 import rooms
+import random
 
 # Run tests from the game directory with the following command:
 #   python -m unittest discover tests "test*.py" -v
@@ -109,6 +110,45 @@ class TestGameState(unittest.TestCase):
         self.assertNotEqual(old_quests, game.tower_quests)
         # TODO: Mock refresh() for each shop to verify it gets called
         room_class.refresh.assert_called()
+
+#    def test_play_until_victory(self):
+#        game = game_state.GameState()
+#        default_choices = ["Explore", "Enter Room", "Leave Town", "Attack",
+#                           "Continue Quest", "Ascend Tower"]
+#        while game.current_state() != "VICTORY":
+#            choices = game.get_choices()
+#            if random.random() < .9 and choices[0] in default_choices:
+#              choice = choices[0]
+#            else:
+#              if game.current_state() == "SUMMIT":
+#                if random.random() < .8:
+#                  choice = "Infinity Dungeon"
+#                else:
+#                  choice = "Stronghold of the Ten"
+#              else:
+#                choices = [x for x in choices if x != ""]
+#                choice = random.choice(choices)
+#            logs = game.verification_apply_choice(choice)
+#        print logs
+
+    def test_game_state_soak(self):
+        game = game_state.GameState()
+        default_choices = ["Explore", "Enter Room", "Leave Town", "Attack",
+                           "Continue Quest", "Ascend Tower"]
+        for _ in xrange(2000):
+            choices = game.get_choices()
+            if random.random() < .9 and choices[0] in default_choices:
+                choice = choices[0]
+            else:
+                if game.current_state() == "SUMMIT":
+                    if random.random() < .8:
+                        choice = "Infinity Dungeon"
+                    else:
+                        choice = "Stronghold of the Ten"
+                else:
+                    choices = [x for x in choices if x != ""]
+                    choice = random.choice(choices)
+            logs = game.verification_apply_choice(choice)
 
 if __name__ == '__main__':
     unittest.main()
