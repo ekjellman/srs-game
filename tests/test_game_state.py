@@ -111,25 +111,47 @@ class TestGameState(unittest.TestCase):
         # TODO: Mock refresh() for each shop to verify it gets called
         room_class.refresh.assert_called()
 
-#    def test_play_until_victory(self):
-#        game = game_state.GameState()
-#        default_choices = ["Explore", "Enter Room", "Leave Town", "Attack",
-#                           "Continue Quest", "Ascend Tower"]
-#        while game.current_state() != "VICTORY":
-#            choices = game.get_choices()
-#            if random.random() < .9 and choices[0] in default_choices:
-#              choice = choices[0]
-#            else:
-#              if game.current_state() == "SUMMIT":
-#                if random.random() < .8:
-#                  choice = "Infinity Dungeon"
-#                else:
-#                  choice = "Stronghold of the Ten"
-#              else:
-#                choices = [x for x in choices if x != ""]
-#                choice = random.choice(choices)
-#            logs = game.verification_apply_choice(choice)
-#        print logs
+    def test_play_until_victory(self):
+        # A fairly stupid AI to play the game
+        game = game_state.GameState()
+        default_choices = ["Explore", "Enter Room", "Leave Town", "Attack",
+                           "Continue Quest", "Ascend Tower"]
+        while game.current_state() != "VICTORY":
+            choices = game.get_choices()
+            if game.infinity_dungeon and choices[0] == "Explore":
+              choice = "Explore"
+            elif random.random() < .95 and choices[0] in default_choices:
+              choice = choices[0]
+            elif game.current_state() == "SUMMIT":
+                buff_string = "".join(str(buff) for buff in game.character.buffs)
+                if not "Well Rested" in buff_string:
+                    game.verification_apply_choice("Town")
+                    game.verification_apply_choice("Inn")
+                    game.verification_apply_choice("Rest")
+                    game.verification_apply_choice("Leave Inn")
+                    game.verification_apply_choice("Temple")
+                    game.verification_apply_choice("Blessing")
+                    game.verification_apply_choice("Leave Temple")
+                    game.verification_apply_choice("Leave Town")
+                chance = (game.character.level - 90) / 100.0
+                if random.random() > chance:
+                    choice = "Infinity Dungeon"
+                else:
+                    choice = "Stronghold of the Ten"
+            elif "Quick Learner" in choices:
+                choice = "Quick Learner"
+            elif game.current_state() == "LOOT_EQUIPMENT":
+                slot = game.equipment_choice.slot
+                new_score = game.equipment_choice.stat_score()
+                old_score = game.character.equipment[slot].stat_score()
+                if new_score > old_score:
+                    choice = "Keep New"
+                else:
+                    choice = "Keep Current"
+            else:
+                choices = [x for x in choices if x != ""]
+                choice = random.choice(choices)
+            logs = game.verification_apply_choice(choice)
 
     def test_game_state_soak(self):
         game = game_state.GameState()

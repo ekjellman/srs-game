@@ -25,6 +25,16 @@ class Equipment(object):
     self.enchant_count = 0
     self.reforge_count = 0
 
+  def stat_score(self):
+    # Primarily for tests
+    score = 0
+    for attribute in self.attributes.keys():
+      if attribute in WEAPON_STATS: continue
+      score += self.attributes[attribute]
+    if self.slot == 0:
+      score += (self.attributes["Low"] + self.attributes["High"] / 2)
+    return score
+
   @staticmethod
   def equipment_comparison_text(current, new):
     pieces = []
