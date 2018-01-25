@@ -160,7 +160,7 @@ class MaterialPack(Item):
       counts[rarity] += 1
     for i, count in enumerate(counts):
       if count > 0:
-        logs.append("You got {} {} materials.".format(count, RARITY[i]))
+        logs.append("You found {} {} materials.".format(count, RARITY[i]))
         character.materials[i] += count
 
 class Tome(Item):

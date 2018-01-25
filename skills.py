@@ -72,7 +72,7 @@ class Blind(Skill):
       if opponent.boss:
         logs.append("Blind resisted.")
       else:
-        logs.append("{} is blinded.".format(opponent.name))
+        logs.append("{} has been blinded.".format(opponent.name))
         opponent.add_debuff(effect.Blinded(10))
     return result
 
@@ -94,9 +94,9 @@ class Bash(Skill):
                                   self.get_attack_multiple())
     if srs_random.random() < self.stun_chance():
       if opponent.boss:
-        logs.append("Stun resisted.")
+        logs.append("Your stun was resisted.")
       else:
-        logs.append("{} is stunned.".format(opponent.name))
+        logs.append("{} is stunned!".format(opponent.name))
         opponent.add_debuff(effect.Stunned(3))
     return result
 
@@ -128,7 +128,7 @@ class HeavySwing(Skill):
     return int(self.level * 6 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
     if srs_random.random() < self.miss_chance():
-      logs.append("Heavy Swing missed.")
+      logs.append("Heavy Swing missed...")
       return Combat.TARGET_ALIVE
     else:
       result = Combat.action_attack(None, actor, opponent, logs, "Physical",
@@ -158,7 +158,7 @@ class Surge(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Strength up by {:.1f}% for {} time".format((self.buff_power() - 1) * 100,
+    return "Strength up by {:.1f}% for {} time units.".format((self.buff_power() - 1) * 100,
                                                self.buff_duration())
   def sp_cost(self):
     return int(self.level * 5 * (1.1 ** self.level))
@@ -174,7 +174,7 @@ class Concentrate(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Intellect up by {:.1f}% for {} time".format((self.buff_power() - 1) * 100,
+    return "Intellect up by {:.1f}% for {} time units.".format((self.buff_power() - 1) * 100,
                                                 self.buff_duration())
   def sp_cost(self):
     return int(self.level * 5 * (1.1 ** self.level))
@@ -190,7 +190,7 @@ class Swiftness(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Speed up by {:.1f}% for {} time.".format((self.buff_power() - 1) * 100,
+    return "Speed up by {:.1f}% for {} time units.".format((self.buff_power() - 1) * 100,
                                             self.buff_duration())
   def sp_cost(self):
     return int(self.level * 7 * (1.1 ** self.level))
@@ -206,7 +206,7 @@ class BulkUp(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Stamina up by {:.1f}% for {} time.".format((self.buff_power() - 1) * 100,
+    return "Stamina up by {:.1f}% for {} time units.".format((self.buff_power() - 1) * 100,
                                             self.buff_duration())
   def sp_cost(self):
     return int(self.level * 7 * (1.1 ** self.level))
@@ -261,7 +261,7 @@ class Meditate(Skill):
   def percent_gained(self):
     return 8 + self.level
   def get_description(self):
-    desc = "Gain {:.1f}% of max SP. Chance to fail based on current SP."
+    desc = "Gain {:.1f}% of max SP. Has a chance to fail based on current SP."
     return desc.format(self.percent_gained())
   def sp_cost(self):
     return 0
@@ -270,9 +270,9 @@ class Meditate(Skill):
   def apply_skill(self, actor, opponent, logs):
     if srs_random.random() > self.chance_to_fail(actor):
       sp_gained = actor.restore_sp(actor.max_sp * self.percent_gained() // 100)
-      logs.append("{} SP gained".format(sp_gained))
+      logs.append("Your meditating restored {} of your SP.".format(sp_gained))
     else:
-      logs.append("Meditation failed")
+      logs.append("Your meditation failed to restore any SP.")
     return Combat.TARGET_ALIVE
 
 class Heal(Skill):
@@ -288,7 +288,7 @@ class Heal(Skill):
     effective_int = actor.get_effective_stat("Intellect")
     hp_gained = int(self.base_hp_gain() * ((effective_int / 100.0) ** .5))
     actor.restore_hp(hp_gained)
-    logs.append("Restored {} HP.".format(hp_gained))
+    logs.append("Your Heal restored {} HP.".format(hp_gained))
     return Combat.TARGET_ALIVE
 
 class Drain(Skill):
@@ -308,7 +308,7 @@ class Drain(Skill):
     result = Combat.action_attack(None, actor, opponent, logs, "Magic",
                                   self.get_attack_multiple())
     actor.restore_hp(hp_gained)
-    logs.append("Gained {} HP".format(hp_gained))
+    logs.append("Drain restored {} of your HP.".format(hp_gained))
     return result
 
 class Wither(Skill):
@@ -321,7 +321,7 @@ class Wither(Skill):
   def get_wither_length(self):
     return 9 + self.level
   def get_description(self):
-    desc = "Magical attack with {:.2f} multiplier. Adds {} stacks of Wither"
+    desc = "Magical attack with {:.2f} multiplier. Adds {} stacks of Wither."
     desc = desc.format(self.get_attack_multiple(), self.get_wither_stacks())
     return desc
   def sp_cost(self):
@@ -384,7 +384,7 @@ class Renew(Skill):
   def buff_duration(self):
     return 6 + (2 * self.level)
   def get_description(self):
-    return "Gain {} HP/turn (base) for {} turns.".format(self.base_hp_gain(),
+    return "Gain {} HP/turn (base) for {} time units.".format(self.base_hp_gain(),
                                                      self.buff_duration())
   def sp_cost(self):
     return int(self.level * 6 * (1.1 ** self.level))
@@ -421,7 +421,7 @@ class HolyBlade(Skill):
   def get_heal_percent(self):
     return 5 + self.level
   def get_description(self):
-    desc = "Physical attack at {:.2f}x. {} stacks of Aura. {:.1f}% heal."
+    desc = "Physical attack with {:.2f} multiplier. Gives {} stacks of Aura. {:.1f}% heal."
     desc = desc.format(self.get_attack_multiple(), self.get_aura_stacks(),
                    self.get_heal_percent())
     return desc
