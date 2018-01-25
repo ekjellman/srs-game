@@ -138,11 +138,11 @@ class StatStone(Item):
     if self.stone_type == "Rainbow":
       for stat in character.stats:
         amount = srs_random.randint(2, 4)
-        logs.append("You gained {} {}".format(amount, stat))
+        logs.append("You gained {} {}.".format(amount, stat))
         character.stats[stat] += amount
     else:
       amount = srs_random.randint(8, 12)
-      logs.append("You gained {} {}".format(amount, self.stone_type))
+      logs.append("You gained {} {}.".format(amount, self.stone_type))
       character.stats[self.stone_type] += amount
 
 class MaterialPack(Item):
@@ -160,7 +160,7 @@ class MaterialPack(Item):
       counts[rarity] += 1
     for i, count in enumerate(counts):
       if count > 0:
-        logs.append("You got {} {} materials".format(count, RARITY[i]))
+        logs.append("You got {} {} materials.".format(count, RARITY[i]))
         character.materials[i] += count
 
 class Tome(Item):
@@ -182,7 +182,7 @@ class Tome(Item):
           character.traits[trait] = character.traits.get(trait, 0) + 1
     else:
       levels = srs_random.randint(1, 3)
-      logs.append("You gained {} levels of the {} trait".format(levels,
+      logs.append("You gained {} levels of the {} trait.".format(levels,
                                                                 self.tome_type))
       character.traits[self.tome_type] = character.traits.get(self.tome_type, 0) + levels
 
@@ -206,7 +206,7 @@ class GoldSack(Item):
     gold = 2500 * (2**self.size)
     gold *= srs_random.gauss(1, .05)
     gold_gained = character.gain_gold(gold)
-    logs.append("You gained {} gold".format(gold_gained))
+    logs.append("You found {} gold in the sack.".format(gold_gained))
 
 class HPStone(Item):
   def __init__(self):
@@ -216,7 +216,7 @@ class HPStone(Item):
   def apply(self, character, monster, logs):
     character.base_hp += 50
     character.recalculate_maxes()
-    logs.append("You gain 50 HP")
+    logs.append("Your maximum HP increases by 50.")
 
 class SPStone(Item):
   def __init__(self):
@@ -226,4 +226,4 @@ class SPStone(Item):
   def apply(self, character, monster, logs):
     character.base_sp += 30
     character.recalculate_maxes()
-    logs.append("You gain 30 SP")
+    logs.append("Your maximum SP increases by 30.")

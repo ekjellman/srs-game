@@ -534,7 +534,7 @@ class Inn(Room):
       cost = trade[1]
       rarity = trade[2]
       if character.materials[rarity] >= cost:
-        logs.append("You trade for the {}".format(item.get_name()))
+        logs.append("You trade for the {}.".format(item.get_name()))
         character.materials[rarity] -= cost
         item.apply(character, None, logs)
         self.inventory[choice] = None
@@ -683,7 +683,7 @@ class Temple(Room):
         character.gold -= cost
         logs.append("You make an offering to the gods.")
         if srs_random.random() < .25:
-          logs.append("The gods accept your offering")
+          logs.append("The gods accept your offering.")
           # TODO: Other effects?
           character.add_buff(Lucky(241))
         return (1, Room.NO_CHANGE)
