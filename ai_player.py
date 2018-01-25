@@ -1,5 +1,8 @@
 import game_state
 import random
+import sys
+
+ATTEMPT_SCORE = 2100
 
 # A (hopefully somewhat smarter) AI player for the game.
 
@@ -20,8 +23,8 @@ def town_choice(game):
   if "Temple" in choices and game.character.runes > 0 and game.character.level < 125:
     return "Temple"
   # TODO: Optimize for Trainer, Forge, Crafthall
-  if "Dungeon" in choices:
-    return "Dungeon"
+  #if "Dungeon" in choices:
+    #return "Dungeon"
   return "Leave Town"
 
 def fully_buffed(game):
@@ -44,6 +47,8 @@ def can_train(game):
 def shop_choice(game):
   shop_type = game.current_shop.get_name()
   if shop_type == "Inn":
+    if game.current_shop.trading:
+      return "Never Mind"
     if not can_inn(game):
       return "Leave Inn"
     if "Well Rested" not in get_buffs(game):
@@ -109,6 +114,11 @@ def use_or_never_mind(game):
     return "Use Item #1"
   return "Never Mind"
 
+def character_score(game):
+  score = sum(score_equipment(e) for e in game.character.equipment)
+  score *= (1.01 ** (game.character.level - 75))
+  return score
+
 def score_equipment(item):
   score = 0
   if item.attributes.get("Type", 0) == "Magic": return 0
@@ -125,6 +135,9 @@ def score_equipment(item):
 def play_game():
   game = game_state.GameState()
   skill_to_use = None
+  mysteries = True
+  last_reset = 0
+  summit_time = None
   while True:
     current_state = game.current_state()
     choice = None
@@ -138,20 +151,31 @@ def play_game():
     elif current_state == "USE_ITEM":
       choice = use_or_never_mind(game)
     elif current_state == "SUMMIT":
+      if summit_time is None:
+        summit_time = game.time_spent
+        #print "Time to summit: ", summit_time
       if game.character.runes > 0 and game.character.level < 125:
         choice = "Town"
       if fully_buffed(game):
         # TODO: Optimize
-        chance = (game.character.level - 60) / 40.0
-        if random.random() < chance:
+        score = character_score(game)
+        #chance = (game.character.level - 60) / 40.0
+        #if random.random() < chance:
+        if score > ATTEMPT_SCORE:
+          #print "Trying stronghold"
           choice = "Stronghold of the Ten"
         else:
           choice = "Infinity Dungeon"
       else:
         choice = "Town"
     elif current_state == "STRONGHOLD":
-      choice = item_or_explore(game, "Enter Room")
+      if game.character.current_sp < game.character.max_sp * .3:
+        choice = "Rest"
+      else:
+        choice = item_or_explore(game, "Enter Room")
     elif current_state == "DUNGEON":
+      if game.floor >= 40 and character_score(game) > ATTEMPT_SCORE:
+        choice = "Leave Dungeon"
       choice = item_or_explore(game, "Explore")
     elif current_state == "LOOT_EQUIPMENT":
       slot = game.equipment_choice.slot
@@ -167,6 +191,9 @@ def play_game():
       choice = "Accept Quest"
     elif current_state == "TOWN":
       choice = town_choice(game)
+      if choice == "Inn" and mysteries:
+        choice = ["Inn", "Mysteries Trader", "Trade #1", "Trade #2", "Trade #3", "Never Mind"]
+        mysteries = False
     elif current_state == "SHOP":
       choice = shop_choice(game)
     elif current_state == "OUTSIDE":
@@ -202,6 +229,10 @@ def play_game():
           if get_skill_cost(game, "Holy Blade") <= game.character.current_sp:
             skill_to_use = "Holy Blade"
             choice = "Skill"
+      elif game.character.current_sp > game.character.max_sp * .9:
+        if "Holy Blade" in get_skills(game):
+          skill_to_use = "Holy Blade"
+          choice = "Skill"
       if choice is None:
         choice = "Attack"
     elif current_state == "LEVEL_UP":
@@ -238,12 +269,34 @@ def play_game():
     else:
       print "Failed: ", current_state
       assert False
-    if game.time_spent > 15000:
+    if game.time_spent > 20000:
       print current_state, choice, game.floor, game.time_spent
+    #print current_state, choice, game.floor, game.time_spent
     assert choice is not None
-    logs = game.verification_apply_choice(choice)
+    if isinstance(choice, list):
+      for c in choice:
+        if c in choices:
+          logs = game.verification_apply_choice(c)
+          choices = game.get_choices()
+          #for log in logs:
+            #print log
+    else:
+      logs = game.verification_apply_choice(choice)
+    if game.time_spent - last_reset > 360:
+      last_reset += 360
+      mysteries = True
 
 if __name__ == "__main__":
-  game = play_game() 
-  print game.character
-  print "Time: ", game.time_spent
+  total = 0
+  if len(sys.argv) > 1:
+    trials = int(sys.argv[1])
+  else:
+    trials = 1
+  for i in range(trials):
+    game = play_game() 
+    #print "Time: ", game.time_spent
+    #print game.character
+    #print "Equip score: ", sum(score_equipment(e) for e in game.character.equipment)
+    total += game.time_spent
+  if trials != 1:
+    print "Average:", (float(total) / trials)
