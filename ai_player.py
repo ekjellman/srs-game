@@ -192,7 +192,7 @@ def play_game():
     elif current_state == "TOWN":
       choice = town_choice(game)
       if choice == "Inn" and mysteries:
-        choice = ["Inn", "Mysteries Trader", "Trade #1", "Trade #2", "Trade #3", "Never Mind"]
+        choice = ["Inn", "Mysterious Trader", "Trade #1", "Trade #2", "Trade #3", "Never Mind"]
         mysteries = False
     elif current_state == "SHOP":
       choice = shop_choice(game)

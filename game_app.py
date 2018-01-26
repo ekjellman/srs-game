@@ -28,6 +28,11 @@ import subprocess
 #                 eventually?
 # TODO: Have Strength give a small defense buff?
 # TODO: Bug: Renew really seems to have a rounding thing. What's going on?
+# TODO: Have Lucky save you from death once
+# TODO: Add tower refresh item to mysteries trader
+# TODO: Add time reduction item to mysteries trader? Or a time slow buff
+# TODO: When you get five levels of Merchant Warrior, credit card.
+#       This will probably require a "spend gold" method
 
 def write_color_text(rtc, string):
   # Takes a wx.richtext.RichTextCtrl and writes my wacky custom color-coded
