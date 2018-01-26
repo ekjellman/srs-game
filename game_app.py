@@ -26,6 +26,8 @@ import subprocess
 #            But: It is inconsistent even with the same log. If you have a
 #                 victory log, and you pass it several times, it seems to work
 #                 eventually?
+# TODO: Have Strength give a small defense buff?
+# TODO: Bug: Renew really seems to have a rounding thing. What's going on?
 
 def write_color_text(rtc, string):
   # Takes a wx.richtext.RichTextCtrl and writes my wacky custom color-coded

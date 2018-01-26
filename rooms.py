@@ -42,13 +42,20 @@ class TrainingRoom(Room):
     super(TrainingRoom, self).__init__(level)
     self.level = level
     self.train_count = 0
+    self.forgetting = False
 
   @classmethod
   def get_name(cls):
     return "Trainer"
 
   def get_buttons(self, character):
-    return ["", "Gain XP", "Gain Stats", "Leave Shop"]
+    if self.forgetting:
+      skills = [x.get_name() for x in character.skills]
+      buttons = ([""] * (3 - len(skills))) + skills
+      buttons.append("Never Mind")
+    else:
+      buttons = ["Forget Skill", "Gain XP", "Gain Stats", "Leave Shop"]
+    return buttons
 
   def stat_training_cost(self, character):
     return int(sum(character.stats.values()) * (self.train_count + 1) *
@@ -60,10 +67,14 @@ class TrainingRoom(Room):
 
   def get_text(self, character):
     pieces = []
-    pieces.append("Gain XP: {} gold ({} base xp)".format
-                  (self.xp_training_cost(), self.level * 25))
-    pieces.append("Gain Stats: {} gold (+1 random stat)".format
-                  (self.stat_training_cost(character)))
+    if self.forgetting:
+      pieces.append("Choose a skill to forget")
+    else:
+      pieces.append("Forget Skill: (submenu)")
+      pieces.append("Gain XP: {} gold ({} base xp)".format
+                    (self.xp_training_cost(), self.level * 25))
+      pieces.append("Gain Stats: {} gold (+1 random stat)".format
+                    (self.stat_training_cost(character)))
     return "\n".join(pieces)
 
   def apply_choice(self, choice_text, logs, character):
@@ -94,9 +105,27 @@ class TrainingRoom(Room):
       else:
         logs.append("Not enough money to train stats.")
         return (0, Room.NO_CHANGE)
+    elif choice_text == "Never Mind":
+      self.forgetting = False
+      return (0, Room.NO_CHANGE)
+    elif choice_text == "Forget Skill":
+      self.forgetting = True
+      return (0, Room.NO_CHANGE)
     elif choice_text == "Leave Shop":
       return (0, Room.LEAVE_ROOM)
-    assert False
+    elif self.forgetting:
+      new_skills = []
+      for skill in character.skills:
+        if skill.get_name() == choice_text:
+          logs.append("The trainer bops you on the head")
+          logs.append("You forget {}".format(choice_text))
+        else:
+          new_skills.append(skill)
+      assert len(new_skills) == len(character.skills) - 1
+      character.skills = new_skills
+      return (1, Room.NO_CHANGE)
+    else:
+      assert False
 
 class Enchanter(Room):
   def __init__(self, level):
