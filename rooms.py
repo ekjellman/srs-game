@@ -93,7 +93,7 @@ class TrainingRoom(Room):
         else:
           return (5, Room.NO_CHANGE)
       else:
-        logs.append("Not enough money to train XP.")
+        logs.append("You don't have enough money to train XP.")
         return (0, Room.NO_CHANGE)
     elif choice_text == "Gain Stats":
       cost = self.stat_training_cost(character)
@@ -103,7 +103,7 @@ class TrainingRoom(Room):
         character.gold -= cost
         return (5, Room.NO_CHANGE)
       else:
-        logs.append("Not enough money to train stats.")
+        logs.append("You don't have enough money to train stats.")
         return (0, Room.NO_CHANGE)
     elif choice_text == "Never Mind":
       self.forgetting = False
@@ -288,7 +288,7 @@ class Forge(Room):
                      self.reforge_cost_materials(weapon),
                      RARITY[weapon.rarity]))
     else:
-      pieces.append("Weapon cannot currently be reforged.")
+      pieces.append("Your weapon cannot currently be reforged.")
     pieces.append("Reforge Armor: [submenu]")
     return "\n".join(pieces)
 
@@ -406,11 +406,11 @@ class EquipmentShop(Room):
         self.inventory[self.shop_choice] = None
         self.shop_choice = None
         self.buying = False
-        logs.append("Purchased {} for {} gold.".format(str(equipment), value))
-        logs.append("Recycled {}.".format(recycle))
+        logs.append("You purchased {} for {} gold.".format(str(equipment), value))
+        logs.append("You recycled your old {} for materials.".format(recycle))
         materials = recycle.get_recycled_materials()
         character.gain_materials(materials)
-        logs.append("Received {}".format(Equipment.materials_string(materials)))
+        logs.append("It turned into {}".format(Equipment.materials_string(materials)))
         return (1, Room.NO_CHANGE)
       else:
         logs.append("You do not have enough money.")
@@ -529,7 +529,7 @@ class Inn(Room):
       choices.append("Never Mind")
       return choices
     else:
-      return ["Mysteries Trader", "Rest", "Buy Food", "Leave Inn"]
+      return ["Mysterious Trader", "Rest", "Buy Food", "Leave Inn"]
 
   def get_rest_cost(self):
     return int(self.level * 10 * self.faction_rate)
@@ -563,7 +563,7 @@ class Inn(Room):
       cost = trade[1]
       rarity = trade[2]
       if character.materials[rarity] >= cost:
-        logs.append("You trade for the {}".format(item.get_name()))
+        logs.append("You trade for the {}.".format(item.get_name()))
         character.materials[rarity] -= cost
         item.apply(character, None, logs)
         self.inventory[choice] = None
@@ -588,8 +588,8 @@ class Inn(Room):
       else:
         logs.append("You do not have sufficient money.")
         return (0, Room.NO_CHANGE)
-    elif choice_text == "Mysteries Trader":
-      logs.append("You visit the trader of mysteries.")
+    elif choice_text == "Mysterious Trader":
+      logs.append("You visit the mysterious trader in the corner.")
       self.trading = True
       return (0, Room.NO_CHANGE)
     elif choice_text == "Never Mind":
@@ -608,7 +608,7 @@ class Inn(Room):
           logs.append("Your inventory is full!")
           return (0, Room.USE_ITEM)
       else:
-        logs.append("You do not have enough gold to buy that.")
+        logs.append("You don't even have enough gold left to buy food.")
         return (0, Room.NO_CHANGE)
     elif choice_text.startswith("Trade"):
       choice = int(choice_text[-1]) - 1
@@ -712,12 +712,12 @@ class Temple(Room):
         character.gold -= cost
         logs.append("You make an offering to the gods.")
         if srs_random.random() < .25:
-          logs.append("The gods accept your offering")
+          logs.append("It appears that the gods have accepted your offering.")
           # TODO: Other effects?
           character.add_buff(Lucky(241))
         return (1, Room.NO_CHANGE)
       else:
-        logs.append("You do not have sufficient money.")
+        logs.append("You don't have enough money to make an offering right now.")
         return (0, Room.NO_CHANGE)
     elif choice_text == "Purify Rune":
       if character.runes <= 0:
