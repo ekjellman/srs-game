@@ -80,10 +80,10 @@ class TrainingRoom(Room):
   def apply_choice(self, choice_text, logs, character):
     if choice_text == "Gain XP":
       cost = self.xp_training_cost()
-      if cost <= character.gold:
+      if character.can_afford(cost):
         levelups = character.train_xp(self.level, logs)
         self.train_count += 1
-        character.gold -= cost
+        character.spend_gold(cost, logs)
         if levelups > 0:
           # TODO (?): There's a bug here. What if the character levels up more
           # than once? That "shouldn't" happen, but...
@@ -97,10 +97,10 @@ class TrainingRoom(Room):
         return (0, Room.NO_CHANGE)
     elif choice_text == "Gain Stats":
       cost = self.stat_training_cost(character)
-      if cost <= character.gold:
+      if character.can_afford(cost):
         character.train_stats(logs)
         self.train_count += 1
-        character.gold -= cost
+        character.spend_gold(cost, logs)
         return (5, Room.NO_CHANGE)
       else:
         logs.append("You don't have enough money to train stats.")
@@ -186,9 +186,9 @@ class Enchanter(Room):
   def apply_enchantment(self, item, logs, character):
     cost = self.enchant_cost_gold(item)
     mat_cost = self.enchant_cost_materials(item)
-    if (cost <= character.gold and
+    if (character.can_afford(cost) and
         mat_cost <= character.materials[item.rarity]):
-      character.gold -= cost
+      character.spend_gold(cost, logs)
       character.materials[item.rarity] -= mat_cost
       old_item_string = str(item)
       enchantment = item.enchant()
@@ -314,9 +314,9 @@ class Forge(Room):
   def apply_reforge(self, item, character, logs):
     cost = self.reforge_cost_gold(item)
     mat_cost = self.reforge_cost_materials(item)
-    if (cost <= character.gold and
+    if (character.can_afford(cost) and
         mat_cost <= character.materials[item.rarity]):
-      character.gold -= cost
+      character.spend_gold(cost, logs)
       character.materials[item.rarity] -= mat_cost
       old_item_string = str(item)
       improvement = item.reforge(self.level)
@@ -400,8 +400,8 @@ class EquipmentShop(Room):
     elif choice_text == "Buy":
       equipment = self.inventory[self.shop_choice]
       value = self.get_cost(equipment)
-      if character.gold >= value:
-        character.gold -= value
+      if character.can_afford(value):
+        character.spend_gold(value, logs)
         recycle = character.equip(equipment)
         self.inventory[self.shop_choice] = None
         self.shop_choice = None
@@ -580,8 +580,8 @@ class Inn(Room):
   def apply_choice(self, choice_text, logs, character):
     if choice_text == "Rest":
       cost = self.get_rest_cost()
-      if cost <= character.gold:
-        character.gold -= cost
+      if character.can_afford(cost):
+        character.spend_gold(cost, logs)
         character.add_buff(WellRested(510))
         logs.append("You became well rested.")
         return (30, Room.NO_CHANGE)
@@ -597,11 +597,11 @@ class Inn(Room):
       return (0, Room.NO_CHANGE)
     # TODO: There's a lot of very similar "buying things" code to consolidate
     elif choice_text == "Buy Food":
-      if character.gold >= self.get_food_cost():
+      if character.can_afford(self.get_food_cost()):
         item = items.InnFood()
         result = character.add_item(item)
         if result:
-          character.gold -= self.get_food_cost()
+          character.spend_gold(self.get_food_cost(), logs)
           logs.append("You purchase the {}.".format(item.get_name()))
           return (1, Room.NO_CHANGE)
         else:
@@ -698,8 +698,8 @@ class Temple(Room):
   def apply_choice(self, choice_text, logs, character):
     if choice_text == "Blessing":
       cost = self.get_blessing_cost()
-      if cost <= character.gold:
-        character.gold -= cost
+      if character.can_afford(cost):
+        character.spend_gold(cost, logs)
         character.add_buff(Blessed(241))
         logs.append("The priest blesses you.")
         return (1, Room.NO_CHANGE)
@@ -708,8 +708,8 @@ class Temple(Room):
         return (0, Room.NO_CHANGE)
     elif choice_text == "Offering":
       cost = self.get_offering_cost()
-      if cost <= character.gold:
-        character.gold -= cost
+      if character.can_afford(cost):
+        character.spend_gold(cost, logs)
         logs.append("You make an offering to the gods.")
         if srs_random.random() < .25:
           logs.append("It appears that the gods have accepted your offering.")
@@ -787,10 +787,10 @@ class Alchemist(Room):
     if choice_text.startswith("Choice #"):
       choice = int(choice_text[-1]) - 1
       item = self.inventory[choice]
-      if character.gold >= self.get_cost(item):
+      if character.can_afford(self.get_cost(item)):
         result = character.add_item(item)
         if result:
-          character.gold -= self.get_cost(item)
+          character.spend_gold(self.get_cost(item), logs)
           logs.append("You purchase a {}.".format(item.get_name()))
           self.inventory[choice] = None
           return (1, Room.NO_CHANGE)
@@ -851,10 +851,10 @@ class Crafthall(Room):
   def handle_craft(self, rarity, logs, character):
     if (character.materials[0] >= self.level and
         character.materials[rarity] >= self.level and
-        character.gold >= 10 * rarity * self.level):
+        character.can_afford(10 * rarity * self.level)):
       character.materials[0] -= self.level
       character.materials[rarity] -= self.level
-      character.gold -= 10 * rarity * self.level
+      character.spend_gold(10 * rarity * self.level, logs)
       rarity = self.get_craft_rarity(rarity)
       self.crafting = True
       level = int(self.level + max(0, srs_random.gauss(0, 1)))

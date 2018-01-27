@@ -30,7 +30,6 @@ import subprocess
 # TODO: Have Lucky save you from death once
 # TODO: Add time reduction item to mysteries trader? Or a time slow buff
 # TODO: When you get five levels of Merchant Warrior, credit card.
-#       This will probably require a "spend gold" method
 # TODO: Make a "has_buff" method on character and get rid of a lot of the
 #       combined_impact stuff
 

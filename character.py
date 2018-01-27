@@ -151,6 +151,12 @@ class Character(object):
     self.gold += amount_gained
     return amount_gained
 
+  def can_afford(self, amount):
+    return self.gold >= amount
+
+  def spend_gold(self, amount, logs):
+    self.gold -= amount
+
   def make_initial_equipment(self, choice):
     for i in range(len(self.equipment)):
       self.equip(Equipment.get_new_armor(1, i, choice))
