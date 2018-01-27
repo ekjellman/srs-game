@@ -95,6 +95,8 @@ class CharacterPanel(wx.Panel):
     write_color_text(self.text_field, "\n_______\n\n")
     write_color_text(self.text_field,
                      "GP: {}\n".format(game_state.character.gold))
+    if game_state.character.line_of_credit():
+      write_color_text(self.text_field, "(Line of credit available)\n")
     update = "(Tower update ready)" if game_state.tower_update_ready else ""
     write_color_text(self.text_field,
                      "Time: {} {}\n".format(game_state.time_spent, update))

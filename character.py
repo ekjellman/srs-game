@@ -151,8 +151,15 @@ class Character(object):
     self.gold += amount_gained
     return amount_gained
 
+  def line_of_credit(self):
+    return self.gold >= 0 and self.traits.get("Merchant Warrior", 0) >= 4
+
   def can_afford(self, amount):
-    return self.gold >= amount
+    if self.gold >= amount:
+      return True
+    if self.line_of_credit():
+      return True
+    return False
 
   def spend_gold(self, amount, logs):
     self.gold -= amount
@@ -240,9 +247,10 @@ class Character(object):
     self.debuffs = []
     if penalty:
       logs.append("You were found by a passerby and brought back to town.")
-      lost_gold = int((self.gold / 2) * (.8 ** self.traits.get("Merchant Warrior", 0)))
-      logs.append("You lost {} gold.".format(lost_gold))
-      self.gold -= lost_gold
+      if self.gold >= 0:
+        lost_gold = int((self.gold / 2) * (.8 ** self.traits.get("Merchant Warrior", 0)))
+        self.gold -= lost_gold
+        logs.append("You lost {} gold.".format(lost_gold))
       self.buffs = []
 
   def get_effective_stat(self, stat):
