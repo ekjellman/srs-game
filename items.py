@@ -1,3 +1,4 @@
+# coding=utf-8
 import effect
 from equipment import RARITY
 from character import TRAITS
@@ -227,3 +228,12 @@ class SPStone(Item):
     character.base_sp += 30
     character.recalculate_maxes()
     logs.append("Your maximum SP increases by 30.")
+
+class SacrificialJizo(Item):
+  def __init__(self):
+    self.info = {"name": "Sacrificial 地蔵",
+                 "value": 100,
+                 "item_level": 1}
+  def apply(self, character, monster, logs):
+    character.add_buff(effect.Substitute())
+    logs.append("The sacrificial 地蔵 will trade its spirit for yours")

@@ -27,6 +27,8 @@ import subprocess
 # TODO: Add time reduction item to mysteries trader? Or a time slow buff
 # TODO: Make a "has_buff" method on character and get rid of a lot of the
 #       combined_impact stuff
+# TODO: Toz said she found whether up or down is "cancelling" to be confusing
+#       given leave shop is down and leave town is up. Consider adjusting this
 
 def write_color_text(rtc, string):
   # Takes a wx.richtext.RichTextCtrl and writes my wacky custom color-coded

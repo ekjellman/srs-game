@@ -1,8 +1,9 @@
+# coding=utf-8
 from equipment import STATS, DEFENSES
 
 STACK_MULTIPLY = ["XP Gain"] + STATS + DEFENSES
 STACK_MAX = ["Blinded", "Stunned", "Immortal", "Auto Life", "Lucky"]
-STACK_ADD = ["HP Restore"]
+STACK_ADD = ["HP Restore", "Substitute"]
 
 class Effect(object):
 
@@ -368,3 +369,32 @@ class Aura(Buff):
     for stat in STATS + DEFENSES:
       impacts[stat] = impact
     return impacts
+
+class Substitute(Buff):
+  def __init__(self):
+    self.quantity = 1
+
+  def pass_time(self, time_passed):
+    pass
+
+  @classmethod
+  def stackable(cls):
+    return False
+
+  def get_name(self):
+    return "Substitute"
+
+  def get_impacts(self):
+    return {"Substitute": self.quantity}
+
+  def active(self):
+    return self.quantity > 0
+
+  def update(self, buff):
+    if buff.get_name() == self.get_name():
+      self.quantity += buff.quantity
+      return True
+    return False
+
+  def __str__(self):
+    return "{} ({}): ∞".format(self.get_name(), self.quantity)

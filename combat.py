@@ -1,3 +1,4 @@
+# coding=utf-8
 import srs_random
 from effect import Effect
 from monster import Monster
@@ -53,6 +54,14 @@ class Combat(object):
           character.restore_hp(effect - 1)
           # TODO: Fix cohesion
           character.buffs = [b for b in character.buffs if b.get_name() != "Auto Life"]
+        elif Effect.get_combined_impact("Substitute", character.buffs,
+                                        character.debuffs) > 0:
+          logs.append("The 地蔵's spirit restored your HP.")
+          character.current_hp = character.max_hp
+          # TODO: Fix cohesion
+          for b in character.buffs:
+            if b.get_name() == "Substitute":
+              b.quantity -= 1
         else:
           death_chance = 0.95 ** character.traits.get("Perseverance", 0)
           if srs_random.random() < death_chance:

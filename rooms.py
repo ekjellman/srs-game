@@ -496,7 +496,8 @@ class Inn(Room):
   # TODO: Maybe trader should not always appear
   TRADER_ITEMS = [items.RareCandy, items.TeleportStone, items.StatStone,
                   items.MaterialPack, items.Tome, items.CorruptedRune,
-                  items.GoldSack, items.HPStone, items.SPStone]
+                  items.GoldSack, items.HPStone, items.SPStone,
+                  items.SacrificialJizo]
 
   def __init__(self, level):
     super(Inn, self).__init__(level)
