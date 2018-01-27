@@ -117,9 +117,9 @@ class TestGameState(unittest.TestCase):
 
     def test_game_state_soak(self):
         game = game_state.GameState()
-        default_choices = ["Explore", "Enter Room", "Leave Town", "Attack",
+        default_choices = ["Explore", "Enter Room", "Attack",
                            "Continue Quest", "Ascend Tower"]
-        for _ in xrange(1000):
+        for _ in xrange(3000):
             choices = game.get_choices()
             if random.random() < .9 and choices[0] in default_choices:
                 choice = choices[0]
