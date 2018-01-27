@@ -62,11 +62,7 @@ DEBUG_TOWER_START = None
 # TODO: It is probably not best to be passing logs around to everything?
 #       it could be part of the GameState, or we could use a logger for real
 # TODO: add traits to weapons/armor
-# TODO: Add an "acknowledgement" state, to make certain uncommon states harder
-#       to skip past (levelling up, finding a shop in a tower, etc)
 # TODO: Floating point error on buffs. (39% for 9 turns at level 2)
-# TODO: Add skill forgetting shop. Could give some bonus for the skill you
-#       forget based on levels
 
 class GameState(object):
   """

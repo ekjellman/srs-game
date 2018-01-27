@@ -10,7 +10,6 @@ import re
 import subprocess
 
 # TODO: Look into using unicode graphics for some of this stuff
-# TODO: Disable rest if HP/SP full? But Infinity Dungeon...
 # TODO: Change "insufficient payment" and "gold or materials" to give
 #       the actual reason. Possibly snarky if you have neither
 # TODO: Have a confirm screen on levelling up skills
@@ -18,7 +17,6 @@ import subprocess
 # TODO: In shops "Which item would you like to look at?"
 # TODO: Make sure in-game docs note that some attacks don't work on elites
 # TODO: Consider making everything work against elites instead
-# TODO: Consider allowing replacing skills
 # TODO: Skill "Flee", (high) chance of fleeing, higher on level, xp gain on level
 # TODO: Bug, something broke replays, I think in the adding a trader to the inn.
 #            I haven't figured out what yet, but even the full srs_random fix
@@ -26,9 +24,7 @@ import subprocess
 #            But: It is inconsistent even with the same log. If you have a
 #                 victory log, and you pass it several times, it seems to work
 #                 eventually?
-# TODO: Have Lucky save you from death once
 # TODO: Add time reduction item to mysteries trader? Or a time slow buff
-# TODO: When you get five levels of Merchant Warrior, credit card.
 # TODO: Make a "has_buff" method on character and get rid of a lot of the
 #       combined_impact stuff
 
