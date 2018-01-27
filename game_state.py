@@ -64,11 +64,9 @@ DEBUG_TOWER_START = None
 # TODO: add traits to weapons/armor
 # TODO: Add an "acknowledgement" state, to make certain uncommon states harder
 #       to skip past (levelling up, finding a shop in a tower, etc)
-
 # TODO: Floating point error on buffs. (39% for 9 turns at level 2)
 # TODO: Add skill forgetting shop. Could give some bonus for the skill you
 #       forget based on levels
-# TODO: Renew bug, displays decimal for number of HP/Turn
 
 class GameState(object):
   """

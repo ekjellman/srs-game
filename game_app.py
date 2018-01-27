@@ -26,7 +26,6 @@ import subprocess
 #            But: It is inconsistent even with the same log. If you have a
 #                 victory log, and you pass it several times, it seems to work
 #                 eventually?
-# TODO: Bug: Renew really seems to have a rounding thing. What's going on?
 # TODO: Have Lucky save you from death once
 # TODO: Add time reduction item to mysteries trader? Or a time slow buff
 # TODO: When you get five levels of Merchant Warrior, credit card.

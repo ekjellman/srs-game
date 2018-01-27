@@ -221,11 +221,12 @@ class Character(object):
     return "".join(pieces)
 
   def restore_hp(self, amount=None):
+    # NB: Amount may be float if it comes from an HP Restore buff like Renew.
     old_current = self.current_hp
     if amount is None:
       self.current_hp = self.max_hp
     else:
-      self.current_hp = min(self.max_hp, self.current_hp + amount)
+      self.current_hp = min(self.max_hp, int(self.current_hp + amount))
     return self.current_hp - old_current
 
   def restore_sp(self, amount=None):
