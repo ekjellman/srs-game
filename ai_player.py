@@ -204,8 +204,10 @@ def play_game():
         choice = "Town"
       elif "Quest" in choices:
         choice = "Quest"
-      else:
+      elif "Ascend Tower" in choices:
         choice = "Ascend Tower"
+      else:
+        choice = "Explore Tower"
       if choice not in choices:  # Tower not unlocked
         choice = "Town"
     elif current_state == "QUEST":

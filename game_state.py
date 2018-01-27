@@ -199,7 +199,10 @@ class GameState(object):
       return self.current_shop.get_buttons(self.character)
     elif current_state == "OUTSIDE":
       choices = []
-      choices.append("" if self.tower_lock[self.floor] else "Ascend Tower")
+      if self.frontier <= self.floor:
+        choices.append("" if self.tower_lock[self.floor] else "Explore Tower")
+      else:
+        choices.append("Ascend Tower")
       choices.append("Quest" if self.tower_quests[self.floor] else "")
       choices.append("Town")
       choices.append("Descend Tower")
@@ -764,7 +767,7 @@ class GameState(object):
 
 
   def apply_choice_outside(self, logs, choice_text):
-    if choice_text == "Ascend Tower":
+    if choice_text == "Ascend Tower" or choice_text == "Explore Tower":
       self.pass_time(10, logs)
       if self.frontier <= self.floor:
         self.add_state("TOWER")
