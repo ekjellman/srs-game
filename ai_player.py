@@ -7,13 +7,15 @@ ATTEMPT_SCORE = 2100
 # A (hopefully somewhat smarter) AI player for the game.
 
 # Arbitrary simplifying design decisions with no real reasoning
-# -- Strength build with Holy Blade, Auto Life, Swiftness
+# -- Intellect build with Chain Lightning, Meditate, Auto Life
 # -- Only use Inn Bento for items
 
+# TODO: It might be fun to have a more general AI for competition use in the
+#       JCC. What it could do is always take the first skill it is given, so
+#       it will have three randomish skills. The combat AI would have to be
+#       "smart" enough to deal with any set of three skills, though
+
 def town_choice(game):
-  # Inn, then Temple, then Dungeon. [Trainer (Gain XP) Forge (Reforge Weapon)
-  # Inn (Mysteries Trader) TeleportChamber(Major Teleport, Teleport, Minor Teleport)
-  # Temple (Blessing, Purify Rune), Crafthall (Craft Epic?)
   choices = game.get_choices()
   buffs = get_buffs(game)
   if "Inn" in choices and "Well Rested" not in buffs and can_inn(game):
@@ -121,11 +123,11 @@ def character_score(game):
 
 def score_equipment(item):
   score = 0
-  if item.attributes.get("Type", 0) == "Magic": return 0
-  score += item.attributes.get("Strength", 0) * 1.0
-  score += item.attributes.get("Stamina", 0) * 1.0
+  if item.attributes.get("Type", 0) == "Physical": return 0
+  score += item.attributes.get("Strength", 0) * 0.0
+  score += item.attributes.get("Stamina", 0) * 0.9
   score += item.attributes.get("Speed", 0) * 1.5
-  score += item.attributes.get("Intellect", 0) * 0.2
+  score += item.attributes.get("Intellect", 0) * 1.5
   score += item.attributes.get("Defense", 0) * 0.4
   score += item.attributes.get("Magic Defense", 0) * 0.4
   score += item.attributes.get("Low", 0) * 0.5
@@ -145,7 +147,7 @@ def play_game():
     if current_state == "VICTORY":
       return game
     elif current_state == "CHAR_CREATE":
-      choice = "Strength"
+      choice = "Intellect"
     elif current_state == "RUNE_WORLD":
       choice = item_or_explore(game, "Explore")
     elif current_state == "USE_ITEM":
@@ -222,47 +224,48 @@ def play_game():
         if get_skill_cost(game, "Auto Life") <= game.character.current_sp:
           skill_to_use = "Auto Life"
           choice = "Skill"
-      elif game.monster.boss:
-        if "Swiftness" not in get_buffs(game) and "Swiftness" in get_skills(game):
-          if get_skill_cost(game, "Swiftness") <= game.character.current_sp:
-            skill_to_use = "Swiftness"
-            choice = "Skill"
-        elif "Holy Blade" in get_skills(game):
-          if get_skill_cost(game, "Holy Blade") <= game.character.current_sp:
-            skill_to_use = "Holy Blade"
-            choice = "Skill"
-      elif game.character.current_sp > game.character.max_sp * .9:
-        if "Holy Blade" in get_skills(game):
-          skill_to_use = "Holy Blade"
+      elif "Meditate" in get_skills(game) and game.character.current_sp < game.character.max_sp * .2:
+          skill_to_use = "Meditate"
+          choice = "Skill"
+      elif "Chain Lightning" in get_skills(game):
+        if get_skill_cost(game, "Chain Lightning") <= game.character.current_sp:
+          skill_to_use = "Chain Lightning"
           choice = "Skill"
       if choice is None:
         choice = "Attack"
     elif current_state == "LEVEL_UP":
-      priority = ["Clarity of Mind", "Beefy", "Stocky", "Mental Toughness",
-                  "Quick Learner", "Combobreaker!", "Regeneration",
-                  "Get New Traits", "Perserverance", "Sneaky",
-                  "Merchant Warrior", "Self-Improvement", "Wizardry",
-                  "Libra", "Scholar"]
+      priority = ["Quick Learner", "Wizardry", "Clarity of Mind", "Stocky",
+                  "Mental Toughness", "Combobreaker!", "Regeneration",
+                  "Get New Traits", "Perserverance", "Self-Improvement",
+                  "Merchant Warrior", "Sneaky", "Libra", "Scholar", "Beefy"]
       for trait in priority:
         if trait in choices:
           choice = trait
           break
     elif current_state == "LEVEL_UP_SKILL":
-      priority = ["Auto Life", "Holy Blade", "Swiftness", "Improve stats"]
+      priority = ["Chain Lightning", "Auto Life", "Meditate", "Improve stats"]
       if len(game.character.skills) != 3:
         for skill in priority:
           if skill in choices and skill not in get_skills(game):
             choice = skill
             break
       else:
+        get_chain = False
+        get_auto = False
         for skill in game.character.skills:
           cost = skill.sp_cost()
-          ratio = game.character.max_sp / cost
-          if ratio > 20:
-            choice = skill.get_name()
-            break
-        if choice is None:
-          choice = "Improve stats"
+          ratio = game.character.max_sp / (cost + 0.01)
+          skill_name = skill.get_name()
+          if ratio > 10 and skill_name == "Chain Lightning":
+            get_chain = True
+          elif ratio > 10 and skill_name == "Auto Life":
+            get_auto = True
+        if get_chain:
+          choice = "Chain Lightning"
+        elif get_auto:
+          choice = "Auto Life"
+        else:
+          choice = "Meditate"
     elif current_state == "USE_SKILL":
       choice = skill_to_use
       skill_to_use = None
