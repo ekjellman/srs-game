@@ -591,7 +591,8 @@ class GameState(object):
       logs.append("You have defeated {}!".format(self.monster.name))
       levelups = self.character.gain_exp(self.monster.calculate_exp(),
                                          self.monster.level, logs)
-      self.treasure_queue = self.monster.get_treasure(self.infinity_dungeon)
+      self.treasure_queue = self.monster.get_treasure(self.infinity_dungeon,
+                                                      self.rune_level != -1)
       self.monster = None
       self.leave_state()
       if self.current_state() == "QUEST":

@@ -114,7 +114,7 @@ class Monster(object):
     effective_level /= 6
     return int(10 * effective_level)
 
-  def get_treasure(self, infinity=False):
+  def get_treasure(self, infinity=False, rune_world=False):
     # list of treasure from this monster.
     # May be int (for gold), Equipment objects, or the string "Rune"
     treasure = []
@@ -129,7 +129,10 @@ class Monster(object):
     for rarity in range(1, len(chances)):
       while srs_random.random() < chances[rarity]:
         treasure.append(Equipment.get_new_armor(self.level, None, None, rarity))
-    rune_chance = RUNE_CHANCES[treasure_tier]
+    if rune_world:
+      rune_chance = 0.0
+    else:
+      rune_chance = RUNE_CHANCES[treasure_tier]
     while srs_random.random() < rune_chance:
       treasure.append("Rune")
     return treasure
