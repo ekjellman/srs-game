@@ -117,19 +117,20 @@ class HeavySwing(Skill):
   def get_name(self):
     return "Heavy Swing"
   def get_attack_multiple(self):
-    return 2.0 + 0.2 * self.level
+    return 2.0 + 0.25 * self.level
   def miss_chance(self):
-    return max(0.05, 0.3 - (0.015 * self.level))
+    return 0.3 * (.9 ** (self.level - 1))
   def get_description(self):
-    desc = "Physical attack with {:.2f} multiplier, {:.1f}% chance to miss."
+    desc = "Physical attack with {:.2f} multiplier, {:.1f}% chance for normal damage."
     desc = desc.format(self.get_attack_multiple(), (self.miss_chance() * 100))
     return desc
   def sp_cost(self):
-    return int(self.level * 6 * (1.1 ** self.level))
+    return int(self.level * 5 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
     if srs_random.random() < self.miss_chance():
-      logs.append("Heavy Swing missed...")
-      return Combat.TARGET_ALIVE
+      logs.append("Heavy Swing lands a glancing blow...")
+      result = Combat.action_attack(None, actor, opponent, logs, "Physical")
+      return result
     else:
       result = Combat.action_attack(None, actor, opponent, logs, "Physical",
                                     self.get_attack_multiple())
