@@ -401,6 +401,11 @@ class GameState(object):
 
   def rest(self, logs, enc_chance=False):
     """Rest to restore HP and possibly encounter a monster."""
+    char = self.character
+    has_full_stats = char.current_hp == char.max_hp and char.current_sp == char.max_sp
+    if (not self.infinity_dungeon) and has_full_stats:
+      logs.append("You don't need to rest right now.")
+      return
     self.pass_time(5, logs)
     hp_gained = self.character.rest()
     logs.append("You rest and regain {} HP.".format(hp_gained))
