@@ -1,4 +1,5 @@
 import srs_random
+import game_state
 from equipment import Equipment, RARITY
 from effect import WellRested, Blessed, Lucky
 import items
@@ -407,10 +408,7 @@ class EquipmentShop(Room):
         self.shop_choice = None
         self.buying = False
         logs.append("You purchased {} for {} gold.".format(str(equipment), value))
-        logs.append("You recycled your old {} for materials.".format(recycle))
-        materials = recycle.get_recycled_materials()
-        character.gain_materials(materials)
-        logs.append("It turned into {}".format(Equipment.materials_string(materials)))
+        game_state.GameState.recycle_equipment(logs, recycle, character)
         return (1, Room.NO_CHANGE)
       else:
         logs.append("You do not have enough money.")
@@ -868,26 +866,18 @@ class Crafthall(Room):
       return (0, Room.NO_CHANGE)
 
   def apply_choice(self, choice_text, logs, character):
+    recycle = None
     if choice_text == "Keep Current":
       recycle = self.crafted_piece
-      self.crafted_piece = None
-      self.crafting = False
-      logs.append("Recycled {}".format(recycle))
-      materials = recycle.get_recycled_materials()
-      character.gain_materials(materials)
-      logs.append("Received {}.".format(Equipment.materials_string(materials)))
-      return (0, Room.NO_CHANGE)
     elif choice_text == "Keep New":
       equipment = self.crafted_piece
       recycle = character.equip(equipment)
+    if recycle:
       self.crafted_piece = None
       self.crafting = False
-      logs.append("Recycled {}.".format(recycle))
-      materials = recycle.get_recycled_materials()
-      character.gain_materials(materials)
-      logs.append("Received {}.".format(Equipment.materials_string(materials)))
+      GameState.recycle_equipment(logs, recycle, character)
       return (0, Room.NO_CHANGE)
-    elif choice_text == "Craft Uncommon":
+    if choice_text == "Craft Uncommon":
       return self.handle_craft(1, logs, character)
     elif choice_text == "Craft Rare":
       return self.handle_craft(2, logs, character)
