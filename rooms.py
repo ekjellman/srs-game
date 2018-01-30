@@ -875,7 +875,7 @@ class Crafthall(Room):
     if recycle:
       self.crafted_piece = None
       self.crafting = False
-      GameState.recycle_equipment(logs, recycle, character)
+      game_state.GameState.recycle_equipment(logs, recycle, character)
       return (0, Room.NO_CHANGE)
     if choice_text == "Craft Uncommon":
       return self.handle_craft(1, logs, character)
