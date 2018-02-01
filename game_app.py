@@ -273,30 +273,30 @@ def run_app():
   wx_app.MainLoop()
 
 def verify_log(filename):
-  # TODO re compile
   action_counter = 0
   game_state = None
+  # Compiled patterns
+  action = re.compile("Action selected: \[(.*)\]")
+  init = re.compile("Game initialized \[Seed: (\d+)\]")
+  victory = re.compile("Victory! \[(.*)\]")
   with open(filename, "r") as log_file:
     for log_line in log_file:
       if "[" not in log_line:
         continue
-      m = re.search("Action selected: \[(.*)\]", log_line)
-      if m:
+      if re.search(action, log_line):
         print "Action found: {}".format(m.group(1))
         if not game_state:
           raise ValueError("Action found before game initialized")
         game_state.verification_apply_choice(m.group(1))
         action_counter += 1
         continue
-      m = re.search("Game initialized \[Seed: (\d+)\]", log_line)
-      if m:
+      if re.search(init, log_line):
         seed = int(m.group(1))
         print "Game found"
         srs_random.seed(seed)
         game_state = GameState()
         continue
-      m = re.search("Victory! \[(.*)\]", log_line)
-      if m:
+      if re.search(victory, log_line):
         log_time = int(m.group(1))
         game_state_time = game_state.time_spent
         if log_time != game_state_time:
