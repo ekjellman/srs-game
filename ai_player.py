@@ -1,5 +1,4 @@
 import game_state
-import random
 import sys
 
 ATTEMPT_SCORE = 2100
@@ -162,7 +161,7 @@ def play_game():
         # TODO: Optimize
         score = character_score(game)
         #chance = (game.character.level - 60) / 40.0
-        #if random.random() < chance:
+        #if python_random.random() < chance:
         if score > ATTEMPT_SCORE:
           #print "Trying stronghold"
           choice = "Stronghold of the Ten"

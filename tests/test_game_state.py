@@ -3,6 +3,7 @@ import mock
 import game_state
 import rooms
 import srs_random
+import random as python_random
 import ai_player
 
 # Run tests from the game directory with the following command:
@@ -125,17 +126,17 @@ class TestGameState(unittest.TestCase):
                            "Continue Quest", "Ascend Tower"]
         for _ in range(3000):
             choices = game.get_choices()
-            if random.random() < .9 and choices[0] in default_choices:
+            if python_random.random() < .9 and choices[0] in default_choices:
                 choice = choices[0]
             else:
                 if game.current_state() == "SUMMIT":
-                    if random.random() < .8:
+                    if python_random.random() < .8:
                         choice = "Infinity Dungeon"
                     else:
                         choice = "Stronghold of the Ten"
                 else:
                     choices = [x for x in choices if x != ""]
-                    choice = random.choice(choices)
+                    choice = python_random.choice(choices)
             logs = game.verification_apply_choice(choice)
 
 if __name__ == '__main__':
