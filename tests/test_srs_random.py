@@ -58,13 +58,13 @@ class TestRandom(unittest.TestCase):
       srs_random.randint(8, 12),
       srs_random.randint(10, 20)
     ]
-    expected = [0, 0, 1, 0, 1, 0, 6, 1, 1, 3, 3, 4, 8, 6, 12, 11]
+    expected = [1, 0, 1, 1, 1, 2, 10, 2, 2, 3, 2, 9, 7, 6, 12, 18]
     self.assertEqual(expected, actual)
 
   def test_choice(self):
     srs_random.seed(12345)
     seq = ['quick', 'brown', 'fox', 'lazy', 'dogs']
-    expected = ['fox', 'quick', 'dogs', 'brown', 'brown']
+    expected = ['lazy', 'quick', 'fox', 'fox', 'brown']
     actual = [srs_random.choice(seq) for i in range(len(expected))]
     self.assertEqual(expected, actual)
 
