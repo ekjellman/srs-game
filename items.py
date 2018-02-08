@@ -165,7 +165,7 @@ class MaterialPack(Item):
         character.materials[i] += count
 
 class Tome(Item):
-  TOME_TYPES = TRAITS.keys() + ["Rainbow"]
+  TOME_TYPES = list(TRAITS.keys()) + ["Rainbow"]
   TOME_TYPES.remove("Libra")
 
   def __init__(self):

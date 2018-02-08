@@ -119,7 +119,7 @@ class TestGameState(unittest.TestCase):
         game = game_state.GameState()
         default_choices = ["Explore", "Enter Room", "Attack",
                            "Continue Quest", "Ascend Tower"]
-        for _ in xrange(3000):
+        for _ in range(3000):
             choices = game.get_choices()
             if random.random() < .9 and choices[0] in default_choices:
                 choice = choices[0]

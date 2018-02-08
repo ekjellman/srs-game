@@ -44,7 +44,7 @@ def can_offer(game):
 
 def can_train(game):
   # TODO
-  return game.current_shop.xp_training_cost < game.character.gold
+  return game.current_shop.xp_training_cost() <= game.character.gold
 
 def shop_choice(game):
   shop_type = game.current_shop.get_name()
@@ -272,10 +272,10 @@ def play_game():
     elif current_state == "TOWER":
       choice = item_or_explore(game, "Explore")
     else:
-      print "Failed: ", current_state
+      print("Failed: ", current_state)
       assert False
     if game.time_spent > 20000:
-      print current_state, choice, game.floor, game.time_spent
+      print(current_state, choice, game.floor, game.time_spent)
     #print current_state, choice, game.floor, game.time_spent
     assert choice is not None
     if isinstance(choice, list):
@@ -304,4 +304,4 @@ if __name__ == "__main__":
     #print "Equip score: ", sum(score_equipment(e) for e in game.character.equipment)
     total += game.time_spent
   if trials != 1:
-    print "Average:", (float(total) / trials)
+    print("Average:", (float(total) / trials))

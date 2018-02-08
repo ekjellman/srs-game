@@ -310,7 +310,7 @@ class Character(object):
     return self.gain_exp(level * 25, level, logs, level_adjust=False)
 
   def train_stats(self, logs):
-    stat = srs_random.choice(self.stats.keys())
+    stat = srs_random.choice(list(self.stats.keys()))
     self.stats[stat] += 1
     logs.append("Gained +1 {}.".format(stat))
 

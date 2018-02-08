@@ -22,7 +22,10 @@ class NameGenerator(object):
 
   def make_markov_table(self, monsters):
     table = {}
-    for letter in "abcdefghijklmnopqrstuvwxyz ":
+    letters = set()
+    for monster in monsters:
+      letters.update(monster)
+    for letter in letters:
       table[letter] = collections.defaultdict(int)
     table["START"] = collections.defaultdict(int)
     for monster in monsters:
