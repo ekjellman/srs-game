@@ -1,5 +1,6 @@
 import game_state
 import sys
+import srs_random
 
 ATTEMPT_SCORE = 2100
 
@@ -134,6 +135,7 @@ def score_equipment(item):
   return score
 
 def play_game():
+  srs_random.init()
   game = game_state.GameState()
   skill_to_use = None
   mysteries = True
@@ -292,13 +294,16 @@ if __name__ == "__main__":
   total = 0
   if len(sys.argv) > 1:
     trials = int(sys.argv[1])
+    print_info = True
   else:
     trials = 1
+    print_info = False
   for i in range(trials):
     game = play_game() 
-    #print "Time: ", game.time_spent
-    #print game.character
-    #print "Equip score: ", sum(score_equipment(e) for e in game.character.equipment)
+    if print_info:
+      print("Time: ", game.time_spent)
+      print(game.character)
+      print("Equip score: ", sum(score_equipment(e) for e in game.character.equipment))
     total += game.time_spent
   if trials != 1:
     print("Average:", (float(total) / trials))
