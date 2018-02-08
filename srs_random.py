@@ -25,8 +25,8 @@ def _randint():
   x = x ^ (x >> 12)
   x = x ^ (x << 25)
   x = x ^ (x >> 27)
-  x = x % maxint
-  return (x * 0x2545F4914F6CDD1D) % maxint;
+  x = x & maxint
+  return (x * 0x2545F4914F6CDD1D) & maxint;
 
 def random():
   return (_randint() >> 10) * RECIP_BPF
