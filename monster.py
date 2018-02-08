@@ -19,12 +19,14 @@ STAT_DICE = {"Strength": (12, 1),
              "Speed": (12, 1),
              "Stamina": (10, 1)}
 
+NAME_GENERATOR = NameGenerator("monsters.txt", "banned.txt")
+
 class Monster(object):
   def __init__(self, level, boss):
     self.stats = {}
     self.level = level
     self.boss = boss
-    self.name_gen = NameGenerator("monsters.txt", "banned.txt")
+    self.name_gen = NAME_GENERATOR
 
     # If you modify these, make sure to modify the XP calc
     for stat in STAT_DICE.keys():
