@@ -1,3 +1,5 @@
+[![](https://travis-ci.org/ekjellman/srs-game.svg?branch=master)](https://travis-ci.org/ekjellman/srs-game)
+
 # srs-game
 
 An RPG you play with only the arrow keys! :arrow_backward: :arrow_up_small: :arrow_down_small: :arrow_forward:
