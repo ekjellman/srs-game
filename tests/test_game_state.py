@@ -2,13 +2,17 @@ import unittest
 import mock
 import game_state
 import rooms
-import random
+import srs_random
 import ai_player
 
 # Run tests from the game directory with the following command:
 #   python -m unittest discover tests "test*.py" -v
 
 class TestGameState(unittest.TestCase):
+
+    def setUp(self):
+        srs_random.init()
+
     # This test should fail if any of the debug statements are active or changed
     def test_debug_off(self):
         self.assertEqual(game_state.DEBUG_FLOOR, None)
