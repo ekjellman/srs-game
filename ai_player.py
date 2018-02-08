@@ -160,8 +160,6 @@ def play_game():
       if fully_buffed(game):
         # TODO: Optimize
         score = character_score(game)
-        #chance = (game.character.level - 60) / 40.0
-        #if python_random.random() < chance:
         if score > ATTEMPT_SCORE:
           #print "Trying stronghold"
           choice = "Stronghold of the Ten"
