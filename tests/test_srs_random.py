@@ -15,7 +15,7 @@ class TestRandom(unittest.TestCase):
       0.2986398551995928,
       0.3684116894884757
     ]
-    actual = [srs_random.random() for i in xrange(len(expected))]
+    actual = [srs_random.random() for i in range(len(expected))]
     self.assertEqual(expected, actual)
 
   def test_gauss(self):
@@ -65,7 +65,7 @@ class TestRandom(unittest.TestCase):
     srs_random.seed(12345)
     seq = ['quick', 'brown', 'fox', 'lazy', 'dogs']
     expected = ['fox', 'quick', 'dogs', 'brown', 'brown']
-    actual = [srs_random.choice(seq) for i in xrange(len(expected))]
+    actual = [srs_random.choice(seq) for i in range(len(expected))]
     self.assertEqual(expected, actual)
 
 if __name__ == '__main__':
