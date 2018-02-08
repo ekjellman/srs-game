@@ -1,0 +1,2 @@
+#!/bin/sh
+pythonw game_app.py
