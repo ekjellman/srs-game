@@ -1,7 +1,7 @@
 import unittest
 import srs_random
 
-class TestGameState(unittest.TestCase):
+class TestRandom(unittest.TestCase):
   def test_init(self):
     seed = srs_random.init()
     assert seed > 0
