@@ -9,11 +9,11 @@ class TestRandom(unittest.TestCase):
   def test_random(self):
     srs_random.seed(12345)
     expected = [
-      0.41661987254534116,
-      0.010169169457068361,
-      0.8252065092537432,
-      0.2986398551995928,
-      0.3684116894884757
+      0.19018498755791735,
+      0.9451315374195004,
+      0.4111855034540688,
+      0.1077103963926298,
+      0.39181641816648183
     ]
     actual = [srs_random.random() for i in range(len(expected))]
     self.assertEqual(expected, actual)
@@ -29,12 +29,12 @@ class TestRandom(unittest.TestCase):
       srs_random.gauss(1, 1)
     ]
     expected = [
-      0.37619920441114607,
-      0.07152496347566478,
-      1.1501075829514789,
-      0.9625001469556529,
-      0.9111291054702578,
-      1.4827546241363072
+      1.3843872364356706,
+      2.241314862141383,
+      -1.2149778823272777,
+      1.0126402170140905,
+      0.8821746293982146,
+      1.4761484036066532
     ]
     self.assertEqual(expected, actual)
 
@@ -58,13 +58,13 @@ class TestRandom(unittest.TestCase):
       srs_random.randint(8, 12),
       srs_random.randint(10, 20)
     ]
-    expected = [1, 0, 1, 1, 1, 2, 10, 2, 2, 3, 2, 9, 7, 6, 12, 18]
+    expected = [0, 1, 0, 0, 1, 1, 8, 2, 4, 3, 2, 6, 9, 6, 9, 20]
     self.assertEqual(expected, actual)
 
   def test_choice(self):
     srs_random.seed(12345)
     seq = ['quick', 'brown', 'fox', 'lazy', 'dogs']
-    expected = ['lazy', 'quick', 'fox', 'fox', 'brown']
+    expected = ['quick', 'dogs', 'fox', 'quick', 'brown']
     actual = [srs_random.choice(seq) for i in range(len(expected))]
     self.assertEqual(expected, actual)
 
