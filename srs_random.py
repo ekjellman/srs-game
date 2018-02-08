@@ -22,6 +22,7 @@ def seed(number):
 
 def _randint():
   global x
+  assert x != 0
   x = x ^ (x >> 12)
   x = x ^ (x << 25)
   x = x ^ (x >> 27)
