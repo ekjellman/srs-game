@@ -26,12 +26,12 @@ install:
   - conda info -a
 
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION mock wxpython
-      source activate test-environment
+      conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION mock wxpython;
+      source activate test-environment;
     else
-      conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION mock
-      source activate test-environment
-      conda install -c newville wxpython-phoenix
+      conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION mock;
+      source activate test-environment;
+      conda install -c newville wxpython-phoenix;
     fi
 #  - python setup.py install
 
