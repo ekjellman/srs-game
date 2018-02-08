@@ -1,16 +1,30 @@
 # srs-game
 
-## Install and run with Conda
+An RPG you play with only the arrow keys! :arrow_backward: :arrow_up_small: :arrow_down_small: :arrow_forward:
 
+## Quick Start
+
+### Set up Conda environment
+
+#### Python 2
 ```
-conda create -n python2 python=2.7 anaconda
-source ~/anaconda3/bin/activate python2
-conda install wxpython
-pythonw game_app.py
+conda create -n tmab python=2.7 anaconda mock wxpython
+source activate tmab
 ```
 
-## Run tests
-
+#### Python 3
 ```
-python -m unittest discover tests "test*.py" -v
+conda create -n tmab python=3.6 anaconda mock
+source activate tmab
+conda install -c newville wxpython-phoenix
+```
+
+### Run tests
+```
+bin/unit-tests
+```
+
+### Play the game
+```
+bin/play-game
 ```
