@@ -236,7 +236,7 @@ def play_game():
     elif current_state == "LEVEL_UP":
       priority = ["Quick Learner", "Wizardry", "Clarity of Mind", "Stocky",
                   "Mental Toughness", "Combobreaker!", "Regeneration",
-                  "Get New Traits", "Perserverance", "Self-Improvement",
+                  "Get New Traits", "Perseverance", "Self-Improvement",
                   "Merchant Warrior", "Sneaky", "Libra", "Scholar", "Beefy"]
       for trait in priority:
         if trait in choices:
