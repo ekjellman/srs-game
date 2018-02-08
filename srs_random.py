@@ -22,7 +22,7 @@ def seed(number):
 
 def _randint():
   global x
-  assert x != 0
+  assert x != 0, "srs_random.init() not called"
   x = x ^ (x >> 12)
   x = x ^ (x << 25)
   x = x ^ (x >> 27)
