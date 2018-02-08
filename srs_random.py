@@ -15,9 +15,11 @@ def init():
 
 x = 0
 maxint = 0x7fffffffffffffff
+gauss_next = None
 
 def seed(number):
-  global x
+  global x, gauss_next
+  gauss_next = None
   x = number
 
 def _randint():
@@ -32,7 +34,6 @@ def _randint():
 def random():
   return (_randint() >> 10) * RECIP_BPF
 
-gauss_next = None
 def gauss(mu, sigma):
   global gauss_next
 
