@@ -7,6 +7,7 @@ import time
 BPF = 53        # Number of bits in a float
 RECIP_BPF = 2**-BPF
 TWOPI = 2.0*_pi
+MAXINT = 0x7fffffffffffffff
 
 def init():
   rng_seed = int(time.time() * 1000)
@@ -14,7 +15,6 @@ def init():
   return rng_seed
 
 x = 0
-maxint = 0x7fffffffffffffff
 gauss_next = None
 
 def seed(number):
@@ -28,8 +28,8 @@ def _randint():
   x = x ^ (x >> 12)
   x = x ^ (x << 25)
   x = x ^ (x >> 27)
-  x = x & maxint
-  return (x * 0x2545F4914F6CDD1D) & maxint;
+  x = x & MAXINT
+  return (x * 0x2545F4914F6CDD1D) & MAXINT
 
 def random():
   return (_randint() >> 10) * RECIP_BPF

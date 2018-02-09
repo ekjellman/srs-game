@@ -1,5 +1,5 @@
 import unittest
-import mock
+from unittest import mock
 import game_state
 import rooms
 import srs_random
