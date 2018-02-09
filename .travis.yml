@@ -22,3 +22,10 @@ install:
 
 script:
   - bin/unit-tests
+
+notifications:
+  email:
+    recipients:
+      - ekjellman@gmail.com
+    on_success: always
+    on_failure: always
