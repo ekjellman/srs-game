@@ -41,7 +41,6 @@ class Room(object):
 class TrainingRoom(Room):
   def __init__(self, level):
     super().__init__(level)
-    self.level = level
     self.train_count = 0
     self.forgetting = False
 
@@ -131,7 +130,6 @@ class TrainingRoom(Room):
 class Enchanter(Room):
   def __init__(self, level):
     super().__init__(level)
-    self.level = level
     self.enchanting_armor = False
 
   @classmethod
@@ -355,7 +353,7 @@ class Forge(Room):
 
 class EquipmentShop(Room):
   def __init__(self, level, shop_type):
-    self.level = level
+    super().__init__(level)
     self.inventory = None
     self.buying = False
     self.shop_choice = None
@@ -734,7 +732,6 @@ class Temple(Room):
 class Alchemist(Room):
   def __init__(self, level):
     super().__init__(level)
-    self.level = level
     self.faction_rate = 1.0
     self.inventory = self.generate_inventory()
 
@@ -809,7 +806,6 @@ class Alchemist(Room):
 class Crafthall(Room):
   def __init__(self, level):
     super().__init__(level)
-    self.level = level
     self.faction_rate = 1.0  # Ignored
     self.crafting = False
     self.crafted_piece = None
