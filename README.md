@@ -7,14 +7,6 @@ An RPG you play with only the arrow keys! :arrow_backward: :arrow_up_small: :arr
 ## Quick Start
 
 ### Set up Conda environment
-
-#### Python 2
-```
-conda create -n srs python=2.7 anaconda mock wxpython
-source activate srs
-```
-
-#### Python 3
 ```
 conda create -n srs python=3.6 anaconda mock
 source activate srs
