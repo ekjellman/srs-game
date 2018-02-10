@@ -9,7 +9,6 @@ import sys
 import re
 import subprocess
 
-# TODO: Look into using unicode graphics for some of this stuff
 # TODO: Change "insufficient payment" and "gold or materials" to give
 #       the actual reason. Possibly snarky if you have neither
 # TODO: Have a confirm screen on levelling up skills
