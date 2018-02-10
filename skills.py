@@ -1,4 +1,3 @@
-import srs_random
 from combat import Combat
 import effect
 
@@ -12,7 +11,8 @@ def get_skill(skill_name, level):
   return skill
 
 class Skill(object):
-  def __init__(self, level=1):
+  def __init__(self, game, level=1):
+    self.game = game
     self.level = level
   def get_name(self):
     return "Not Implemented"
@@ -45,7 +45,7 @@ class QuickAttack(Skill):
                                   self.get_attack_multiple())
     if result == Combat.TARGET_DEAD:
       return result
-    if srs_random.random() < self.go_again_chance():
+    if self.game.rng.random() < self.go_again_chance():
       logs.append("Quick attack succeeded!")
       return Combat.ACTOR_TURN
     else:
@@ -68,7 +68,7 @@ class Blind(Skill):
   def apply_skill(self, actor, opponent, logs):
     result = Combat.action_attack(None, actor, opponent, logs, "Physical",
                                   self.get_attack_multiple())
-    if srs_random.random() < self.blind_chance():
+    if self.game.rng.random() < self.blind_chance():
       if opponent.boss:
         logs.append("Blind resisted.")
       else:
@@ -92,7 +92,7 @@ class Bash(Skill):
   def apply_skill(self, actor, opponent, logs):
     result = Combat.action_attack(None, actor, opponent, logs, "Physical",
                                   self.get_attack_multiple())
-    if srs_random.random() < self.stun_chance():
+    if self.game.rng.random() < self.stun_chance():
       if opponent.boss:
         logs.append("Your stun was resisted.")
       else:
@@ -127,7 +127,7 @@ class HeavySwing(Skill):
   def sp_cost(self):
     return int(self.level * 5 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
-    if srs_random.random() < self.miss_chance():
+    if self.game.rng.random() < self.miss_chance():
       logs.append("Heavy Swing lands a glancing blow...")
       result = Combat.action_attack(None, actor, opponent, logs, "Physical")
       return result
@@ -248,7 +248,7 @@ class PoisonedBlade(Skill):
   def sp_cost(self):
     return int(self.level * 4 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
-    if srs_random.random() < self.kill_chance() and not opponent.boss:
+    if self.game.rng.random() < self.kill_chance() and not opponent.boss:
       logs.append("Assassinated!")
       return Combat.TARGET_DEAD
     else:
@@ -269,7 +269,7 @@ class Meditate(Skill):
   def chance_to_fail(self, actor):
     return (actor.current_sp / float(actor.max_sp) * (.99 ** self.level))
   def apply_skill(self, actor, opponent, logs):
-    if srs_random.random() > self.chance_to_fail(actor):
+    if self.game.rng.random() > self.chance_to_fail(actor):
       sp_gained = actor.restore_sp(actor.max_sp * self.percent_gained() // 100)
       logs.append("Your meditating restored {} of your SP.".format(sp_gained))
     else:
@@ -351,7 +351,7 @@ class ChainLightning(Skill):
     repeat_chance = self.get_repeat_chance()
     result = Combat.action_attack(None, actor, opponent, logs, "Magic",
                                   self.get_attack_multiple())
-    while result == Combat.TARGET_ALIVE and srs_random.random() < repeat_chance:
+    while result == Combat.TARGET_ALIVE and self.game.rng.random() < repeat_chance:
       repeat_chance *= .9
       result = Combat.action_attack(None, actor, opponent, logs, "Magic",
                                     self.get_attack_multiple())
@@ -442,4 +442,4 @@ SKILLS = [QuickAttack, Blind, Bash, Protection, HeavySwing, LastStand, Surge,
           Concentrate, Swiftness, BulkUp, Cannibalize, PoisonedBlade,
           Meditate, Heal, Drain, Wither, ChainLightning, FinalStrike, Renew,
           AutoLife, HolyBlade]
-SKILL_NAMES = [skill().get_name() for skill in SKILLS]
+SKILL_NAMES = [skill(None).get_name() for skill in SKILLS]

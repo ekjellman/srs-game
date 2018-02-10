@@ -1,4 +1,3 @@
-import srs_random
 from skills import SKILLS, SKILL_NAMES
 from equipment import Equipment, RARITY
 from effect import Effect, Buff, Debuff
@@ -35,7 +34,8 @@ BLACK = "`0,0,0`"
 # -- Dodge (chance to avoid all damage from an attack)
 
 class Character(object):
-  def __init__(self):
+  def __init__(self, game):
+    self.game = game
     # Weapon, Hat, Shirt, Pants, Accessory
     self.equipment = [None, None, None, None, None]
     self.items = []
@@ -71,21 +71,21 @@ class Character(object):
     return "{}{} / {}{}".format(color, int(self.current_hp), self.max_hp, BLACK)
 
   @classmethod
-  def debug_character(cls, level, choice_text):
-    character = Character()
+  def debug_character(cls, game, level, choice_text):
+    character = Character(game)
     for i in range(1, level):
       character.level_up([])
       trait_choices = character.get_trait_choices()
       choice = ""
       while choice not in TRAITS:
-        choice = srs_random.choice(trait_choices)
+        choice = game.rng.choice(trait_choices)
       character.learn_trait(choice)
       skill_choices = character.get_skill_choices()
       choice = ""
       while choice not in SKILL_NAMES + ["Improve stats"]:
-        choice = srs_random.choice(skill_choices)
+        choice = game.rng.choice(skill_choices)
       chance = 10.0 / i
-      if srs_random.random() < chance:
+      if game.rng.random() < chance:
         character.learn_skill(choice)
       else:
         character.learn_skill("Improve stats")
@@ -95,7 +95,7 @@ class Character(object):
 
   def make_debug_equipment(self, level, choice):
     for i in range(len(self.equipment)):
-      self.equip(Equipment.get_new_armor(level, i, choice, 3))
+      self.equip(Equipment.get_new_armor(self.game, level, i, choice, 3))
 
   def add_item(self, item):
     if len(self.items) >= 3:
@@ -166,7 +166,7 @@ class Character(object):
 
   def make_initial_equipment(self, choice):
     for i in range(len(self.equipment)):
-      self.equip(Equipment.get_new_armor(1, i, choice))
+      self.equip(Equipment.get_new_armor(self.game, 1, i, choice))
 
   def __str__(self):
     pieces = []
@@ -294,12 +294,12 @@ class Character(object):
 
   def level_up(self, logs):
     for stat in self.stats.keys():
-      increase = srs_random.randint(1, 3)
+      increase = self.game.rng.randint(1, 3)
       if increase > 0:
         self.stats[stat] += increase
         logs.append("You have gained {} {}.".format(increase, stat))
-    hp_gain = srs_random.randint(10, 20)
-    sp_gain = srs_random.randint(5, 10)
+    hp_gain = self.game.rng.randint(10, 20)
+    sp_gain = self.game.rng.randint(5, 10)
     self.base_hp += hp_gain
     self.base_sp += sp_gain
     logs.append("You have gained {} HP.".format(hp_gain))
@@ -310,7 +310,7 @@ class Character(object):
     return self.gain_exp(level * 25, level, logs, level_adjust=False)
 
   def train_stats(self, logs):
-    stat = srs_random.choice(list(self.stats.keys()))
+    stat = self.game.rng.choice(list(self.stats.keys()))
     self.stats[stat] += 1
     logs.append("Gained +1 {}.".format(stat))
 
@@ -322,13 +322,13 @@ class Character(object):
     choices = [""]
     reroll_trait_level = self.traits.get("Self-Improvement", 0)
     reroll_chance = float(reroll_trait_level) / (reroll_trait_level + 1)
-    if srs_random.random() < reroll_chance:
+    if self.game.rng.random() < reroll_chance:
       choices.append("Get New Traits")
     while len(choices) < 4:
       best_roll, best_trait = 0.0, None
       for trait in TRAITS.keys():
         rerolls = max(1, int((self.traits.get(trait, 0) + 1) ** .5))
-        roll = min(srs_random.random() for _ in range(rerolls))
+        roll = min(self.game.rng.random() for _ in range(rerolls))
         if trait == "Libra" and self.traits.get(trait, 0) > 0:  # Only one libra level
           roll = 0.0
         if roll > best_roll:
@@ -356,7 +356,7 @@ class Character(object):
     else:
       reroll_skill_level = self.traits.get("Scholar", 0)
       reroll_chance = float(reroll_skill_level) / (reroll_skill_level + 1)
-      if srs_random.random() < reroll_chance:
+      if self.game.rng.random() < reroll_chance:
         choices.append("Get New Skills")
       while len(choices) < 4:
         best_roll, best_skill = 0.0, None
@@ -366,7 +366,7 @@ class Character(object):
             rerolls = 1
           else:
             rerolls = int(current_skill.level ** .5)
-          roll = min(srs_random.random() for _ in range(rerolls))
+          roll = min(self.game.rng.random() for _ in range(rerolls))
           if roll > best_roll:
             best_roll, best_skill = roll, skill_name
         if best_skill not in choices:
@@ -396,7 +396,7 @@ class Character(object):
       assert len(self.skills) < 3
       new_skill = None
       for skill in SKILLS:
-        skill_instance = skill()
+        skill_instance = skill(self.game)
         if skill_instance.get_name() == skill_name:
           new_skill = skill_instance
       self.skills.insert(0, new_skill)

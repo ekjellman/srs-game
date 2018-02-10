@@ -5,7 +5,7 @@ import equipment
 
 class TestCharacter(unittest.TestCase):
     def test_character_constructor(self):
-        c = character.Character()
+        c = character.Character(None)
         assert not any(c.equipment) # Should be 5 empty slots
         assert not c.items
         assert not c.skills
@@ -49,7 +49,7 @@ class TestCharacter(unittest.TestCase):
     #       Test that buff.pass_time, restore_hp, restore_sp don't break with non-positive time_passed
     def test_pass_time_no_buffs_no_traits_full_hp(self):
         # No Regeneration or Clarity of Mind
-        c = character.Character()
+        c = character.Character(None)
         prev_hp = c.current_hp
         prev_sp = c.current_sp
         c.pass_time(1)
@@ -57,7 +57,7 @@ class TestCharacter(unittest.TestCase):
         self.assertEqual(c.current_sp, prev_sp)
 
     def test_pass_time_no_buffs_regeneration_partial_hp(self):
-        c = character.Character()
+        c = character.Character(None)
         c.traits["Regeneration"] = 1
         c.current_hp = int(c.max_hp * 0.75)
         assert c.current_hp < c.max_hp
@@ -66,7 +66,7 @@ class TestCharacter(unittest.TestCase):
         assert c.current_hp > prev_hp
 
     def test_pass_time_no_buffs_regeneration_full_hp(self):
-        c = character.Character()
+        c = character.Character(None)
         c.traits["Regeneration"] = 1
         assert c.current_hp == c.max_hp
         prev_hp = c.current_hp
@@ -74,7 +74,7 @@ class TestCharacter(unittest.TestCase):
         self.assertEqual(c.current_hp, prev_hp)
 
     def test_pass_time_no_buffs_clarity_partial_sp(self):
-        c = character.Character()
+        c = character.Character(None)
         c.traits["Clarity of Mind"] = 1
         c.current_sp = int(c.max_sp * 0.75)
         assert c.current_sp < c.max_sp
@@ -83,7 +83,7 @@ class TestCharacter(unittest.TestCase):
         assert c.current_sp > prev_sp
 
     def test_pass_time_no_buffs_clarity_full_sp(self):
-        c = character.Character()
+        c = character.Character(None)
         c.traits["Clarity of Mind"] = 1
         assert c.current_sp == c.max_sp
         prev_sp = c.current_sp
@@ -91,14 +91,14 @@ class TestCharacter(unittest.TestCase):
         self.assertEqual(c.current_sp, prev_sp)
 
     def test_gain_gold_zero_not_merchant_warrior(self):
-        c = character.Character() 
+        c = character.Character(None)
         c.gold = 0
         gained = c.gain_gold(0)
         self.assertEqual(c.gold, 0)
         self.assertEqual(gained, 0)
 
     def test_gain_gold_nonzero_not_merchant_warrior(self):
-        c = character.Character() 
+        c = character.Character(None)
         c.gold = 0
         gained = c.gain_gold(100)
         self.assertEqual(c.gold, 100)
@@ -107,7 +107,7 @@ class TestCharacter(unittest.TestCase):
     # Test for Character.rest, not the 'Rest' option within the game
     @mock.patch('character.Character.restore_hp')
     def test_rest(self, mock_restore):
-        c = character.Character() 
+        c = character.Character(None)
         old_hp = c.current_hp
         assert c.current_hp == c.max_hp
         mock_restore.return_value = 10
