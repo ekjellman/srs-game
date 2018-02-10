@@ -1,4 +1,3 @@
-import srs_random
 from equipment import Equipment
 from effect import Debuff, Effect
 
@@ -28,14 +27,14 @@ class Monster(object):
     # If you modify these, make sure to modify the XP calc
     for stat in STAT_DICE.keys():
       die, modifier = STAT_DICE[stat]
-      self.stats[stat] = self.roll_stat(self.level, die, modifier)
+      self.stats[stat] = self.roll_stat(die, modifier)
     if boss:
       for stat in self.stats.keys():
         self.stats[stat] = self.stats[stat] * 1.3
       self.stats["Stamina"] *= 4   # Effectively x5.2
     for stat in self.stats.keys():
       # 75-125% change
-      self.stats[stat] *= (srs_random.random() * 0.5) + 0.75
+      self.stats[stat] *= (game.rng.random() * 0.5) + 0.75
       self.stats[stat] = int(self.stats[stat])
       self.stats[stat] = max(1, self.stats[stat])
     self.max_hp = self.stats["Stamina"] * 5
@@ -120,19 +119,19 @@ class Monster(object):
     boss_factor = 4 if self.boss else 1
     min_gold = 5 * self.level * boss_factor
     max_gold = 15 * self.level * boss_factor
-    treasure.append(srs_random.randint(min_gold, max_gold))
+    treasure.append(self.game.rng.randint(min_gold, max_gold))
     treasure_tier = 1
     treasure_tier += (1 if self.boss else 0)
     treasure_tier += (1 if infinity else 0)
     chances = CHANCE_TIERS[treasure_tier]
     for rarity in range(1, len(chances)):
-      while srs_random.random() < chances[rarity]:
+      while self.game.rng.random() < chances[rarity]:
         treasure.append(Equipment.get_new_armor(self.game, self.level, None, None, rarity))
     if rune_world:
       rune_chance = 0.0
     else:
       rune_chance = RUNE_CHANCES[treasure_tier]
-    while srs_random.random() < rune_chance:
+    while self.game.rng.random() < rune_chance:
       treasure.append("Rune")
     return treasure
 
@@ -147,7 +146,7 @@ class Monster(object):
     low = (10 + (7 * self.level)) * boss_factor
     high = (20 + (14 * self.level)) * boss_factor
     low, high = int(low), int(high)
-    return srs_random.randint(low, high)
+    return self.game.rng.randint(low, high)
 
   def get_damage_type(self):
     if (self.get_effective_stat("Intellect") >
@@ -156,9 +155,8 @@ class Monster(object):
     else:
       return "Physical"
 
-  @classmethod
-  def roll_stat(cls, level, die, modifier):
-    return sum(srs_random.randint(1, die) + modifier for _ in range(level))
+  def roll_stat(self, die, modifier):
+    return sum(self.game.rng.randint(1, die) + modifier for _ in range(self.level))
 
   def get_action(self, character):
     # Monster AI

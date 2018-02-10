@@ -2,17 +2,14 @@ import unittest
 from unittest import mock
 import game_state
 import rooms
-import srs_random
 import random as python_random
 import ai_player
+from srs_random import Dice
 
 # Run tests from the game directory with the following command:
 #   python -m unittest discover tests "test*.py" -v
 
 class TestGameState(unittest.TestCase):
-
-    def setUp(self):
-        srs_random.init()
 
     # This test should fail if any of the debug statements are active or changed
     def test_debug_off(self):
@@ -64,6 +61,7 @@ class TestGameState(unittest.TestCase):
     # TODO: Test tower when quest has not been done
     def test_generate_quests(self):
         mock_game_state = mock.MagicMock()
+        mock_game_state.rng = Dice()
         quests = game_state.GameState.generate_quests(mock_game_state)
         self.assertEqual(quests[0], None)
         for i in range(1, game_state.TOWER_LEVELS + 1):
@@ -87,6 +85,7 @@ class TestGameState(unittest.TestCase):
 
     def test_generate_towns(self):
         mock_game_state = mock.MagicMock()
+        mock_game_state.rng = Dice()
         towns = game_state.GameState.generate_towns(mock_game_state)
         levels = game_state.TOWER_LEVELS
         self.assertEqual(towns[0], None)

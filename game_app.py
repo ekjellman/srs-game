@@ -4,7 +4,6 @@ import time
 from game_state import GameState
 import wx
 import wx.richtext
-import srs_random
 import sys
 import re
 import subprocess
@@ -233,9 +232,8 @@ class MainWindow(wx.Frame):
     self.Show()
 
   def initialize(self):
-    seed = srs_random.init()
     self.game_state = GameState()
-    self.log_panel.add_entry("Game initialized [Seed: {}]".format(seed))
+    self.log_panel.add_entry("Game initialized [Seed: {}]".format(self.game_state.rng.seed))
     self.update_ui(character=False)
 
   def update_ui(self, character=True):
@@ -292,8 +290,7 @@ def verify_log(filename):
       if re.search(init, log_line):
         seed = int(m.group(1))
         print("Game found")
-        srs_random.seed(seed)
-        game_state = GameState()
+        game_state = GameState(seed)
         continue
       if re.search(victory, log_line):
         log_time = int(m.group(1))

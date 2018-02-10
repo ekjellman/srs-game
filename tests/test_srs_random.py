@@ -1,13 +1,13 @@
 import unittest
-import srs_random
+from srs_random import Dice
 
 class TestRandom(unittest.TestCase):
   def test_init(self):
-    seed = srs_random.init()
-    assert seed > 0
+    rng = Dice()
+    assert rng.seed > 0
 
   def test_random(self):
-    srs_random.seed(1248)
+    rng = Dice(1248)
     expected = [
       0.18123209611107516,
       0.4835357922971334,
@@ -26,18 +26,18 @@ class TestRandom(unittest.TestCase):
       0.4650767231172983,
       0.6867830279441302
     ]
-    actual = [srs_random.random() for i in range(len(expected))]
+    actual = [rng.random() for i in range(len(expected))]
     self.assertEqual(expected, actual)
 
   def test_gauss(self):
-    srs_random.seed(12345)
+    rng = Dice(12345)
     actual = [
-      srs_random.gauss(.5, 1),
-      srs_random.gauss(0, 1),
-      srs_random.gauss(0, 3),
-      srs_random.gauss(1, .05),
-      srs_random.gauss(1, .2),
-      srs_random.gauss(1, 1)
+      rng.gauss(.5, 1),
+      rng.gauss(0, 1),
+      rng.gauss(0, 3),
+      rng.gauss(1, .05),
+      rng.gauss(1, .2),
+      rng.gauss(1, 1)
     ]
     expected = [
       0.9361013880612667,
@@ -50,33 +50,33 @@ class TestRandom(unittest.TestCase):
     self.assertEqual(expected, actual)
 
   def test_randint(self):
-    srs_random.seed(653)
+    rng = Dice(653)
     actual = [
-      srs_random.randint(0, 1),
-      srs_random.randint(0, 1),
-      srs_random.randint(0, 1),
-      srs_random.randint(0, 1),
-      srs_random.randint(0, 3),
-      srs_random.randint(0, 4),
-      srs_random.randint(1, 10),
-      srs_random.randint(1, 3),
-      srs_random.randint(1, 4),
-      srs_random.randint(1, 5),
-      srs_random.randint(2, 4),
-      srs_random.randint(3, 10),
-      srs_random.randint(5, 10),
-      srs_random.randint(5, 8),
-      srs_random.randint(8, 12),
-      srs_random.randint(10, 20)
+      rng.randint(0, 1),
+      rng.randint(0, 1),
+      rng.randint(0, 1),
+      rng.randint(0, 1),
+      rng.randint(0, 3),
+      rng.randint(0, 4),
+      rng.randint(1, 10),
+      rng.randint(1, 3),
+      rng.randint(1, 4),
+      rng.randint(1, 5),
+      rng.randint(2, 4),
+      rng.randint(3, 10),
+      rng.randint(5, 10),
+      rng.randint(5, 8),
+      rng.randint(8, 12),
+      rng.randint(10, 20)
     ]
     expected = [0, 1, 1, 0, 3, 4, 10, 3, 1, 3, 4, 4, 9, 6, 11, 20]
     self.assertEqual(expected, actual)
 
   def test_choice(self):
-    srs_random.seed(98765)
+    rng = Dice(98765)
     seq = ['quick', 'brown', 'fox', 'lazy', 'dogs']
     expected = ['dogs', 'brown', 'brown', 'quick', 'fox']
-    actual = [srs_random.choice(seq) for i in range(len(expected))]
+    actual = [rng.choice(seq) for i in range(len(expected))]
     self.assertEqual(expected, actual)
 
 if __name__ == '__main__':

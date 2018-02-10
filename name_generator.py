@@ -1,5 +1,4 @@
 import collections
-import srs_random
 
 class NameGenerator(object):
   def __init__(self, game, monster_file, banned_file, shortest=3, longest=100):
@@ -57,7 +56,7 @@ class NameGenerator(object):
       for candidate in entry:
         count = entry[candidate]
         total += count
-        if srs_random.randint(1, total) <= count:
+        if self.game.rng.randint(1, total) <= count:
           next_letter = candidate
       if next_letter == "END":
         if self.valid_name(name):

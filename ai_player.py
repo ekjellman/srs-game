@@ -1,6 +1,5 @@
 import game_state
 import sys
-import srs_random
 
 ATTEMPT_SCORE = 2100
 
@@ -135,7 +134,6 @@ def score_equipment(item):
   return score
 
 def play_game():
-  srs_random.init()
   game = game_state.GameState()
   skill_to_use = None
   mysteries = True

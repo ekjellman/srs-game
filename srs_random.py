@@ -9,60 +9,51 @@ RECIP_BPF = 2**-BPF
 TWOPI = 2.0*_pi
 MAXINT = 0x7fffffffffffffff
 
-def init():
-  rng_seed = int(time.time() * 1000)
-  seed(rng_seed)
-  return rng_seed
+class Dice(object):
+  def __init__(self, seed=None):
+    if seed is None:
+      seed = int(time.time() * 1000)
+    self.seed = self.x = seed
+    self.gauss_next = None
 
-x = 0
-gauss_next = None
+  def _randint(self):
+    assert self.x != 0, "RNG state corrupted"
+    self.x = self.x ^ (self.x >> 12)
+    self.x = self.x ^ (self.x << 25)
+    self.x = self.x ^ (self.x >> 27)
+    self.x = self.x & MAXINT
+    return (self.x * 0x2545F4914F6CDD1D) & MAXINT
 
-def seed(number):
-  global x, gauss_next
-  gauss_next = None
-  x = number
+  def random(self):
+    return (self._randint() >> 10) * RECIP_BPF
 
-def _randint():
-  global x
-  assert x != 0, "srs_random.init() not called"
-  x = x ^ (x >> 12)
-  x = x ^ (x << 25)
-  x = x ^ (x >> 27)
-  x = x & MAXINT
-  return (x * 0x2545F4914F6CDD1D) & MAXINT
+  def gauss(self, mu, sigma):
+    # Adapted from CPython's random.gauss function.
 
-def random():
-  return (_randint() >> 10) * RECIP_BPF
+    # When x and y are two variables from [0, 1), uniformly
+    # distributed, then
+    #
+    #    cos(2*pi*x)*sqrt(-2*log(1-y))
+    #    sin(2*pi*x)*sqrt(-2*log(1-y))
+    #
+    # are two *independent* variables with normal distribution
+    # (mu = 0, sigma = 1).
+    # (Lambert Meertens)
+    # (corrected version; bug discovered by Mike Miller, fixed by LM)
 
-def gauss(mu, sigma):
-  global gauss_next
+    z = self.gauss_next
+    self.gauss_next = None
+    if z is None:
+      x2pi = self.random() * TWOPI
+      g2rad = _sqrt(-2.0 * _log(1.0 - self.random()))
+      z = _cos(x2pi) * g2rad
+      self.gauss_next = _sin(x2pi) * g2rad
+    return mu + z*sigma
 
-  # Adapted from CPython's random.gauss function.
+  def randint(self, a, b):
+    width = b - a + 1
+    return int(width * self.random()) + a
 
-  # When x and y are two variables from [0, 1), uniformly
-  # distributed, then
-  #
-  #    cos(2*pi*x)*sqrt(-2*log(1-y))
-  #    sin(2*pi*x)*sqrt(-2*log(1-y))
-  #
-  # are two *independent* variables with normal distribution
-  # (mu = 0, sigma = 1).
-  # (Lambert Meertens)
-  # (corrected version; bug discovered by Mike Miller, fixed by LM)
-
-  z = gauss_next
-  gauss_next = None
-  if z is None:
-    x2pi = random() * TWOPI
-    g2rad = _sqrt(-2.0 * _log(1.0 - random()))
-    z = _cos(x2pi) * g2rad
-    gauss_next = _sin(x2pi) * g2rad
-  return mu + z*sigma
-
-def randint(a, b):
-  range = b - a + 1
-  return int(range * random()) + a
-
-def choice(seq):
-  i = randint(0, len(seq) - 1)
-  return seq[i]
+  def choice(self, seq):
+    i = self.randint(0, len(seq) - 1)
+    return seq[i]
