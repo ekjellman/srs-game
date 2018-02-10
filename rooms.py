@@ -849,7 +849,7 @@ class Crafthall(Room):
       character.materials[0] -= self.level
       character.materials[rarity] -= self.level
       character.spend_gold(10 * rarity * self.level, logs)
-      rarity = get_craft_rarity(rarity)
+      rarity = self.get_craft_rarity(rarity)
       self.crafting = True
       level = int(self.level + max(0, self.game.rng.gauss(0, 1)))
       self.crafted_piece = Equipment.get_new_armor(self.game, level, None, None, rarity)
