@@ -1,13 +1,13 @@
 from math import log as _log, pi as _pi, sqrt as _sqrt, cos as _cos, sin as _sin
 import time
 
-# An xorshift* random number generator.
+# A modified xorshift* random number generator.
 # https://en.wikipedia.org/wiki/Xorshift
 
-BPF = 53        # Number of bits in a float
+BPF = 23        # Number of bits in a 32-bit float
 RECIP_BPF = 2**-BPF
 TWOPI = 2.0*_pi
-MAXINT = 0x7fffffffffffffff
+MAXINT = 0x7fffffff
 
 class Dice(object):
   def __init__(self, seed=None):
@@ -22,10 +22,10 @@ class Dice(object):
     self.x = self.x ^ (self.x << 25)
     self.x = self.x ^ (self.x >> 27)
     self.x = self.x & MAXINT
-    return (self.x * 0x2545F4914F6CDD1D) & MAXINT
+    return self.x
 
   def random(self):
-    return (self._randint() >> 10) * RECIP_BPF
+    return (self._randint() >> 8) * RECIP_BPF
 
   def gauss(self, mu, sigma):
     # Adapted from CPython's random.gauss function.

@@ -7,24 +7,19 @@ class TestRandom(unittest.TestCase):
     assert rng.seed > 0
 
   def test_random(self):
-    rng = Dice(1248)
+    rng = Dice(8421)
     expected = [
-      0.18123209611107516,
-      0.4835357922971334,
-      0.5823983723903442,
-      0.9727856702015698,
-      0.6614749676932676,
-      0.632901508040328,
-      0.6047620139037617,
-      0.9386117697169615,
-      0.5321717912477563,
-      0.24780457066956219,
-      0.24919355624928652,
-      0.34943757408355614,
-      0.8258911077824963,
-      0.09761401796435931,
-      0.4650767231172983,
-      0.6867830279441302
+      0.609379768371582,
+      0.7931511402130127,
+      0.05381131172180176,
+      0.6512428522109985,
+      0.9651315212249756,
+      0.3705257177352905,
+      0.6148815155029297,
+      0.0711895227432251,
+      0.8699692487716675,
+      0.6136062145233154,
+      0.5560871362686157
     ]
     actual = [rng.random() for i in range(len(expected))]
     self.assertEqual(expected, actual)
@@ -40,12 +35,12 @@ class TestRandom(unittest.TestCase):
       rng.gauss(1, 1)
     ]
     expected = [
-      0.9361013880612667,
-      1.1052175415166217,
-      -3.5149387007807764,
-      0.9963576216668021,
-      0.9831245768135517,
-      2.273494456580683
+      0.77939701361899,
+      -0.18666895427036528,
+      -3.8315715975338014,
+      1.0167345321217482,
+      1.1363730167341564,
+      -0.4553519284739609
     ]
     self.assertEqual(expected, actual)
 
@@ -69,13 +64,13 @@ class TestRandom(unittest.TestCase):
       rng.randint(8, 12),
       rng.randint(10, 20)
     ]
-    expected = [0, 1, 1, 0, 3, 4, 10, 3, 1, 3, 4, 4, 9, 6, 11, 20]
+    expected = [0, 1, 0, 0, 3, 3, 2, 2, 1, 3, 4, 7, 6, 5, 10, 19]
     self.assertEqual(expected, actual)
 
   def test_choice(self):
-    rng = Dice(98765)
+    rng = Dice(737171737)
     seq = ['quick', 'brown', 'fox', 'lazy', 'dogs']
-    expected = ['dogs', 'brown', 'brown', 'quick', 'fox']
+    expected = ['quick', 'dogs', 'fox', 'lazy', 'dogs']
     actual = [rng.choice(seq) for i in range(len(expected))]
     self.assertEqual(expected, actual)
 
