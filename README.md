@@ -11,6 +11,7 @@ An RPG you play with only the arrow keys! :arrow_backward: :arrow_up_small: :arr
 conda create -n srs python=3.6 anaconda
 source activate srs
 conda install -c newville wxpython-phoenix
+pip install transcrypt
 ```
 
 ### Run tests
@@ -19,6 +20,14 @@ bin/unit-tests
 ```
 
 ### Play the game
+
+#### Desktop version
 ```
 bin/play-game
+```
+
+#### Browser version
+```
+bin/build-html
+open srs.html
 ```
