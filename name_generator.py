@@ -1,5 +1,3 @@
-import collections
-
 class NameGenerator(object):
   def __init__(self, game, monster_file, banned_file, shortest=3, longest=100):
     self.game = game
@@ -26,14 +24,14 @@ class NameGenerator(object):
     for monster in monsters:
       letters.update(monster)
     for letter in letters:
-      table[letter] = collections.defaultdict(int)
-    table["START"] = collections.defaultdict(int)
+      table[letter] = {}
+    table["START"] = {}
     for monster in monsters:
       current = "START"
       for letter in monster:
-        table[current][letter] += 1
+        table[current][letter] = table[current].get(letter, 0) + 1
         current = letter
-      table[current]["END"] += 1
+      table[current]["END"] = table[current].get("END", 0) + 1
     return table
 
   def valid_name(self, name):
