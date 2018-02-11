@@ -1,4 +1,3 @@
-import game_state
 from equipment import Equipment, RARITY
 from effect import WellRested, Blessed, Lucky
 import items
@@ -407,7 +406,7 @@ class EquipmentShop(Room):
         self.shop_choice = None
         self.buying = False
         logs.append("You purchased {} for {} gold.".format(str(equipment), value))
-        game_state.GameState.recycle_equipment(logs, recycle, character)
+        self.game.recycle_equipment(logs, recycle, character)
         return (1, Room.NO_CHANGE)
       else:
         logs.append("You do not have enough money.")
@@ -881,7 +880,7 @@ class Crafthall(Room):
     if recycle:
       self.crafted_piece = None
       self.crafting = False
-      game_state.GameState.recycle_equipment(logs, recycle, character)
+      self.game.recycle_equipment(logs, recycle, character)
       return (0, Room.NO_CHANGE)
     if choice_text == "Craft Uncommon":
       return self.handle_craft(1, logs, character)

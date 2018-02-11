@@ -807,13 +807,12 @@ class GameState(object):
     elif choice_text == "Keep New":
       recycle = self.character.equip(self.equipment_choice)
       self.equipment_choice = None
-    GameState.recycle_equipment(logs, recycle, self.character)
+    self.recycle_equipment(logs, recycle, self.character)
     # Add materials to character, add materials inventory to character string
     self.leave_state()
     self.handle_treasure(logs)
 
-  @staticmethod
-  def recycle_equipment(logs, gear_piece, character):
+  def recycle_equipment(self, logs, gear_piece, character):
     """Recycle the given piece of equipment."""
     logs.append("You recycled {} for materials.".format(gear_piece))
     materials = gear_piece.get_recycled_materials()
