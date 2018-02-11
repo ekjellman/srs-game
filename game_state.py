@@ -79,7 +79,7 @@ class GameState(object):
     self.state = ["CHAR_CREATE"]
     self.character = Character(self)
     self.rng = Dice(seed)
-    self.name_gen = NameGenerator(self, "monsters.txt", "banned.txt")
+    self.name_gen = NameGenerator(self)
     if DEBUG_GOLD:
       self.character.gold = DEBUG_GOLD
     self.floor = 1
