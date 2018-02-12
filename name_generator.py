@@ -1,3 +1,5 @@
+from util import capwords
+
 MONSTERS = """
 Aazelion
 Aboleth
@@ -537,7 +539,7 @@ Leviathan
 Librarian
 Lich
 Licker
-Licker β
+Licker B
 Lion
 Lisa Trevor
 Little Rex
@@ -555,9 +557,9 @@ Lord Zedd
 Ludwig von Koopa
 Lurker
 Lycanthrope
-MA-121 Hunter "α"
-MA-121 Hunter "β"
-MA-124 Hunter "γ"
+MA-121 Hunter "A"
+MA-121 Hunter "B"
+MA-124 Hunter "Y"
 MA-125 Hunter-R
 Mages of Saruun
 Magikoopa
@@ -604,8 +606,8 @@ Mummy
 Muncher
 Muton
 Myrrah
-NE-α Type
-NE-β Type
+NE-A Type
+NE-B Type
 Naga
 Nail
 Nali
@@ -622,8 +624,7 @@ Nest
 Nexus
 Nidoking
 Nidoqueen
-Nidoran ♀
-Nidoran ♂
+Nidoran
 Nidorina
 Nidorino
 Nightmare
@@ -680,7 +681,7 @@ Pluto
 Pod
 Poison Headcrab
 Poison Zombie
-Pokémon
+Pokemon
 Pom-Pom
 Popokarimu
 Possessor
@@ -1067,10 +1068,8 @@ class NameGenerator(object):
 
   def make_markov_table(self, monsters):
     table = {}
-    letters = set()
-    for monster in monsters:
-      letters.update(monster)
-    for letter in letters:
+    # __pragma__ ('opov')
+    for letter in 'abcdefghijklmnopqrstuvwxyz ':
       table[letter] = {}
     table["START"] = {}
     for monster in monsters:
@@ -1079,6 +1078,7 @@ class NameGenerator(object):
         table[current][letter] = table[current].get(letter, 0) + 1
         current = letter
       table[current]["END"] = table[current].get("END", 0) + 1
+    # __pragma__ ('noopov')
     return table
 
   def valid_name(self, name):
@@ -1098,14 +1098,15 @@ class NameGenerator(object):
       entry = self.table[current]
       next_letter = None
       total = 0
-      for candidate in entry:
+      for candidate in entry.keys():
         count = entry[candidate]
         total += count
         if self.game.rng.randint(1, total) <= count:
           next_letter = candidate
       if next_letter == "END":
         if self.valid_name(name):
-          return "".join(name).title()
+          # NB: Transcrypt does not support str.title or str.capwords
+          return capwords("".join(name))
         else:
           return self.generate_name()
       else:
