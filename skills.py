@@ -442,4 +442,4 @@ SKILLS = [QuickAttack, Blind, Bash, Protection, HeavySwing, LastStand, Surge,
           Concentrate, Swiftness, BulkUp, Cannibalize, PoisonedBlade,
           Meditate, Heal, Drain, Wither, ChainLightning, FinalStrike, Renew,
           AutoLife, HolyBlade]
-SKILL_NAMES = [skill(None).get_name() for skill in SKILLS]
+SKILL_NAMES = [skill(None).get_name() for skill in SKILLS] # __:opov

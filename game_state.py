@@ -87,9 +87,11 @@ class GameState(object):
     self.time_spent = 0
     self.energy = 200
     self.towns = self.generate_towns()
-    self.tower_lock = [True] * (TOWER_LEVELS + 1) # __:opov
+    # __pragma__ ('opov')
+    self.tower_lock = [True] * (TOWER_LEVELS + 1)
     self.tower_lock[1] = False
-    self.tower_faction = [1.0] * (TOWER_LEVELS + 1) # __:opov
+    self.tower_faction = [1.0] * (TOWER_LEVELS + 1)
+    # __pragma__ ('noopov')
     self.tower_update_ready = False
     self.tower_quests = self.generate_quests()
     # Number of encounters completed in current tower ascension

@@ -50,7 +50,7 @@ class TrainingRoom(Room):
 
   def get_buttons(self, character):
     if self.forgetting:
-      skills = [x.get_name() for x in character.skills]
+      skills = [x.get_name() for x in character.skills] # __:opov
       buttons = ([""] * (3 - len(skills))) + skills
       buttons.append("Never Mind")
     else:
@@ -437,8 +437,10 @@ class ArmorShop(EquipmentShop):
     self.refresh()
 
   def refresh(self):
+    # __pragma__ ('opov')
     self.inventory = [Equipment.get_new_armor(self.game, self.level, slot)
                       for slot in range(1, 4)]
+    # __pragma__ ('noopov')
 
   @classmethod
   def get_name(cls):
@@ -450,7 +452,7 @@ class WeaponShop(EquipmentShop):
     self.refresh()
 
   def refresh(self):
-    self.inventory = [Equipment.get_new_armor(self.game, self.level, 0) for _ in range(3)]
+    self.inventory = [Equipment.get_new_armor(self.game, self.level, 0) for _ in range(3)] # __:opov
 
   @classmethod
   def get_name(cls):
@@ -462,7 +464,7 @@ class Jeweler(EquipmentShop):
     self.refresh()
 
   def refresh(self):
-    self.inventory = [Equipment.get_new_armor(self.game, self.level, 4) for _ in range(3)]
+    self.inventory = [Equipment.get_new_armor(self.game, self.level, 4) for _ in range(3)] # __:opov
 
   @classmethod
   def get_name(cls):
@@ -743,10 +745,11 @@ class Alchemist(Room):
     inventory = []
     for _ in range(3):
       # Health, magic, and buff potions each have their own constructors
-      # __pragma__ ('opov')
       health_pots = [items.HealthPotion(self.game, x) for x in ("Minor", "Standard", "Major", "Super")]
       magic_pots = [items.MagicPotion(self.game, x) for x in ("Minor", "Standard", "Major")] # Super Magic Potion doesn't exist
-      pots = health_pots + magic_pots + [items.EffectPotion(self.game, x) for x in items.EffectPotion.EFFECT_POTIONS]
+      effect_pots = [items.EffectPotion(self.game, x) for x in items.EffectPotion.EFFECT_POTIONS.keys()]
+      # __pragma__ ('opov')
+      pots = health_pots + magic_pots + effect_pots
       # __pragma__ ('noopov')
       #inventory.append(max((self.item_rate(p), p) for p in pots)[1])
       best_pot = None

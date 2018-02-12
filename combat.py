@@ -52,7 +52,7 @@ class Combat(object):
           character.current_hp = 1
           character.restore_hp(effect - 1)
           # TODO: Fix cohesion
-          character.buffs = [b for b in character.buffs if b.get_name() != "Auto Life"]
+          character.buffs = [b for b in character.buffs if b.get_name() != "Auto Life"] # __:opov
         elif Effect.get_combined_impact("Substitute", character.buffs,
                                         character.debuffs) > 0:
           logs.append("The 地蔵's spirit restored your HP.")
