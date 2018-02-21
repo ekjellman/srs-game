@@ -8,10 +8,8 @@ An RPG you play with only the arrow keys! :arrow_backward: :arrow_up_small: :arr
 
 ### Set up Conda environment
 ```
-conda create -n srs python=3.6 anaconda
-source activate srs
-conda install -c newville wxpython-phoenix
-pip install transcrypt
+conda env create -f environment.yml
+source activate srs-game
 ```
 
 ### Run tests
