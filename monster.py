@@ -74,7 +74,7 @@ class Monster(object):
        best = self.stats[stat]
     del self.stats["Tank"]
     self.monster_type = best_stat
-    for stat in self.stats:
+    for stat in self.stats.keys():
       self.stats[stat] = int(self.stats[stat] * .95)
       self.stats[stat] = max(1, self.stats[stat])
     if self.monster_type == "Tank":
