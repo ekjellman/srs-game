@@ -89,7 +89,7 @@ class Monster(object):
 
   def set_image(self, stronghold, random_monster=False):
     if stronghold:
-      self.image = "boss" + str(stronghold)
+      self.image = "boss" + str(stronghold) + ".png"
       return
     elif random_monster:
       tier = self.game.rng.randint(1, 8)
@@ -100,6 +100,7 @@ class Monster(object):
       if tier < 1: tier = 1
       image_type = self.monster_type
     self.image = "t" + str(tier) + image_type
+    self.image = self.image + ".png"
 
   def hp_string(self):
     percent = int(100 * self.current_hp // self.max_hp)
@@ -120,7 +121,7 @@ class Monster(object):
     pieces = []
     # TODO: Mark elites somehow
     if is_browser:
-      pieces.append(nl(nl("<img class=\"monster\" src=\"" + self.image + "\">")));
+      pieces.append(nl(nl("<img class=\"monster\" src=\"images/" + self.image + "\">")));
     pieces.append(nl("Name: {}").format(self.name))
     if libra_level == 0:
       pieces.append(nl("HP: {}").format(self.hp_string()))
@@ -137,7 +138,6 @@ class Monster(object):
         pieces.append("{}: {} ({})  ".format(stat, self.get_effective_stat(stat),
                                          self.stats[stat]))
         pieces.append(nl())
-    pieces.append("Image: {}".format(self.image))
     return "".join(pieces)
 
   def __str__(self):
