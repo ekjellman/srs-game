@@ -8,7 +8,7 @@ An RPG you play with only the arrow keys! :arrow_backward: :arrow_up_small: :arr
 
 ### Set up Conda environment
 ```
-conda env create -f environment.yml
+conda env create
 source activate srs-game
 ```
 
