@@ -19,7 +19,9 @@ STAT_DICE = {"Strength": (12, 1),
              "Stamina": (10, 1)}
 
 class Monster(object):
-  def __init__(self, game, level, boss):
+
+  def __init__(self, game, level, boss, infinity_dungeon=False, stronghold=0,
+               rune_world=False):
     self.game = game
     self.stats = {}
     self.level = level
@@ -46,6 +48,11 @@ class Monster(object):
       self.stats[stat] *= (game.rng.random() * 0.5) + 0.75
       self.stats[stat] = int(self.stats[stat])
       self.stats[stat] = max(1, self.stats[stat])
+    if not infinity_dungeon and not stronghold and not rune_world:
+      self.set_type()
+    else:
+      self.monster_type = "None"
+    self.set_image(stronghold, infinity_dungeon or rune_world)
     self.max_hp = self.stats["Stamina"] * 5
     self.current_hp = self.max_hp
     if boss:
@@ -56,6 +63,43 @@ class Monster(object):
     self.traits = {}
     self.buffs = []
     self.debuffs = []
+
+  def set_type(self):
+    self.stats["Tank"] = (self.stats["Defense"] + self.stats["Magic Defense"]) / 2
+    best = 0
+    best_stat = None
+    for stat in ("Tank", "Strength", "Intellect", "Speed"):
+      if self.stats[stat] > best:
+       best_stat = stat
+       best = self.stats[stat]
+    del self.stats["Tank"]
+    self.monster_type = best_stat
+    for stat in self.stats:
+      self.stats[stat] = int(self.stats[stat] * .95)
+      self.stats[stat] = max(1, self.stats[stat])
+    if self.monster_type == "Tank":
+      self.stats["Magic Defense"] = int(self.stats["Magic Defense"] * 1.20)
+      self.stats["Defense"] = int(self.stats["Defense"] * 1.20)
+    else:
+      self.stats[best_stat] = int(self.stats[best_stat] * 1.20)
+
+        # Start here: set self.monster_type
+        #             Implement set_image
+        #             Make sure infinity_dungeon and stronghold are hooked in
+
+  def set_image(self, stronghold, random_monster=False):
+    if stronghold:
+      self.image = "boss" + str(stronghold)
+      return
+    elif random_monster:
+      tier = self.game.rng.randint(1, 8)
+      image_type = self.game.rng.choice(["Tank", "Intellect", "Speed", "Strength"])
+    else:
+      tier = int(self.game.rng.gauss(0, .5) + (self.level / 5) + 1)
+      if tier > 8: tier = 8
+      if tier < 1: tier = 1
+      image_type = self.monster_type
+    self.image = "t" + str(tier) + image_type
 
   def hp_string(self):
     percent = int(100 * self.current_hp // self.max_hp)
@@ -93,6 +137,7 @@ class Monster(object):
         pieces.append("{}: {} ({})  ".format(stat, self.get_effective_stat(stat),
                                          self.stats[stat]))
         pieces.append(nl())
+    pieces.append("Image: {}".format(self.image))
     return "".join(pieces)
 
   def __str__(self):

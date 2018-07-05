@@ -325,8 +325,13 @@ class GameState(object):
     if level is None:
       level = self.floor
     boss = self.rng.random() < boss_chance
+    if self.current_state() == "STRONGHOLD":
+      boss_number = self.stronghold_room + 1
+    else:
+      boss_number = 0
+    self.monster = Monster(self, level, boss, self.infinity_dungeon,
+                           boss_number, self.rune_level != -1)
     self.add_state("COMBAT")
-    self.monster = Monster(self, level, boss)
     logs.append("You have encountered a monster.")
 
   def apply_choice_rune_world(self, logs, choice_text):
