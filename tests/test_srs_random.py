@@ -42,7 +42,8 @@ class TestRandom(unittest.TestCase):
       1.1363730167341564,
       -0.4553519284739609
     ]
-    self.assertAlmostEqual(expected, actual)
+    for e, a in zip(expected, actual):
+      self.assertAlmostEqual(e, a)
 
   def test_randint(self):
     rng = Dice(653)
