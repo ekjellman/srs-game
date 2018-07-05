@@ -57,6 +57,6 @@ class Quest(object):
     while len(treasure) < self.treasure_reward:
       for rarity in range(4, -1, -1):
         if self.game.rng.random() < TREASURE_CHANCES[rarity]:
-          treasure.append(Equipment.get_new_armor(self.game, self.level, None, None, rarity))
+          treasure.append(Equipment.get_new_gear(self.game, self.level, None, None, rarity))
           break
     return treasure

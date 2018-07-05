@@ -95,7 +95,7 @@ class Character(object):
 
   def make_debug_equipment(self, level, choice):
     for i in range(len(self.equipment)):
-      self.equip(Equipment.get_new_armor(self.game, level, i, choice, 3))
+      self.equip(Equipment.get_new_gear(self.game, level, i, choice, 3))
 
   def add_item(self, item):
     if len(self.items) >= 3:
@@ -166,7 +166,7 @@ class Character(object):
 
   def make_initial_equipment(self, choice):
     for i in range(len(self.equipment)):
-      self.equip(Equipment.get_new_armor(self.game, 1, i, choice))
+      self.equip(Equipment.get_new_gear(self.game, 1, i, choice))
 
   def __str__(self):
     pieces = []

@@ -439,7 +439,7 @@ class ArmorShop(EquipmentShop):
 
   def refresh(self):
     # __pragma__ ('opov')
-    self.inventory = [Equipment.get_new_armor(self.game, self.level, slot)
+    self.inventory = [Equipment.get_new_gear(self.game, self.level, slot)
                       for slot in range(1, 4)]
     # __pragma__ ('noopov')
 
@@ -453,7 +453,7 @@ class WeaponShop(EquipmentShop):
     self.refresh()
 
   def refresh(self):
-    self.inventory = [Equipment.get_new_armor(self.game, self.level, 0) for _ in range(3)] # __:opov
+    self.inventory = [Equipment.get_new_gear(self.game, self.level, 0) for _ in range(3)] # __:opov
 
   @classmethod
   def get_name(cls):
@@ -465,7 +465,7 @@ class Jeweler(EquipmentShop):
     self.refresh()
 
   def refresh(self):
-    self.inventory = [Equipment.get_new_armor(self.game, self.level, 4) for _ in range(3)] # __:opov
+    self.inventory = [Equipment.get_new_gear(self.game, self.level, 4) for _ in range(3)] # __:opov
 
   @classmethod
   def get_name(cls):
@@ -482,7 +482,7 @@ class RareGoodsShop(EquipmentShop):
       level = max(1, self.level + int(self.game.rng.gauss(0, 3)))
       rarity = self.game.rng.randint(2, 4)
       slot = self.game.rng.randint(0, 4)
-      equip = Equipment.get_new_armor(self.game, level, slot, None, rarity)
+      equip = Equipment.get_new_gear(self.game, level, slot, None, rarity)
       self.inventory.append(equip)
 
   @classmethod
@@ -866,7 +866,7 @@ class Crafthall(Room):
       rarity = self.get_craft_rarity(rarity)
       self.crafting = True
       level = int(self.level + max(0, self.game.rng.gauss(0, 1)))
-      self.crafted_piece = Equipment.get_new_armor(self.game, level, None, None, rarity)
+      self.crafted_piece = Equipment.get_new_gear(self.game, level, None, None, rarity)
       return (3, Room.NO_CHANGE)
     else:
       logs.append("You do not have enough money or materials.")

@@ -180,7 +180,7 @@ class Equipment(object):
     return value
 
   @classmethod
-  def get_new_armor(cls, game, item_level, slot=None, require=None, rarity=1):
+  def get_new_gear(cls, game, item_level, slot=None, require=None, rarity=1):
     attributes = {}
     if slot is None:
       slot = game.rng.randint(0, len(SLOTS) - 1)

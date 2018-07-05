@@ -267,7 +267,7 @@ class GameState(object):
     if self.rune_level == 0:
       logs.append("Unpurified, the rune dissolves into dust.")
       return
-    item = Equipment.get_new_armor(self, self.rune_level, slot=4, rarity=4)
+    item = Equipment.get_new_gear(self, self.rune_level, slot=4, rarity=4)
     self.treasure_queue.append(item)
     self.rune_level = -1
     self.handle_treasure(logs)
@@ -526,7 +526,7 @@ class GameState(object):
         if self.infinity_dungeon:
           rarity = max(rarity, self.rng.min_randint_n_times(1, 4, 4))
         level = max(1, int(self.floor + self.rng.gauss(0, 1)))
-        treasure.append(Equipment.get_new_armor(self, level, None, None, rarity))
+        treasure.append(Equipment.get_new_gear(self, level, None, None, rarity))
     self.treasure_queue = treasure
     self.handle_treasure(logs)
 
