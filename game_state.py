@@ -913,8 +913,8 @@ class GameState(object):
     buffs = ", ".join(str(buff) for buff in self.character.buffs)
     buffs = buffs or "None"
     libra_string = self.monster.libra_string(self.character.traits.get("Libra", 0))
-    return nl("Your HP: {}") + nl(nl("Buffs: {}")) + "{}".format(self.character.colored_hp(),
-                                                                 buffs, libra_string)
+    return (nl("Your HP: {}") + nl(nl("Buffs: {}")) + "{}").format(self.character.colored_hp(),
+                                                                   buffs, libra_string)
 
   def panel_text(self):
     """Return text to display to the player about the current game state."""
