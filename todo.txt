@@ -1,0 +1,9 @@
+- JS version needs to write log files
+- verify log file from Python passes in Python checker
+- verify log file from JS passes in Python checker
+- show monster types in UI -- requires synthesizing another list of them
+- process images -- transparent or white background; autocrop
+- icons for equipment etc. in browser mode
+- reconcile browser & python UIs
+- decide on music
+- full playthroughs in browser mode
