@@ -11,7 +11,7 @@ def capwords(s, sep=None):
 def pd(number):
   # Transcrypt-friendly '{:+d}' string formatting.
   symbol = '+' if number >= 0 else '-'
-  return symbol + abs(number)
+  return symbol + str(abs(number))
 
 def f1(number):
   # Transcrypt-friendly '{:.1f}' string formatting.
