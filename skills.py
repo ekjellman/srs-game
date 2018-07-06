@@ -1,5 +1,6 @@
 from combat import Combat
 import effect
+from util import f1, f2
 
 # TODO: A few more interesting magical attacks
 # Force bolt?
@@ -35,8 +36,8 @@ class QuickAttack(Skill):
   def go_again_chance(self):
     return 1.0 - (0.8 ** self.level)
   def get_description(self):
-    desc = "Physical attack with {:.2f} multiplier, {:.1f}% chance to go again."
-    desc = desc.format(self.get_attack_multiple(), (self.go_again_chance() * 100))
+    desc = "Physical attack with {} multiplier, {}% chance to go again."
+    desc = desc.format(f2(self.get_attack_multiple()), f1(self.go_again_chance() * 100))
     return desc
   def sp_cost(self):
     return int(self.level * 4 * (1.1 ** self.level))
@@ -60,8 +61,8 @@ class Blind(Skill):
   def blind_chance(self):
     return 1.0 - (0.5 ** self.level)
   def get_description(self):
-    desc = "Physical attack with {:.2f} multiplier, {:.1f}% chance to blind."
-    desc = desc.format(self.get_attack_multiple(), (self.blind_chance() * 100))
+    desc = "Physical attack with {} multiplier, {}% chance to blind."
+    desc = desc.format(f2(self.get_attack_multiple()), f1(self.blind_chance() * 100))
     return desc
   def sp_cost(self):
     return int(self.level * 4 * (1.1 ** self.level))
@@ -84,8 +85,8 @@ class Bash(Skill):
   def stun_chance(self):
     return 1.0 - (0.8 ** self.level)
   def get_description(self):
-    desc = "Physical attack with {:.2f} multiplier, {:.1f}% chance to stun."
-    desc = desc.format(self.get_attack_multiple(), (self.stun_chance() * 100))
+    desc = "Physical attack with {} multiplier, {}% chance to stun."
+    desc = desc.format(f2(self.get_attack_multiple()), f1(self.stun_chance() * 100))
     return desc
   def sp_cost(self):
     return int(self.level * 5 * (1.1 ** self.level))
@@ -121,8 +122,8 @@ class HeavySwing(Skill):
   def miss_chance(self):
     return 0.3 * (.9 ** (self.level - 1))
   def get_description(self):
-    desc = "Physical attack with {:.2f} multiplier, {:.1f}% chance for normal damage."
-    desc = desc.format(self.get_attack_multiple(), (self.miss_chance() * 100))
+    desc = "Physical attack with {} multiplier, {}% chance for normal damage."
+    desc = desc.format(f2(self.get_attack_multiple()), f1(self.miss_chance() * 100))
     return desc
   def sp_cost(self):
     return int(self.level * 5 * (1.1 ** self.level))
@@ -159,8 +160,8 @@ class Surge(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Strength up by {:.1f}% for {} time units.".format((self.buff_power() - 1) * 100,
-                                               self.buff_duration())
+    return "Strength up by {}% for {} time units.".format(f1((self.buff_power() - 1) * 100),
+                                                          self.buff_duration())
   def sp_cost(self):
     return int(self.level * 5 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
@@ -175,8 +176,8 @@ class Concentrate(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Intellect up by {:.1f}% for {} time units.".format((self.buff_power() - 1) * 100,
-                                                self.buff_duration())
+    return "Intellect up by {}% for {} time units.".format(f1((self.buff_power() - 1) * 100),
+                                                           self.buff_duration())
   def sp_cost(self):
     return int(self.level * 5 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
@@ -191,8 +192,8 @@ class Swiftness(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Speed up by {:.1f}% for {} time units.".format((self.buff_power() - 1) * 100,
-                                            self.buff_duration())
+    return "Speed up by {}% for {} time units.".format(f1((self.buff_power() - 1) * 100),
+                                                       self.buff_duration())
   def sp_cost(self):
     return int(self.level * 7 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
@@ -207,8 +208,8 @@ class BulkUp(Skill):
   def buff_power(self):
     return 1.2 + 0.1 * self.level
   def get_description(self):
-    return "Stamina up by {:.1f}% for {} time units.".format((self.buff_power() - 1) * 100,
-                                            self.buff_duration())
+    return "Stamina up by {}% for {} time units.".format(f1((self.buff_power() - 1) * 100),
+                                                         self.buff_duration())
   def sp_cost(self):
     return int(self.level * 7 * (1.1 ** self.level))
   def apply_skill(self, actor, opponent, logs):
@@ -221,8 +222,8 @@ class Cannibalize(Skill):
   def percent_converted(self):
     return 3 + self.level
   def get_description(self):
-    desc = "Convert up to {:.1f}% of max HP into half as many SP."
-    return desc.format(self.percent_converted())
+    desc = "Convert up to {}% of max HP into half as many SP."
+    return desc.format(f1(self.percent_converted()))
   def sp_cost(self):
     return 0
   def apply_skill(self, actor, opponent, logs):
@@ -242,8 +243,8 @@ class PoisonedBlade(Skill):
   def kill_chance(self):
     return 0.05 + (0.02 * self.level)
   def get_description(self):
-    desc = "Physical attack with {:.2f} multiplier, {:.1f}% chance to auto-kill."
-    desc = desc.format(self.get_attack_multiple(), (self.kill_chance() * 100))
+    desc = "Physical attack with {} multiplier, {}% chance to auto-kill."
+    desc = desc.format(f2(self.get_attack_multiple()), f1(self.kill_chance() * 100))
     return desc
   def sp_cost(self):
     return int(self.level * 4 * (1.1 ** self.level))
@@ -262,8 +263,8 @@ class Meditate(Skill):
   def percent_gained(self):
     return 8 + self.level
   def get_description(self):
-    desc = "Gain {:.1f}% of max SP. Has a chance to fail based on current SP."
-    return desc.format(self.percent_gained())
+    desc = "Gain {}% of max SP. Has a chance to fail based on current SP."
+    return desc.format(f1(self.percent_gained()))
   def sp_cost(self):
     return 0
   def chance_to_fail(self, actor):
@@ -298,8 +299,8 @@ class Drain(Skill):
   def get_attack_multiple(self):
     return 1.0 + 0.1 * self.level
   def get_description(self):
-    desc = "Magical attack with {:.2f} multiplier. Gains some HP."
-    desc = desc.format(self.get_attack_multiple())
+    desc = "Magical attack with {} multiplier. Gains some HP."
+    desc = desc.format(f2(self.get_attack_multiple()))
     return desc
   def sp_cost(self):
     return int(self.level * 5 * (1.1 ** self.level))
@@ -322,8 +323,8 @@ class Wither(Skill):
   def get_wither_length(self):
     return 9 + self.level
   def get_description(self):
-    desc = "Magical attack with {:.2f} multiplier. Adds {} stacks of Wither."
-    desc = desc.format(self.get_attack_multiple(), self.get_wither_stacks())
+    desc = "Magical attack with {} multiplier. Adds {} stacks of Wither."
+    desc = desc.format(f2(self.get_attack_multiple()), self.get_wither_stacks())
     return desc
   def sp_cost(self):
     return int(self.level * 6 * (1.1 ** self.level))
@@ -342,8 +343,8 @@ class ChainLightning(Skill):
   def get_repeat_chance(self):
     return 1.0 - (0.75 ** self.level)
   def get_description(self):
-    desc = "Magical attack with {:.2f} multiplier. {:.1f}% initial repeat chance."
-    desc = desc.format(self.get_attack_multiple(), self.get_repeat_chance() * 100)
+    desc = "Magical attack with {} multiplier. {}% initial repeat chance."
+    desc = desc.format(f2(self.get_attack_multiple()), f1(self.get_repeat_chance() * 100))
     return desc
   def sp_cost(self):
     return int(self.level * 6 * (1.1 ** self.level))
@@ -422,9 +423,9 @@ class HolyBlade(Skill):
   def get_heal_percent(self):
     return 5 + self.level
   def get_description(self):
-    desc = "Physical attack with {:.2f} multiplier. Gives {} stacks of Aura. {:.1f}% heal."
-    desc = desc.format(self.get_attack_multiple(), self.get_aura_stacks(),
-                   self.get_heal_percent())
+    desc = "Physical attack with {} multiplier. Gives {} stacks of Aura. {}% heal."
+    desc = desc.format(f2(self.get_attack_multiple()), self.get_aura_stacks(),
+                   f1(self.get_heal_percent()))
     return desc
   def sp_cost(self):
     return int(self.level * 6 * (1.1 ** self.level))

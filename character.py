@@ -2,6 +2,7 @@ from skills import SKILLS, SKILL_NAMES
 from equipment import Equipment, RARITY
 from effect import Effect, Buff, Debuff
 from platform import nl
+from util import pd
 
 STAT_ORDER = ["Strength", "Intellect", "Speed", "Stamina", "Defense",
               "Magic Defense"]
@@ -412,7 +413,7 @@ class Character(object):
     self.exp += total_xp_gain
     added_xp = total_xp_gain - exp_gained
     if added_xp:
-      logs.append("You have gained {} XP ({:+d} from buffs).".format(exp_gained, added_xp))
+      logs.append("You have gained {} XP ({} from buffs).".format(exp_gained, pd(added_xp)))
     else:
       logs.append("You have gained {} XP.".format(exp_gained))
     levels_gained = 0
