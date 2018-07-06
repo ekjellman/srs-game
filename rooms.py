@@ -51,8 +51,10 @@ class TrainingRoom(Room):
 
   def get_buttons(self, character):
     if self.forgetting:
-      skills = [x.get_name() for x in character.skills] # __:opov
+      # __pragma__ ('opov')
+      skills = [x.get_name() for x in character.skills]
       buttons = ([""] * (3 - len(skills))) + skills
+      # __pragma__ ('noopov')
       buttons.append("Never Mind")
     else:
       buttons = ["Forget Skill", "Gain XP", "Gain Stats", "Leave Shop"]

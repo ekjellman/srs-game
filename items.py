@@ -159,7 +159,7 @@ class MaterialPack(Item):
                  "value": value,
                  "item_level": 1}
   def apply(self, character, monster, logs):
-    counts = [0] * 5
+    counts = [0] * 5 # __:opov
     for i in range(40):
       rarity = self.material_type + self.game.rng.gauss(.5, 1)
       rarity = max(0, min(4, int(rarity)))
