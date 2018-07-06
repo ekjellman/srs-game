@@ -1,4 +1,5 @@
 from platform import nl
+from util import pd, pf1
 
 # TODO: Make stats always be in a specific order [OrderedDict or array]
 # TODO: Should probably move these to a different place
@@ -62,13 +63,13 @@ class Equipment(object):
       difference = new_attribute - old_attribute
       if difference != 0:
         color_string = "rgb(255,0,0)" if difference < 0 else "rgb(0,160,0)"
-        pieces.append("<span style=\"color: {}\">{:+d} {}</span>".format(color_string, difference, attr))
+        pieces.append("<span style=\"color: {}\">{} {}</span>".format(color_string, pd(difference), attr))
     if old.slot == 0:
       old_average = (old.attributes.get("Low", 0) + old.attributes.get("High", 0)) / 2.0
       new_average = (new.attributes.get("Low", 0) + new.attributes.get("High", 0)) / 2.0
       difference = new_average - old_average
       color = "rgb(255,0,0)" if difference < 0 else "rgb(0,160,0)"
-      pieces.append("<span style=\"color: {}\">{:+0.1f} average damage</span>".format(color, difference))
+      pieces.append("<span style=\"color: {}\">{} average damage</span>".format(color, pf1(difference)))
       if old.attributes.get("Type", 0) != new.attributes.get("Type", 0):
         pieces.append("Weapon type change")
     return nl().join(pieces)
@@ -80,7 +81,7 @@ class Equipment(object):
                             max(1, self.item_level // 2))
     amount = int(amount * (1.0 + 0.25 * self.rarity))
     self.attributes[enchanted_stat] = self.attributes.get(enchanted_stat, 0) + amount
-    return "{:+d} {}".format(amount, enchanted_stat)
+    return "{} {}".format(pd(amount), enchanted_stat)
 
   def get_stat_value(self, stat):
     return self.attributes.get(stat, 0)
@@ -96,7 +97,7 @@ class Equipment(object):
       stat_gains[i] = self.game.rng.randint(stat_gains[i] // 2, stat_gains[i])
       self.attributes[STATS[i]] = self.attributes.get(STATS[i], 0) + stat_gains[i]
       if stat_gains[i] > 0:
-        result_pieces.append("{:+d} {}".format(stat_gains[i], STATS[i]))
+        result_pieces.append("{} {}".format(pd(stat_gains[i]), STATS[i]))
     # Defenses
     max_gains = 2 * (level - self.item_level)
     def_gains = [0, 0]
@@ -106,7 +107,7 @@ class Equipment(object):
       def_gains[i] = self.game.rng.randint(def_gains[i] // 2, def_gains[i])
       self.attributes[DEFENSES[i]] = self.attributes.get(DEFENSES[i], 0) + def_gains[i]
       if def_gains[i] > 0:
-        result_pieces.append("{:+d} {}".format(def_gains[i], DEFENSES[i]))
+        result_pieces.append("{} {}".format(pd(def_gains[i]), DEFENSES[i]))
     # Weapon Stats
     if self.slot == 0:
       rarity_factor = 1.0 + (.1 * self.rarity)
@@ -122,7 +123,7 @@ class Equipment(object):
       new_average = (new_low + new_high) / 2.0
       difference = new_average - old_average
       if difference > 0:
-        result_pieces.append("{:+0.1f} average damage".format(difference))
+        result_pieces.append("{} average damage".format(pf1(difference)))
       self.attributes["Low"] = new_low
       self.attributes["High"] = new_high
     self.reforge_count += 1
@@ -230,7 +231,7 @@ class Equipment(object):
     for attr in self.attributes.keys():
       if attr in STATS:
         if self.attributes.get(attr, 0) > 0:
-          stat_pieces.append("{:+d} {}".format(self.attributes.get(attr, 0), attr))
+          stat_pieces.append("{} {}".format(pd(self.attributes.get(attr, 0)), attr))
       elif attr in DEFENSES:
         defense_pieces.append("{} {}".format(self.attributes.get(attr, 0),
                                          ABBREVIATIONS[attr]))
