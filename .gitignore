@@ -44,3 +44,9 @@ Thumbs.db
 # Transcript generated files #
 ##############################
 __javascript__
+
+# PyInstaller generated files #
+###############################
+/build/
+/dist/
+/srs-game.spec

@@ -1,0 +1,3 @@
+#!/bin/sh
+rm -rf build dist
+pyinstaller --onedir --onefile --name=srs-game --windowed game_app.py
