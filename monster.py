@@ -1,6 +1,6 @@
 from equipment import Equipment
 from effect import Debuff, Effect
-from platform import is_browser, nl
+from plat import is_browser, nl
 
 STAT_ORDER = ["Strength", "Intellect", "Speed", "Stamina", "Defense",
               "Magic Defense"]

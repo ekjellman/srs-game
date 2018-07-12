@@ -1,7 +1,7 @@
 from skills import SKILLS, SKILL_NAMES
 from equipment import Equipment, RARITY
 from effect import Effect, Buff, Debuff
-from platform import nl
+from plat import nl
 from util import pd
 
 STAT_ORDER = ["Strength", "Intellect", "Speed", "Stamina", "Defense",

@@ -10,7 +10,7 @@ from items import Item
 import skills
 from srs_random import Dice
 from name_generator import NameGenerator
-from platform import nl
+from plat import nl
 from util import last
 
 # TODO: Log more. Certainly including victory

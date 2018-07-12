@@ -1,6 +1,6 @@
 import time
 from game_state import GameState
-from platform import nl
+from plat import nl
 
 class Game:
   def __init__(self):

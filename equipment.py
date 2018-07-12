@@ -1,4 +1,4 @@
-from platform import nl
+from plat import nl
 from util import pd, pf1
 
 # TODO: Make stats always be in a specific order [OrderedDict or array]

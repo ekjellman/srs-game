@@ -1,6 +1,6 @@
 from monster import Monster
 from equipment import Equipment
-from platform import nl
+from plat import nl
 
 TREASURE_CHANCES = [1.0, 1.0, 0.500, 0.080, 0.015]
 

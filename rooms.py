@@ -1,7 +1,7 @@
 from equipment import Equipment, RARITY
 from effect import WellRested, Blessed, Lucky
 import items
-from platform import nl
+from plat import nl
 from util import last
 
 class Room(object):
