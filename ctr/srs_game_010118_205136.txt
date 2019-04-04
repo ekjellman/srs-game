@@ -1,0 +1,29 @@
+Victory Time: 12225
+
+1st victory
+
+HP 1102 / 4304
+SP 1189 / 1239
+Level 75 (2996 / 15818)
+
+Strength 587 (217)
+Int 677 (230)
+Speed 1283 (236)
+Stam 637 (229)
+Def 1423 (233)
+M. Def 1482 (232)
+
+Weapon 87 R Phys 590-820 56 Def / 56 MDef +56 Stam +154 Speed
+Helm 62 E 84 Def / 80 MDef +138 Str + 78 Stam +93 Speed
+Chest 73 E 102 Def / 103 MDef +45 Stam +181 Speed +67 Int
+Legs 72 U 107 Def / 71 MDef +108 Speed +106 Int
+Acc 89 L 65 Def / 129 MDef +87 Str +72 Stam +194 Speed +107 Int
+Traits: Perseverance 10 Stocky! 6 Scholar 2 Regen 10 Wizardry 9 Q. Learner 8 Combobreaker! 6 Libra 1 Self-Improvement 5 Clarity of Mind 10 Merchant Warrior 2 Mental Toughness 5
+Skills: Prot 4 Auto Life 5 Drain 3
+Materials Common 1637 Uncommon 1368 Rare 427 Epic 104 Legendary 68
+Buffs Well Rested 70 Blessed 135 Well Fed 197 Protection 4 Auto Life (1500) 17
+Items: Inn-made Bento
+Corrupted runes: 1
+
+--
+And final boss was too easy... next time try L70-72?
